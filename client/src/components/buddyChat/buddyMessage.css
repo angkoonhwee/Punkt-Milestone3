@@ -1,0 +1,149 @@
+.message-container {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 15px;
+  margin: 3px 0;
+  align-items: flex-start;
+}
+
+.message-container.own {
+  justify-content: flex-end;
+  font-weight: 300;
+}
+
+.container-message-w-date {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  flex-direction: column;
+  width: auto;
+  max-width: 75%;
+}
+
+/* .container-message-w-date.own {
+  align-items: flex-end;
+} */
+
+.message-box {
+  background: #e9f0f0;
+  border-radius: 20px;
+  padding: 10px 20px;
+  color: white;
+  display: inline-block;
+  /* max-width: 75%; */
+  width: 100%;
+}
+
+.message-box.own {
+  background-color: #16697a;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3CradialGradient id='a' cx='0' cy='800' r='800' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%232b869b'/%3E%3Cstop offset='1' stop-color='%232b869b' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='b' cx='1200' cy='800' r='800' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%2335a4ba'/%3E%3Cstop offset='1' stop-color='%2335a4ba' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='c' cx='600' cy='0' r='600' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%2365b0c1'/%3E%3Cstop offset='1' stop-color='%2365b0c1' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='d' cx='600' cy='800' r='600' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%2316697a'/%3E%3Cstop offset='1' stop-color='%2316697a' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='e' cx='0' cy='0' r='800' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23489fb5'/%3E%3Cstop offset='1' stop-color='%23489fb5' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='f' cx='1200' cy='0' r='800' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%2382c0cc'/%3E%3Cstop offset='1' stop-color='%2382c0cc' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='1200' height='800'/%3E%3Crect fill='url(%23b)' width='1200' height='800'/%3E%3Crect fill='url(%23c)' width='1200' height='800'/%3E%3Crect fill='url(%23d)' width='1200' height='800'/%3E%3Crect fill='url(%23e)' width='1200' height='800'/%3E%3Crect fill='url(%23f)' width='1200' height='800'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.message-text {
+  width: 100%;
+  letter-spacing: 0;
+  float: left;
+  font-size: 1.1em;
+  word-wrap: break-word;
+  color: #353535;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.message-text.own {
+  color: white;
+}
+
+.message-text img {
+  vertical-align: middle;
+}
+
+.container-buddy-chat-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-right: 10px;
+}
+
+.container-buddy-chat-user.own {
+  padding-left: 10px;
+  padding-right: 0;
+}
+
+.sent-username {
+  color: #777777;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.buddy-message-date {
+  color: #918f8f;
+  font-size: 12px;
+  line-height: 1;
+  padding: 2px 10px 3px;
+  margin: 0;
+}
+
+.buddy-message-profile-pic {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 770px) {
+  .message-text {
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .sent-username {
+    font-size: 12px;
+  }
+
+  .buddy-message-date {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 580px) {
+  .message-container {
+    padding: 0 5px;
+  }
+
+  .buddy-message-profile-pic {
+    width: 35px;
+    height: 35px;
+  }
+
+  .message-box {
+    background: #e9f0f0;
+    border-radius: 20px;
+    padding: 9px 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .message-text {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .sent-username {
+    font-size: 11px;
+  }
+
+  .buddy-message-date {
+    font-size: 9px;
+  }
+
+  .buddy-message-profile-pic {
+    width: 30px;
+    height: 30px;
+  }
+}

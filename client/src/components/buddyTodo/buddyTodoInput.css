@@ -1,0 +1,70 @@
+.buddy-todo-input form {
+  padding: 0;
+  width: 100%;
+}
+
+.buddy-todo-input input {
+  /* border-radius: 10px; */
+  width: 100%;
+  background-color: rgba(239, 253, 255, 0.87);
+  border: none;
+  height: auto;
+  padding: 10px 0;
+  margin: 10px 0;
+  margin-right: 10px;
+  border-radius: 0;
+  /* overflow:; */
+}
+
+.buddy-todo-input input:focus {
+  outline: none;
+  border-bottom: 2px solid #1f788a;
+}
+
+.add-todo-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-todo-form input {
+  width: 92%;
+}
+.add-todo-form button {
+  width: 8%;
+}
+
+.add-todo-btn {
+  min-width: 52px;
+  max-width: 53px;
+  min-height: 52px;
+  max-height: 53px;
+  border-radius: 50%;
+  /* margin: 10px; */
+  background-color: #489fb5;
+  border: 0;
+  transition: 0.3s ease-in-out;
+}
+
+.add-todo-btn:hover {
+  background-color: #1f788a;
+}
+
+@media (max-width: 550px) {
+  .add-todo-btn {
+    min-width: 41px;
+    max-width: 43px;
+    min-height: 41px;
+    max-height: 43px;
+  }
+}
+
+@media (max-width: 380px) {
+  .add-todo-btn {
+    min-width: 38px;
+    max-width: 40px;
+    min-height: 38px;
+    max-height: 40px;
+  }
+}

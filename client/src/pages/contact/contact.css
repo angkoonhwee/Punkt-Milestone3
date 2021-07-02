@@ -1,0 +1,154 @@
+.container-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92vh;
+  padding-top: 40px;
+  width: 100%;
+  background-color: rgba(239, 253, 255, 0.87);
+}
+
+.contact-wrapper {
+  display: flex;
+  background-color: white;
+  margin: 60px 50px 50px;
+  border-radius: 20px;
+  -webkit-box-shadow: 0px 3px 7px -2px rgba(60, 60, 60, 0.41);
+  box-shadow: 0px 3px 7px -2px rgba(60, 60, 60, 0.41);
+}
+
+.container-contact-pic {
+  width: 50%;
+}
+
+.container-contact-pic img {
+  width: 100%;
+  padding: 50px;
+}
+
+.container-contact-form {
+  width: 50%;
+  padding: 30px;
+}
+
+.form-content-text {
+  margin: 0;
+  line-height: 1.5;
+  color: lightslategrey;
+}
+
+.contact-form {
+  padding: 10px 0;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.contact-form .MuiFormControl-root {
+  width: 100%;
+}
+
+.MuiInput-underline:after {
+  border-bottom: 2px solid #1f788a !important;
+}
+
+.MuiFormLabel-root.Mui-focused {
+  color: #1f788a !important;
+}
+
+.enquiry-input {
+  border: none;
+  border-bottom: 1px solid rgb(148, 148, 148);
+  margin: 25px 0 10px;
+  padding: 10px 0 5px;
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.35;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  transition: 0.15s ease-in;
+}
+
+.enquiry-input:hover {
+  border-bottom: 2px solid black;
+}
+
+.enquiry-input::placeholder {
+  color: rgb(138, 138, 138);
+  letter-spacing: 0.35px;
+}
+
+.enquiry-input:focus {
+  outline: none;
+  border-bottom: 2px solid #1f788a;
+}
+
+.submit-enquiry-btn {
+  border: none;
+  margin: 5px 0;
+  padding: 8px 15px;
+  text-transform: uppercase;
+  border-radius: 10px;
+  background-color: #3e92a3;
+  color: white;
+  transition: 0.25s ease-in-out;
+}
+
+.submit-enquiry-btn:hover {
+  background-color: #1f788a;
+}
+
+.container-contact-form h2 {
+  font-weight: 700;
+  color: #1f788a;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 550px) {
+  .contact-wrapper {
+    flex-direction: column;
+  }
+
+  .container-contact-pic {
+    width: 100%;
+  }
+
+  .container-contact-form {
+    width: 100%;
+  }
+
+  .container-contact-form h2 {
+    margin-top: 0;
+  }
+
+  .container-contact-pic img {
+    padding: 30px 30px 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .container-contact-form h2 {
+    font-size: 22px;
+  }
+
+  .form-content-text {
+    font-size: 14px;
+  }
+
+  .enquiry-input {
+    font-size: 14px;
+  }
+
+  .MuiFormLabel-root {
+    font-size: 14px !important;
+  }
+
+  .submit-enquiry-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .contact-wrapper {
+    margin: 40px 35px 35px;
+  }
+}

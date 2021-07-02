@@ -1,0 +1,58 @@
+.container-buddy-todo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.buddy-todo-title {
+  background-color: #489fb5;
+  color: white;
+  padding: 18px 30px;
+  text-align: center;
+  width: 75%;
+  vertical-align: middle;
+  border-radius: 10px;
+}
+
+.buddy-todo-title h2 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.buddy-todo-content {
+  width: 75%;
+}
+
+@media (max-width: 770px) {
+  .buddy-todo-title {
+    padding: 12px 20px;
+  }
+
+  .buddy-todo-title {
+    width: 85%;
+  }
+
+  .buddy-todo-title h2 {
+    font-size: 24px;
+  }
+
+  .buddy-todo-content {
+    width: 85%;
+  }
+}
+
+@media (max-width: 550px) {
+  .buddy-todo-title {
+    width: 93%;
+  }
+
+  .buddy-todo-content {
+    width: 93%;
+  }
+
+  .buddy-todo-title h2 {
+    font-size: 20px;
+  }
+}
