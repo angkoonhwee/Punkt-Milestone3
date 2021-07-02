@@ -23,6 +23,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET ALL USERS' USERNAME AND PROFILE PIC ARRAY
+router.get("/all", async (req, res) => {
+  try {
+    const users = await User.find({}).select(["username", "profilePicture"]);
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // UPDATE USER
 router.put("/:id", async (req, res) => {
   // console.log(req.body);

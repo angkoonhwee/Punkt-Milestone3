@@ -11,6 +11,7 @@ import PublicIcon from "@material-ui/icons/Public";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Link, Redirect } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import Searchbar from "./Searchbar";
 
 function NavbarMain() {
   const PublicImg = process.env.REACT_APP_PUBLIC_URL;
@@ -46,13 +47,7 @@ function NavbarMain() {
         <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <div className="nav-link searchBar" title="Search">
-                <SearchIcon className="searchIcon" />
-                <input
-                  placeholder="Coming Soon"
-                  className="searchInput"
-                ></input>
-              </div>
+              <Searchbar />
             </li>
 
             <li className="nav-item">
