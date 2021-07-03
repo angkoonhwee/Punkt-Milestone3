@@ -29,7 +29,6 @@ router.get("/:id", async (req, res) => {
 router.get("/profile/:username", async (req, res) => {
   // const currUser = User.findById(req.body.userId);
   try {
-    console.log(req.params.username);
     const currUser = await User.findOne({ username: req.params.username });
     const userPosts = await Post.find({ userId: currUser._id });
 

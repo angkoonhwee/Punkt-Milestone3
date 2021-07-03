@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import "./loginSignup.css";
 import { Link, useHistory } from "react-router-dom";
-import { loginCall, signUpCall } from "../../apiCalls";
+import { loginCall, signUpCall, googleLoginCall } from "../../apiCalls";
 import { UserContext } from "../../context/UserContext";
 import { CircularProgress } from "@material-ui/core";
 import axios from "axios";
@@ -66,29 +66,34 @@ function LoginSignupForms() {
     }
   };
 
-  function googleLogin(event) {
-    console.log(event.target);
+  // function googleLogin(event) {
+  //   // console.log(event.target);
 
-    window.open(`http://localhost:8000/auth/google`, "_self");
-  }
+  //   // window.open(`http://localhost:8000/auth/google`, "_self");
+  //   googleLoginCall(dispatch);
+  // }
 
   return (
     <div className="container-forms">
       <div className="signup-login">
         <form className="form-login" onSubmit={submitLogin}>
           <h2 className="form-title">Login to Punkt.</h2>
-          <div className="google-login">
+          {/* <div className="google-login">
             <div
               className="google-icon"
               style={{ cursor: "pointer" }}
-              // onClick={googleLogin}
+              onClick={googleLogin}
             >
               <i className="fab fa-google"></i> Login with Google
             </div>
           </div>
-          <p className="gmail-text">Or use your email account</p>
+          <p className="gmail-text">Or use your email account</p> */}
           {loginError && (
-            <Alert severity="error" onClose={() => setLoginError(false)}>
+            <Alert
+              severity="error"
+              onClose={() => setLoginError(false)}
+              stlye={{ maxWidth: "400px", width: "100%" }}
+            >
               {loginError}
             </Alert>
           )}
@@ -119,9 +124,9 @@ function LoginSignupForms() {
             />
           </div>
 
-          {/* <Link className="forgot-pw" to="/forgot-password">
+          <Link className="forgot-pw" to="/forgot-password">
             Forgot your password?
-          </Link> */}
+          </Link>
           <button
             className="bton"
             type="submit"
@@ -138,7 +143,7 @@ function LoginSignupForms() {
 
         <form className="form-signup" onSubmit={submitSignup}>
           <h2 className="form-title">Create Account</h2>
-          <div className="google-login">
+          {/* <div className="google-login">
             <div
               className="google-icon"
               style={{ cursor: "pointer" }}
@@ -148,7 +153,7 @@ function LoginSignupForms() {
             </div>
           </div>
 
-          <p className="gmail-text">Or use your email for registration</p>
+          <p className="gmail-text">Or use your email for registration</p> */}
           {signUpError && (
             <Alert severity="error" onClose={() => setSignUpError(false)}>
               {signUpError}

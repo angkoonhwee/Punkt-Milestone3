@@ -98,7 +98,6 @@ export default function Post({ post }) {
       try {
         if (post.comments.length > 0) {
           const res = await axios.get(url + "/comment/post/" + post._id);
-          console.log("res.data: " + res.data);
 
           setAllComments(res.data);
         }

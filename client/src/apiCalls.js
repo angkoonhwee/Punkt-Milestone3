@@ -23,11 +23,22 @@ export const signUpCall = async (userCredential, dispatch) => {
   }
 };
 
-// export const logoutCall = async (dispatch) => {
-//   try {
-//     await axios.get(url + "/auth/logout");
-//     dispatch({ type: "LOGOUT" });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const googleLoginCall = async (dispatch) => {
+  try {
+    window.open(`http://localhost:8000/auth/google`, "_self");
+    const res = await axios.get(url + "/auth/google/punkt");
+    console.log(res.data);
+    dispatch({ type: "GOOGLE_LOGIN", payload: res.data });
+  } catch (err) {
+    dispatch({ type: "LOGIN_FAILURE", payload: "Google Login Failed." });
+  }
+};
+
+export const logoutCall = async (dispatch) => {
+  try {
+    await axios.get(url + "/auth/logout");
+    dispatch({ type: "LOGOUT" });
+  } catch (err) {
+    console.log(err);
+  }
+};

@@ -12,6 +12,7 @@ const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
 const goalRoute = require("./routes/goal");
+const contactRoute = require("./routes/contact");
 const commentRoute = require("./routes/comment");
 const reportRoute = require("./routes/report");
 const cors = require("cors");
@@ -91,6 +92,7 @@ app.use("/post", postRoute);
 app.use("/goal", goalRoute);
 app.use("/comment", commentRoute);
 app.use("/report", reportRoute);
+app.use("/contact", contactRoute);
 
 const PORT = process.env.PORT || 8000;
 

@@ -12,16 +12,16 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Link, Redirect } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import Searchbar from "./Searchbar";
+import { logoutCall } from "../../apiCalls";
 
 function NavbarMain() {
   const PublicImg = process.env.REACT_APP_PUBLIC_URL;
   const { user, dispatch } = useContext(UserContext);
   // console.log(user);
 
-  // async function handleLogout() {
-  //   // logoutCall(dispatch);
+  // function handleLogout() {
+  //   logoutCall(dispatch);
   //   // to be fixed
-  //   console.log("logout");
   // }
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
