@@ -23,10 +23,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET ALL USERS' USERNAME AND PROFILE PIC ARRAY
+// GET ALL USERS' USERNAME, PROFILE PIC, PRODUCTIVITY POINTS ARRAY
 router.get("/all", async (req, res) => {
   try {
-    const users = await User.find({}).select(["username", "profilePicture"]);
+    const users = await User.find({}).select([
+      "username",
+      "profilePicture",
+      "productivityPoints",
+    ]);
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);

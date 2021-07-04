@@ -79,7 +79,7 @@ export default function Post({ post }) {
   useEffect(() => {
     const fetchBetAgainst = async () => {
       try {
-        if (goal._id) {
+        if (goal._id && currUser._id) {
           const res = await axios.get(
             url + "/goal/" + goal._id + "/bet-against/" + currUser._id
           );
@@ -223,9 +223,9 @@ export default function Post({ post }) {
             <div className="carousel-inner">
               {post.img?.map((p, index) => {
                 return index === 0 ? (
-                  <ImgActive key={index} image={PublicImg + p} />
+                  <ImgActive key={index} image={p} />
                 ) : (
-                  <ImgRest key={index} image={PublicImg + p} />
+                  <ImgRest key={index} image={p} />
                 );
               })}
             </div>

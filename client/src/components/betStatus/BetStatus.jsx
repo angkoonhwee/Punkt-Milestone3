@@ -67,8 +67,6 @@ export default function BetStatus({ user, goal }) {
     const currDate = latestPost.createdAt
       ? new Date(latestPost.createdAt)
       : new Date();
-    console.log(startDate);
-    console.log("date diff " + dateDiffInDays(startDate, currDate));
 
     if (dateDiffInDays(startDate, currDate) > 1) {
       console.log("failed");

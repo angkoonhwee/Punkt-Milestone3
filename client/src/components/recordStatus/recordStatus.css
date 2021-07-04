@@ -35,7 +35,7 @@
   width: 100%;
 }
 
-.record-container button {
+.record-btn {
   /* background-color: rgb(247, 176, 25); */
   border: none;
   color: white;
@@ -49,9 +49,9 @@
   /* text-transform: uppercase; */
 }
 
-.record-container button:hover {
+/* .record-btn:hover {
   background-color: rgb(240, 170, 18);
-}
+} */
 
 .record-bottom {
   display: flex;
@@ -125,7 +125,7 @@
     padding: 2.5px 5px;
   }
 
-  .record-container button {
+  .record-btn {
     /* background-color: rgb(247, 176, 25); */
     font-size: 14px;
     width: 42%;

@@ -6,7 +6,6 @@ const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const multer = require("multer");
 const path = require("path");
 const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
@@ -54,33 +53,6 @@ app.use(
     credentials: true, // allow session cookie from browser to pass through
   })
 );
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images");
-  },
-  filename: (req, file, cb) => {
-    // console.log(file);
-    // console.log(req.files);
-    // cb(null, file.originalname);
-    // const { originalname } = file;
-    // const fileExtension = (originalname.match(/\.+[\S]+$/) || [])[0];
-    // cb(null, `${Date.now()}${originalname}`);
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-app.post("/upload", upload.array("file", 6), (req, res) => {
-  try {
-    // console.log(req.fields);
-    // console.log(req.files);
-    return res.status(200).json("Files uploaded successfully");
-  } catch (err) {
-    console.log(err);
-  }
-}); // max count 6
 
 app.get("/", (req, res) => {
   res.send("Test Punkt Server");
