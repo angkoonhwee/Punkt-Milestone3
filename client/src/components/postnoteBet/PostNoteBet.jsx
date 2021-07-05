@@ -67,20 +67,15 @@ export default function PostNoteBet() {
 
     try {
       const newGoalObj = await axios.post(url + "/goal", newGoal);
+
       const updatedUser = {
         userId: user._id,
         goalId: newGoalObj._id,
       };
+
       const res = await axios.put(url + "/user/" + user._id, updatedUser);
 
-      // setHasGoal(true);
       dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
-      // setGoal({
-      //   title: "",
-      //   amount: "",
-      //   days: "",
-      // });
-      // window.location.reload();
     } catch (err) {
       console.log(err);
       dispatch({ type: "UPDATE_FAILURE" });

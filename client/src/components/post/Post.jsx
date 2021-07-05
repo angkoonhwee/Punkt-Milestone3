@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./post.css";
-import ReportIcon from "@material-ui/icons/Report";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
 import Fab from "@material-ui/core/Fab";
 import ModeCommentIcon from "@material-ui/icons/ModeComment";
@@ -12,7 +11,7 @@ import Report from "../report/Report";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import axios from "axios";
-import { format, render, cancel, register } from "timeago.js";
+import { format } from "timeago.js";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { url } from "../../utils/constants";
@@ -180,17 +179,17 @@ export default function Post({ post }) {
       <div className="post-wrapper">
         <div className="post-top">
           <div className="post-top-left">
-            <Link to={`profile/${user.username}`}>
+            <Link to={`/profile/${user.username}`}>
               <img
                 // src={Users.filter((u) => u.id === post.userId)[0].profilePicture}
                 src={
                   user.profilePicture
-                    ? PublicImg + user.profilePicture
+                    ? user.profilePicture
                     : PublicImg + "defaultDP.svg"
                 }
                 alt="profilePic"
                 className="profilePic post-profile"
-              ></img>
+              />
             </Link>
             <div className="profile-name-date">
               <p className="post-name">

@@ -128,7 +128,7 @@ function NavbarMain() {
                     className="profilePic"
                     src={
                       user.profilePicture !== ""
-                        ? PublicImg + user.profilePicture
+                        ? user.profilePicture
                         : "/assets/img/defaultDP.svg"
                     }
                     alt="Profile-Pic"

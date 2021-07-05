@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./settings.css";
 import NavbarMain from "../../components/navbarMain/NavbarMain";
 import ScrollTop from "../../components/scrollTop/ScrollTop";
@@ -10,53 +10,111 @@ import { UserContext } from "../../context/UserContext";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
+import UserInfo from "../../components/userInfo/UserInfo";
+import EditProfile from "../../components/editProfile/EditProfile";
+import { motion } from "framer-motion";
+import UploadFile from "../../components/uploadFile/UploadFile";
 
 export default function Settings() {
-  const { user } = useContext(UserContext);
-  const PublicImg = process.env.REACT_APP_PUBLIC_URL;
+  const { user, dispatch } = useContext(UserContext);
   const [isBetTableClicked, setBetTableClicked] = useState(true);
   const [isGoalTableClicked, setGoalTableClicked] = useState(true);
   const [isBuddyTableClicked, setBuddyTableClicked] = useState(true);
   const [isFinancesClicked, setFinancesClicked] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [file, setFile] = useState(null);
 
   return (
     <>
       <NavbarMain />
       <div className="container-settings">
-        <div className="basic-setting">
-          <div className="profile-pic-setting">
-            <div className="change-dp-setting-wrapper">
-              <img
-                alt="change-profile-pic"
-                src={
-                  user.profilePicture !== ""
-                    ? PublicImg + user.profilePicture
-                    : "/assets/img/defaultDP.svg"
-                }
-              />
-              <div className="change-dp">
-                <CameraAltIcon
-                  style={{
-                    position: "absolute",
-                    left: "17%",
-                    top: "17%",
-                  }}
+        <div className="basic-setting-wrapper">
+          <div className="basic-setting">
+            <div className="profile-pic-setting">
+              <div className="change-dp-setting-wrapper">
+                <img
+                  alt="change-profile-pic"
+                  src={
+                    user.profilePicture !== ""
+                      ? user.profilePicture
+                      : "/assets/img/defaultDP.svg"
+                  }
                 />
+                <label className="change-dp-label">
+                  <input
+                    type="file"
+                    accept=".png,.jpeg,.jpg"
+                    className="change-dp-input"
+                    onChange={(e) => setFile(e.target.files[0])}
+                  />
+                  <div className="change-dp">
+                    <CameraAltIcon
+                      style={{
+                        position: "absolute",
+                        left: "17%",
+                        top: "17%",
+                      }}
+                    />
+                  </div>
+                </label>
+                {file && (
+                  <UploadFile
+                    file={file}
+                    setFile={setFile}
+                    user={user}
+                    dispatch={dispatch}
+                    pic={"profilePicture"}
+                  />
+                )}
               </div>
             </div>
-          </div>
-          <div className="info-setting">
-            <div className="user-info">
-              <h4 style={{ fontWeight: "700", marginRight: "10px" }}>
-                Username:{" "}
+            <div className="info-setting">
+              <h4 className="user-info-username">
+                <strong>{user.username}</strong>
               </h4>
-              <h4> {user.username}</h4>
-            </div>
-            <div className="user-info">
-              <h4 style={{ fontWeight: "700", marginRight: "10px" }}>Rank: </h4>
-              <h4> #{user.rank}</h4>
+              {!isEditing && (
+                <button
+                  className="edit-profile"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit Profile
+                </button>
+              )}
             </div>
           </div>
+          {isEditing ? (
+            <EditProfile
+              user={user}
+              dispatch={dispatch}
+              setIsEditing={setIsEditing}
+            />
+          ) : (
+            <motion.div
+              initial={{ opacity: 0.5 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              {user.bio && <UserInfo field={"Bio"} data={user.bio} />}
+              {user.school && <UserInfo field={"School"} data={user.school} />}
+              {user.major && <UserInfo field={"Major"} data={user.major} />}
+              {user.yearOfStudy && (
+                <UserInfo field={"Year of Study"} data={user.yearOfStudy} />
+              )}
+              {user.currentModules && (
+                <UserInfo
+                  field={"Current Modules"}
+                  data={user.currentModules}
+                />
+              )}
+              {user.instagram && (
+                <UserInfo field={"Instagram"} data={user.instagram} />
+              )}
+              {user.linkedIn && (
+                <UserInfo field={"LinkedIn"} data={user.linkedIn} />
+              )}
+              {user.github && <UserInfo field={"Github"} data={user.github} />}
+            </motion.div>
+          )}
         </div>
         <div className="container-table">
           <div className="table-title">

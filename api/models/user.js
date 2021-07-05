@@ -2,16 +2,6 @@ const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
 const findOrCreate = require("mongoose-findorcreate");
 
-// const userSchema = new mongoose.Schema({
-//   username: String,
-//   displayName: String,
-//   password: String,
-//   googleId: String,
-//   posts: Array,
-//   resetPasswordToken: String,
-//   resetPasswordExpires: Date,
-// });
-
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -41,8 +31,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    bio: String,
+    school: String,
+    major: String,
+    yearOfStudy: Number,
+    currentModules: [String],
+    instagram: String,
+    github: String,
+    linkedIn: String,
     betHistory: {
-      type: [{ goalId: String, amt: Number, status: String }],
+      type: [{ goalId: String, status: String }],
       default: [],
     },
     followings: {
@@ -61,26 +59,26 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 9999,
     },
-    currAmt: {
-      type: Number,
-      default: 0,
-    },
-    totalAmtWon: {
-      type: Number,
-      default: 0,
-    },
-    totalAmtLost: {
-      type: Number,
-      default: 0,
-    },
-    betFor: {
-      type: [{ goalId: String, amt: Number }],
-      default: [],
-    },
-    betAgainst: {
-      type: [{ goalId: String, amt: Number }],
-      default: [],
-    },
+    // currAmt: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // totalAmtWon: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // totalAmtLost: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // betFor: {
+    //   type: [{ goalId: String, amt: Number }],
+    //   default: [],
+    // },
+    // betAgainst: {
+    //   type: [String],
+    //   default: [],
+    // },
     buddyHistory: {
       type: Array,
       default: [],
@@ -97,6 +95,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
     resetPasswordToken: String,
     resetPasswordExpires: Date,
   },

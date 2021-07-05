@@ -9,6 +9,9 @@ import { Add, Remove, GroupAdd, EmojiPeople } from "@material-ui/icons";
 import "./profile.css";
 import { UserContext } from "../../context/UserContext";
 import { url } from "../../utils/constants";
+import { Instagram, LinkedIn, GitHub } from "@material-ui/icons";
+import { Link } from "react-router-dom";
+import UploadFile from "../../components/uploadFile/UploadFile";
 
 export default function Profile() {
   const { user: currUser, dispatch } = useContext(UserContext);
@@ -17,6 +20,7 @@ export default function Profile() {
   const [isFollowing, setFollowing] = useState(false);
   const [isBuddy, setBuddy] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -41,11 +45,45 @@ export default function Profile() {
       <NavbarMain />
       <div className="container-profile">
         <div className="container-cover-picture">
-          <img
-            className="profile-page-cover"
-            alt="user-cover-background"
-            src="/assets/img/defaultBG.svg"
-          ></img>
+          {/* If user visiting this profile page is user himself, allow user to change cover picture */}
+          {currUser.username === username ? (
+            <label className="change-dp-label">
+              <input
+                type="file"
+                accept=".png,.jpeg,.jpg"
+                className="change-dp-input"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              <img
+                className="profile-page-cover"
+                alt="user-cover-background"
+                src={
+                  user.coverPicture
+                    ? user.coverPicture
+                    : "/assets/img/defaultBG.svg"
+                }
+              ></img>
+            </label>
+          ) : (
+            <img
+              className="profile-page-cover"
+              alt="user-cover-background"
+              src={
+                user.coverPicture !== ""
+                  ? user.coverPicture
+                  : "/assets/img/defaultBG.svg"
+              }
+            ></img>
+          )}
+          {file && (
+            <UploadFile
+              file={file}
+              setFile={setFile}
+              user={user}
+              dispatch={dispatch}
+              pic={"coverPicture"}
+            />
+          )}
         </div>
         <div className="container-info-feed">
           <div className="container-user-info">
@@ -53,60 +91,87 @@ export default function Profile() {
               <img
                 className="profile-page-dp"
                 alt="user-profile-pic"
-                src="/assets/img/defaultDP.svg"
+                src={
+                  user.profilePicture !== ""
+                    ? user.profilePicture
+                    : "/assets/img/defaultDP.svg"
+                }
               />
             </div>
-            {/* <div
-              className="change-dp"
-              style={{
-                position: "absolute",
-              }}
-            >
-              <CameraAlt
-                style={{
-                  position: "relative",
-                  left: "17.5%",
-                }}
-              />
-            </div> */}
+
             <h4>{user.username}</h4>
-            <button
-              className="follow-btn"
-              onClick={handleBuddy}
-              style={{
-                backgroundColor: isBuddy ? "#7f8fad" : "#4d6591",
-              }}
-            >
-              {isBuddy ? (
-                <EmojiPeople style={{ marginRight: "3px" }} />
-              ) : (
-                <GroupAdd style={{ marginRight: "5px" }} />
-              )}
-              {isBuddy ? "My Buddy !" : "Request Buddy"}
-            </button>
-            <button
-              className="follow-btn"
-              onClick={handleFollowing}
-              style={{
-                backgroundColor: isFollowing ? "#82C0CC" : "#3391a3",
-              }}
-            >
-              {isFollowing ? (
-                <Remove style={{ marginRight: "3px" }} />
-              ) : (
-                <Add
+            {user.username !== username && (
+              <div>
+                <button
+                  className="follow-btn"
+                  onClick={handleBuddy}
                   style={{
-                    marginRight: "3px",
+                    backgroundColor: isBuddy ? "#7f8fad" : "#4d6591",
                   }}
-                />
+                >
+                  {isBuddy ? (
+                    <EmojiPeople style={{ marginRight: "3px" }} />
+                  ) : (
+                    <GroupAdd style={{ marginRight: "5px" }} />
+                  )}
+                  {isBuddy ? "My Buddy !" : "Request Buddy"}
+                </button>
+                <button
+                  className="follow-btn"
+                  onClick={handleFollowing}
+                  style={{
+                    backgroundColor: isFollowing ? "#82C0CC" : "#3391a3",
+                  }}
+                >
+                  {isFollowing ? (
+                    <Remove style={{ marginRight: "3px" }} />
+                  ) : (
+                    <Add
+                      style={{
+                        marginRight: "3px",
+                      }}
+                    />
+                  )}
+                  {isFollowing ? "Unfollow" : "Follow"}
+                </button>
+              </div>
+            )}
+            <div className="social-media-icons">
+              {user.instagram && (
+                <a href={user.instagram}>
+                  <i
+                    className="fab fa-instagram"
+                    style={{ color: "#C13584", marginRight: "15px" }}
+                  />
+                </a>
               )}
-              {isFollowing ? "Unfollow" : "Follow"}
-            </button>
+
+              {user.linkedIn && (
+                <a href={user.linkedIn}>
+                  <i
+                    className="fab fa-linkedin"
+                    style={{ color: "#2867B2", marginRight: "15px" }}
+                  />
+                </a>
+              )}
+
+              {user.github && (
+                <a href={user.github}>
+                  <i className="fab fa-github" style={{ color: "#333" }}></i>
+                </a>
+              )}
+            </div>
+
             <ul className="user-info-list">
               <li>Rank: #{user.rank}</li>
               <li>Productivity Points: {user.productivityPoints}</li>
-              <li>School</li>
-              <li>Major</li>
+              {user.school && <li>{user.school}</li>}
+              {user.major && <li>{user.major}</li>}
+              {user.yearOfStudy && <li>Year {user.yearOfStudy}</li>}
+              {user.currentModules &&
+                user.currentModules.map((m) => (
+                  <li key={m}>{m.toUpperCase()}</li>
+                ))}
             </ul>
           </div>
 

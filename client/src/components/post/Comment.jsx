@@ -5,6 +5,7 @@ import { UserContext } from "../../context/UserContext";
 import { format, render, cancel, register } from "timeago.js";
 import { url } from "../../utils/constants";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import { motion } from "framer-motion";
 
 export default function Comment({ comm }) {
   const [user, setUser] = useState({});
@@ -39,7 +40,12 @@ export default function Comment({ comm }) {
 
   return (
     <div className="comment-wrapper">
-      <div className="post-user-comments">
+      <div
+        className="post-user-comments"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+      >
         <img
           className="profilePic"
           src={
@@ -48,7 +54,7 @@ export default function Comment({ comm }) {
               : PublicImg + "defaultDP.svg"
           }
           alt="profile-pic"
-        ></img>
+        />
 
         <div className="comment-content">
           <p>
