@@ -14,7 +14,7 @@ const useStorage = (file) => {
     // references (file name)
     // console.log(file);
     const storageRef = projectStorage.ref(file.name + file.lastModified);
-    const collectionRef = projectFirestore.collection("images-punkt");
+    const collectionRef = projectFirestore.collection("punkt-multimedia");
 
     storageRef.put(file).on(
       "state_changed",

@@ -24,13 +24,18 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = username
-        ? await axios.get(url + `/user?username=${username}`)
-        : await axios.get(url + "/");
-      setUser(res.data);
+      if (username) {
+        if (username === currUser.username) {
+          setUser(currUser);
+        } else {
+          const res = await axios.get(url + `/user?username=${username}`);
+
+          setUser(res.data);
+        }
+      }
     };
     fetchUser();
-  }, [username]);
+  }, [username, currUser]);
 
   async function handleFollowing() {
     setFollowing(!isFollowing);
