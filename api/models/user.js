@@ -32,13 +32,18 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
     bio: String,
-    school: String,
-    major: String,
-    yearOfStudy: Number,
-    currentModules: [String],
-    instagram: String,
-    github: String,
-    linkedIn: String,
+    education: {
+      school: String,
+      major: String,
+      yearOfStudy: Number,
+      currentModules: [String],
+    },
+    social: {
+      instagram: String,
+      github: String,
+      linkedIn: String,
+    },
+
     betHistory: {
       type: [{ goalId: String, status: String }],
       default: [],
@@ -75,10 +80,10 @@ const userSchema = new mongoose.Schema(
     //   type: [{ goalId: String, amt: Number }],
     //   default: [],
     // },
-    // betAgainst: {
-    //   type: [String],
-    //   default: [],
-    // },
+    betAgainst: {
+      type: [String],
+      default: [],
+    },
     buddyHistory: {
       type: Array,
       default: [],

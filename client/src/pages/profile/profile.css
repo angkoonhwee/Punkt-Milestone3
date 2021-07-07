@@ -98,6 +98,13 @@
   z-index: 2;
 }
 
+.buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 @media (max-width: 990px) {
   .container-user-feed {
     flex: 8 1;

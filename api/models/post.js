@@ -22,14 +22,10 @@ const postSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    // comments: [
-    //   {
-    //     userId: String,
-    //     comment: String,
-    //     numLikes: Array,
-    //     createdAt: Date,
-    //   },
-    // ],
+    atonement: {
+      type: Boolean,
+      default: false,
+    },
     comments: {
       type: Array,
       default: [],

@@ -4,12 +4,13 @@ import "react-circular-progressbar/dist/styles.css";
 import "./betStatus.css";
 import { url } from "../../utils/constants";
 
-export default function BetStatus({ user, goal }) {
-  const PublicImg = process.env.REACT_APP_PUBLIC_URL;
+export default function BetStatus({ user, goal, dispatch, currUser }) {
   const [latestPost, setLatestPost] = useState({});
   const [SecLatestPost, setSecLatestPost] = useState({});
 
-  const currDays = goal.postIds?.length;
+  const currDays = goal.madeAtonement
+    ? goal.postIds?.length - 1
+    : goal.postIds?.length;
   const totalDays = goal.numDays;
 
   useEffect(() => {
@@ -75,34 +76,39 @@ export default function BetStatus({ user, goal }) {
   }
 
   const prog = checkProgress();
-  console.log("prog" + prog);
-  // const prog = "Failed";
 
   useEffect(() => {
     const updateStatus = async () => {
       if (goal.status === "In Progress" && prog === "Failed") {
-        await axios.put(url + "/goal/" + goal._id + "/status", {
+        const res = await axios.put(url + "/goal/" + goal._id + "/status", {
           userId: user._id,
           status: "Failed",
         });
+
+        console.log(res.data);
+        if (res.data._id === currUser._id) {
+          dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+        }
       }
     };
     updateStatus();
-  }, [prog, user._id, goal._id, goal.status]);
+  }, [prog, user._id, goal, dispatch, currUser]);
 
   return (
     <div className="bet-status">
       <div className="status-top">
         <div className="status-name">
-          <img
-            className="profilePic post-profile"
-            src={
-              user.profilePicture
-                ? PublicImg + user.profilePicture
-                : PublicImg + "defaultDP.svg"
-            }
-            alt="profilePic"
-          ></img>
+          <a href={`/profile/${user.username}`}>
+            <img
+              className="profilePic post-profile"
+              src={
+                user.profilePicture
+                  ? user.profilePicture
+                  : "/assets/img/defaultDP.svg"
+              }
+              alt="profilePic"
+            />
+          </a>
           <p className="post-name">{user.username}</p>
         </div>
         <h2>「 {goal.title} 」</h2>
@@ -110,9 +116,9 @@ export default function BetStatus({ user, goal }) {
       <div className="status-middle">
         <div className="middle-component">
           <h4>
-            <strong>Amount:</strong>
+            <strong>Atonement:</strong>
           </h4>
-          <h4>SGD {goal.betAmount}</h4>
+          <h4>{goal.atonement}</h4>
         </div>
 
         <div className="middle-component">

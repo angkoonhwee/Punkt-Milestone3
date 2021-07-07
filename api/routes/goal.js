@@ -34,35 +34,35 @@ router.get("/:id", async (req, res) => {
 });
 
 // GET USER GOAL
-router.get("/profile/:username", async (req, res) => {
-  // const currUser = User.findById(req.body.userId);
-  try {
-    // console.log(req.params.username);
-    const currUser = await User.findOne({ username: req.params.username });
-    const userGoal = await Goal.findOne({
-      userId: currUser._id,
-      status: "In Progress",
-    });
-    // console.log(userGoal);
-    if (userGoal) {
-      res.status(200).json(userGoal);
-    } else {
-      const sortGoalsByDate = await Goal.find({
-        userId: currUser._id,
-      }).sort({
-        createdAt: "-1",
-      });
-      // console.log(sortGoalsByDate);
-      res.status(200).json(sortGoalsByDate[0]);
-    }
+// router.get("/profile/:username", async (req, res) => {
+//   // const currUser = User.findById(req.body.userId);
+//   try {
+//     // console.log(req.params.username);
+//     const currUser = await User.findOne({ username: req.params.username });
+//     const userGoal = await Goal.findOne({
+//       userId: currUser._id,
+//       status: "In Progress",
+//     });
+//     // console.log(userGoal);
+//     if (userGoal) {
+//       res.status(200).json(userGoal);
+//     } else {
+//       const sortGoalsByDate = await Goal.find({
+//         userId: currUser._id,
+//       }).sort({
+//         createdAt: "-1",
+//       });
+//       // console.log(sortGoalsByDate);
+//       res.status(200).json(sortGoalsByDate[0]);
+//     }
 
-    // const allPosts = await Post.find();
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+//     // const allPosts = await Post.find();
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
-// GET USER GOAL BY USER ID
+// GET THE LATEST USER GOAL BY USER ID
 router.get("/user/:userId", async (req, res) => {
   // const currUser = User.findById(req.body.userId);
   try {
@@ -89,29 +89,14 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
-// GET CURR USER'S BET ON ANOTHER USER'S GOAL
-router.get("/:goalId/bet-for/:userId", async (req, res) => {
-  try {
-    const userGoal = await Goal.findById(req.params.goalId);
-    // console.log(userGoal);
-    const currUserFor = await userGoal.usersBetFor.filter(
-      (u) => u.userId === req.params.userId
-    )[0];
-
-    // user has not bet on this goal
-    res.status(200).json(currUserFor);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
+// GET CURR USER'S BET AGAINST ON ANOTHER USER'S GOAL
 router.get("/:goalId/bet-against/:userId", async (req, res) => {
   try {
     const userGoal = await Goal.findById(req.params.goalId);
     // console.log(userGoal);
 
     const currUserAgainst = await userGoal.usersBetAgainst.filter(
-      (u) => u.userId === req.params.userId
+      (u) => u === req.params.userId
     )[0];
 
     res.status(200).json(currUserAgainst);
@@ -120,69 +105,71 @@ router.get("/:goalId/bet-against/:userId", async (req, res) => {
   }
 });
 
-// GET USERS BET FOR & INDIV AMT
-router.get("/:id/bet-for", async (req, res) => {
+// GET ALL GOALS BY USER ID
+router.get("/user/:userId/all", async (req, res) => {
   try {
-    const goal = await Goal.findById(req.params.id);
-    res.status(200).json(goal.usersBetFor);
+    const goals = await Goal.find({ userId: req.params.userId });
+    res.status(200).json(goals);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// GET USERS BET AGAINST & INDIV AMT
+// GET ALL BETS BY USER ID
+router.get("/user/:userId/bet", async (req, res) => {
+  try {
+    const goals = await Goal.find({ usersBetAgainst: req.params.userId });
+    const goalsWithName = await Promise.all(
+      goals.map((g) => {
+        const { title, atonement, status, createdAt } = g._doc;
+        return User.findById(g.userId)
+          .then((u) => {
+            return {
+              title: title,
+              atonement: atonement,
+              status: status,
+              createdAt: createdAt,
+              username: u.username,
+            };
+          })
+          .catch((err) => console.log(err));
+      })
+    );
+    res.status(200).json(goalsWithName);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// GET USERS BET AGAINST ARRAY OF A GOAL
 router.get("/:id/bet-against", async (req, res) => {
   try {
     const goal = await Goal.findById(req.params.id);
-    res.status(200).json(goal.usersBetFor);
+    res.status(200).json(goal.usersBetAgainst);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// UPDATE AMT BET FOR
-router.put("/:id/bet-for", async (req, res) => {
-  try {
-    const goal = await Goal.findById(req.params.id);
-    const user = await User.findById(req.body.userId);
-
-    // req.body should contain userId and amount
-    // update users who bet for this goal
-    await goal.updateOne({ $push: { usersBetFor: req.body } });
-
-    // update total bet for amt for this goal
-    await goal.updateOne({ $inc: { amtBetFor: req.body.amt } });
-
-    // update user's goal bets for
-    await user.updateOne({
-      $push: { betFor: { goalId: req.params.id, amt: req.body.amt } },
-    });
-
-    res.status(200).json("You have successfully bet for this goal.");
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// UPDATE AMT BET AGAINST
+// UPDATE BET AGAINST USERS
 router.put("/:id/bet-against", async (req, res) => {
   try {
     const goal = await Goal.findById(req.params.id);
     const user = await User.findById(req.body.userId);
 
-    // req.body should contain userId and amount
+    // req.body should contain userId
     // update users who bet against this goal
-    await goal.updateOne({ $push: { usersBetAgainst: req.body } });
+    if (!goal.usersBetAgainst.includes(req.body.userId)) {
+      await goal.updateOne({ $push: { usersBetAgainst: req.body.userId } });
 
-    // update total bet against amt for this goal
-    await goal.updateOne({ $inc: { amtBetAgainst: req.body.amt } });
-
-    // update user's goal bets against
-    await user.updateOne({
-      $push: { betAgainst: { goalId: req.params.id, amt: req.body.amt } },
-    });
-
-    res.status(200).json("You have successfully bet against this goal.");
+      // update user's goal bets against
+      await user.updateOne({
+        $push: { betAgainst: req.params.id },
+      });
+      res.status(200).json("You have successfully bet against this goal.");
+    } else {
+      res.status(200).json("You have already bet against this goal.");
+    }
   } catch (err) {
     res.status(500).json(err);
   }
@@ -194,17 +181,9 @@ router.put("/:id/status", async (req, res) => {
     const goal = await Goal.findById(req.params.id);
     const user = await User.findById(req.body.userId);
 
-    // const totalAmtBetFor = goal.usersBetFor.reduce(
-    //   (accumulator, currentValue) => {
-    //     return { amt: accumulator.amt + currentValue.amt };
-    //   }
-    // );
-    // const totalAmtBetFor = goal.amtBetFor;
-
-    // const totalAmtBetAgainst = goal.amtBetAgainst;
-
     if (req.body.status === "Success") {
       console.log("success status block");
+
       // push goalId into goal history arr of user
       await user.updateOne({ $push: { goalHistory: req.params.id } });
 
@@ -213,25 +192,11 @@ router.put("/:id/status", async (req, res) => {
 
       // calculate & update productivity points of user
       const numUsersAgainst = goal.usersBetAgainst.length;
-      const numUsersFor = goal.usersBetFor.length;
-      const totalBetters = numUsersAgainst + numUsersFor + 1;
-      const productivityPoints = (numUsersAgainst / totalBetters) * 100 + 10;
+
+      const productivityPoints = numUsersAgainst * 10 + 10;
       await user.updateOne({
         $inc: { productivityPoints: productivityPoints },
       });
-
-      // calculate own nett amt won
-      const nettWinning =
-        (goal.betAmount / (goal.betAmount + goal.amtBetFor)) *
-        goal.amtBetAgainst; // additional winning
-
-      // update own user's total amt won
-      await user.updateOne({
-        $inc: { totalAmtWon: nettWinning, currAmt: nettWinning },
-      });
-
-      // update goal nett amt
-      await goal.updateOne({ $set: { nettAmt: nettWinning } });
 
       // update goal status
       await goal.updateOne({ $set: { status: req.body.status } });
@@ -248,82 +213,25 @@ router.put("/:id/status", async (req, res) => {
       );
       // console.log(updateRank);
 
-      // update users bet for data
-      const updateUsersBetForData = await Promise.all(
-        // for all users who bet for this goal
-        goal.usersBetFor.map((userBetFor) => {
-          // calculate indiv nett amt won
-          const amtWon =
-            (userBetFor.amt / (goal.betAmount + goal.amtBetFor)) *
-            goal.amtBetAgainst; // additional winning
-
-          // increase total amt won by and curr amt of this user
-          // pull this completed goal from currUser's betFor goal arr
-          // push this completed goal into currUser's bet history arr
-          return User.bulkWrite([
-            {
-              updateOne: {
-                filter: { _id: userBetFor.userId },
-                update: { $inc: { totalAmtWon: amtWon, currAmt: amtWon } },
-              },
-            },
-            {
-              updateOne: {
-                filter: { _id: userBetFor.userId },
-                update: { $pull: { betFor: { goalId: req.params.id } } },
-              },
-            },
-            {
-              updateOne: {
-                filter: { _id: userBetFor.userId },
-                update: {
-                  $push: {
-                    betHistory: {
-                      goalId: req.params.id,
-                      amt: amtWon,
-                      status: "Victory",
-                    },
-                  },
-                },
-              },
-            },
-          ]);
-        })
-      );
-      // console.log(updateUsersBetForData);
-
       // update user bet against data
       const updateUsersBetAgainstData = await Promise.all(
         goal.usersBetAgainst.map((userBetAgainst) => {
-          // increment amt lost by the amt bet by user, decrement user's curr amt
           // pull this goal from currUser's bet against arr
           // push this goal into currUser's bet history arr
           return User.bulkWrite([
             {
               updateOne: {
-                filter: { _id: userBetAgainst.userId },
-                update: {
-                  $inc: {
-                    totalAmtLost: userBetAgainst.amt,
-                    currAmt: -userBetAgainst.amt,
-                  },
-                },
+                filter: { _id: userBetAgainst },
+                update: { $pull: { betAgainst: req.params.id } },
               },
             },
             {
               updateOne: {
-                filter: { _id: userBetAgainst.userId },
-                update: { $pull: { betAgainst: { goalId: req.params.id } } },
-              },
-            },
-            {
-              updateOne: {
-                filter: { _id: userBetAgainst.userId },
+                filter: { _id: userBetAgainst },
                 update: {
                   $push: {
                     betHistory: {
                       goalId: req.params.id,
-                      amt: -userBetAgainst.amt,
                       status: "Lost",
                     },
                   },
@@ -334,6 +242,7 @@ router.put("/:id/status", async (req, res) => {
         })
       );
       // console.log(updateUsersBetAgainstData);
+      res.status(200).json(user);
     } else if (req.body.status === "Failed") {
       console.log("failed status block");
       // failed goals dont need update productivity points & ranking
@@ -344,177 +253,40 @@ router.put("/:id/status", async (req, res) => {
       // clear curr goal id of user
       await user.updateOne({ $set: { goalId: "" } });
 
-      if (goal.usersBetAgainst.length === 0) {
-        // consider the case where user failed but no one bet against as a draw case => all users to get back their own money
-        // no need to update users' total amt lost/win, curr amt, goal nett amt (default 0)
+      // update goal status
+      await goal.updateOne({ $set: { status: req.body.status } });
 
-        // update goal status
-        await goal.updateOne({ $set: { status: "Draw" } });
-
-        // update users bet for data
-        await Promise.all(
-          // for all users who bet for this goal
-          goal.usersBetFor.map((userBetFor) => {
-            // pull this goal from currUser's bet for arr
-            // push this goal into currUser's bet history arr
-            return User.bulkWrite([
-              {
-                updateOne: {
-                  filter: { _id: userBetFor.userId },
-                  update: { $pull: { betFor: { goalId: req.params.id } } },
-                },
+      // update users bet against data --> win
+      await Promise.all(
+        // for all users who bet against this goal
+        goal.usersBetAgainst.map((userBetAgainst) => {
+          // pull this completed goal from currUser's betFor goal arr
+          // push this completed goal into currUser's bet history arr
+          return User.bulkWrite([
+            {
+              updateOne: {
+                filter: { _id: userBetAgainst },
+                update: { $pull: { betAgainst: req.params.id } },
               },
-              {
-                updateOne: {
-                  filter: { _id: userBetFor.userId },
-                  update: {
-                    $push: {
-                      betHistory: {
-                        goalId: req.params.id,
-                        amt: 0,
-                        status: "Draw",
-                      },
+            },
+            {
+              updateOne: {
+                filter: { _id: userBetAgainst },
+                update: {
+                  $push: {
+                    betHistory: {
+                      goalId: req.params.id,
+                      status: "Victory",
                     },
                   },
                 },
               },
-            ]);
-          })
-        );
-
-        // update users bet against data
-        await Promise.all(
-          // for all users who bet for this goal
-          goal.usersBetAgainst.map((userBetAgainst) => {
-            // pull this goal from currUser's bet against arr
-            // push this goal into currUser's bet history arr
-            return User.bulkWrite([
-              {
-                updateOne: {
-                  filter: { _id: userBetAgainst.userId },
-                  update: { $pull: { betAgainst: { goalId: req.params.id } } },
-                },
-              },
-              {
-                updateOne: {
-                  filter: { _id: userBetAgainst.userId },
-                  update: {
-                    $push: {
-                      betHistory: {
-                        goalId: req.params.id,
-                        amt: 0,
-                        status: "Draw",
-                      },
-                    },
-                  },
-                },
-              },
-            ]);
-          })
-        );
-      } else {
-        // update own user total amount lost = original bet amt
-        await user.updateOne({
-          $inc: { totalAmtLost: goal.betAmount, currAmt: -goal.betAmount },
-        });
-
-        // update goal nett amt
-        await goal.updateOne({ $set: { nettAmt: -goal.betAmount } });
-
-        // update goal status
-        await goal.updateOne({ $set: { status: req.body.status } });
-
-        // update users bet for data -> lose money
-        await Promise.all(
-          // for all users who bet for this goal
-          goal.usersBetFor.map((userBetFor) => {
-            // increment amt lost by the amt bet by user, decrement user's curr amt
-            // pull this goal from currUser's bet for arr
-            // push this goal into currUser's bet history arr
-            return User.bulkWrite([
-              {
-                updateOne: {
-                  filter: { _id: userBetFor.userId },
-                  update: {
-                    $inc: {
-                      totalAmtLost: userBetFor.amt,
-                      currAmt: -userBetFor.amt,
-                    },
-                  },
-                },
-              },
-              {
-                updateOne: {
-                  filter: { _id: userBetFor.userId },
-                  update: { $pull: { betFor: { goalId: req.params.id } } },
-                },
-              },
-              {
-                updateOne: {
-                  filter: { _id: userBetFor.userId },
-                  update: {
-                    $push: {
-                      betHistory: {
-                        goalId: req.params.id,
-                        amt: -userBetFor.amt,
-                        status: "Lost",
-                      },
-                    },
-                  },
-                },
-              },
-            ]);
-          })
-        );
-
-        // update users bet against data --> win money
-        await Promise.all(
-          // for all users who bet against this goal
-          goal.usersBetAgainst.map((userBetAgainst) => {
-            // calculate indiv nett amt won
-            const amtWon =
-              (userBetAgainst.amt / goal.amtBetAgainst) *
-              (goal.amtBetFor + goal.betAmount); // additional winning
-
-            // increase total amt won by and curr amt of this user
-            // pull this completed goal from currUser's betFor goal arr
-            // push this completed goal into currUser's bet history arr
-            return User.bulkWrite([
-              {
-                updateOne: {
-                  filter: { _id: userBetAgainst.userId },
-                  update: {
-                    $inc: { totalAmtWon: amtWon, currAmt: amtWon },
-                  },
-                },
-              },
-              {
-                updateOne: {
-                  filter: { _id: userBetAgainst.userId },
-                  update: { $pull: { betAgainst: { goalId: req.params.id } } },
-                },
-              },
-              {
-                updateOne: {
-                  filter: { _id: userBetAgainst.userId },
-                  update: {
-                    $push: {
-                      betHistory: {
-                        goalId: req.params.id,
-                        amt: amtWon,
-                        status: "Victory",
-                      },
-                    },
-                  },
-                },
-              },
-            ]);
-          })
-        );
-      }
+            },
+          ]);
+        })
+      );
+      res.status(200).json(user);
     }
-
-    res.status(200).json("goal has been successfully updated");
   } catch (err) {
     res.status(500).json(err);
   }

@@ -71,22 +71,16 @@ router.get("/main/:userId", async (req, res) => {
 // GET SPECULATING POSTS (BET FOR AND BET AGAINST)
 router.get("/speculate/:userId", async (req, res) => {
   try {
-    const goalsBetFor = await Goal.find({
-      "usersBetFor.userId": req.params.userId,
-    });
     const goalsBetAgainst = await Goal.find({
-      "usersBetAgainst.userId": req.params.userId,
+      usersBetAgainst: req.params.userId,
     });
-    const totalGoalsBet = goalsBetFor.concat(goalsBetAgainst);
-    // let allSpeculatePosts = [];
-    // for (let i = 0; i < totalGoalsBet; i++) {}
+
     const allSpeculatePosts = await Promise.all(
-      totalGoalsBet.map((goal) => {
+      goalsBetAgainst.map((goal) => {
         return Post.find({ goalId: goal._id });
       })
     );
     const flattenedPosts = allSpeculatePosts.flat();
-    // console.log(allSpeculatePosts);
 
     res.status(200).json(flattenedPosts);
   } catch (err) {

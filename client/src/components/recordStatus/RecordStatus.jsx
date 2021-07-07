@@ -1,17 +1,15 @@
 import React from "react";
 import { useContext, useRef, useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
 import "./recordStatus.css";
 import { TextareaAutosize } from "@material-ui/core";
-import { PermMedia } from "@material-ui/icons";
+import { LocalConvenienceStoreOutlined, PermMedia } from "@material-ui/icons";
 import { UserContext } from "../../context/UserContext";
 import axios from "axios";
 import ImgPreview from "./ImgPreview";
 import { url } from "../../utils/constants";
-import Alert from "@material-ui/lab/Alert";
 
-export default function RecordStatus({ goal }) {
-  const { user } = useContext(UserContext);
+export default function RecordStatus({ goal, atonement }) {
+  const { user, dispatch } = useContext(UserContext);
   const desc = useRef("");
 
   const [files, setFiles] = useState([]);
@@ -22,11 +20,10 @@ export default function RecordStatus({ goal }) {
     goal.status !== "In Progress" ||
       (goal.postIds ? goal.postIds.length === goal.numDays : false)
   );
-  // console.log("isCompleted: " + isCompleted);
-  // console.log("goal status: " + goal.status);
-  // useEffect dep on isCompleted => sort and change ranking
 
   const [isDisabled, setDisabled] = useState(false);
+  const [isAtonement, setIsAtonement] = useState(atonement);
+
   const [recordText, setRecordText] = useState("");
 
   function dateDiffInDays(a, b) {
@@ -54,23 +51,25 @@ export default function RecordStatus({ goal }) {
   const dayDiff = dateDiffInDays(new Date(goal.createdAt), new Date());
 
   useEffect(() => {
-    if (goal._id && goal.postIds && goal.status === "In Progress") {
+    if (goal && goal.postIds && goal.status === "In Progress") {
       setCompleted(goal.postIds.length === goal.numDays);
       setDisabled(dayDiff < goal.postIds.length);
 
       const updateStatus = async () => {
         if (goal.postIds.length === goal.numDays) {
-          await axios.put(url + "/goal/" + goal._id + "/status", {
+          const res = await axios.put(url + "/goal/" + goal._id + "/status", {
             userId: user._id,
             status: "Success",
           });
+
+          dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
         }
       };
       updateStatus();
     } else if (goal.status === "Success") {
       setCompleted(true);
     }
-  }, [goal.postIds, goal.numDays, goal.status, dayDiff, goal._id, user._id]);
+  }, [dayDiff, goal, user._id, dispatch]);
 
   async function submitRecord(event) {
     // setRecordText("");
@@ -128,8 +127,12 @@ export default function RecordStatus({ goal }) {
     <div className="record-status">
       <form
         className="record-form"
-        disabled={isDisabled || isCompleted}
-        onSubmit={isDisabled || isCompleted ? null : submitRecord}
+        disabled={isAtonement ? !isAtonement : isDisabled || isCompleted}
+        onSubmit={
+          (isAtonement ? !isAtonement : isDisabled || isCompleted)
+            ? null
+            : submitRecord
+        }
       >
         <div className="record-container">
           <TextareaAutosize
@@ -138,10 +141,12 @@ export default function RecordStatus({ goal }) {
             ref={desc}
             className="record-area"
             placeholder="Have you completed your goals today? (You can only record once a day)"
-            disabled={isDisabled || isCompleted}
+            disabled={isAtonement ? !isAtonement : isDisabled || isCompleted}
             onChange={handleChange}
             style={{
-              cursor: isDisabled || isCompleted ? "not-allowed" : "text",
+              cursor: (isAtonement ? !isAtonement : isDisabled || isCompleted)
+                ? "not-allowed"
+                : "text",
             }}
           />
           <div className="record-bottom">
@@ -149,12 +154,16 @@ export default function RecordStatus({ goal }) {
               htmlFor="file"
               className="shareOption"
               style={{
-                cursor: isDisabled || isCompleted ? "not-allowed" : "pointer",
+                cursor: (isAtonement ? !isAtonement : isDisabled || isCompleted)
+                  ? "not-allowed"
+                  : "pointer",
               }}
             >
               <PermMedia
                 htmlColor={
-                  isDisabled || isCompleted ? "grey" : "rgb(255 101 132)"
+                  (isAtonement ? !isAtonement : isDisabled || isCompleted)
+                    ? "grey"
+                    : "rgb(255 101 132)"
                 }
                 className="shareIcon"
               />
@@ -166,7 +175,9 @@ export default function RecordStatus({ goal }) {
                 type="file"
                 id="file"
                 accept=".png,.jpeg,.jpg"
-                disabled={isDisabled || isCompleted}
+                disabled={
+                  isAtonement ? !isAtonement : isDisabled || isCompleted
+                }
                 multiple
                 onChange={handleUpload}
               />
@@ -174,11 +185,16 @@ export default function RecordStatus({ goal }) {
             <button
               className="record-btn"
               type="submit"
-              disabled={isDisabled || isCompleted}
+              disabled={isAtonement ? !isAtonement : isDisabled || isCompleted}
               style={{
-                cursor: isDisabled || isCompleted ? "not-allowed" : "pointer",
-                backgroundColor:
-                  isDisabled || isCompleted ? "grey" : "rgb(247, 176, 25)",
+                cursor: (isAtonement ? !isAtonement : isDisabled || isCompleted)
+                  ? "not-allowed"
+                  : "pointer",
+                backgroundColor: (
+                  isAtonement ? !isAtonement : isDisabled || isCompleted
+                )
+                  ? "grey"
+                  : "rgb(247, 176, 25)",
               }}
             >
               Record

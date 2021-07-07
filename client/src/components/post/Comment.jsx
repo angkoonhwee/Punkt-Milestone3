@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "./post.css";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext";
-import { format, render, cancel, register } from "timeago.js";
+import { format } from "timeago.js";
 import { url } from "../../utils/constants";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { motion } from "framer-motion";
@@ -40,18 +40,17 @@ export default function Comment({ comm }) {
 
   return (
     <div className="comment-wrapper">
-      <div
+      <motion.div
         className="post-user-comments"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
       >
         <img
           className="profilePic"
           src={
             user.profilePicture
-              ? PublicImg + user.profilePicture
-              : PublicImg + "defaultDP.svg"
+              ? user.profilePicture
+              : "/assets/img/defaultDP.svg"
           }
           alt="profile-pic"
         />
@@ -64,7 +63,7 @@ export default function Comment({ comm }) {
 
           <p>{comm.content}</p>
         </div>
-      </div>
+      </motion.div>
       <div className="comment-like">
         <FavoriteIcon
           onClick={handleLike}

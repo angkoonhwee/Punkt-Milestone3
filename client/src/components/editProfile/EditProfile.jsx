@@ -16,16 +16,16 @@ export default function EditProfile({ user, dispatch, setIsEditing }) {
   const [userProfile, setUserProfile] = useState({
     userId: user._id,
     bio: user.bio || "",
-    school: user.school || "",
-    major: user.major || "",
-    yearOfStudy: user.yearOfStudy || "",
+    school: user.education?.school || "",
+    major: user.education?.major || "",
+    yearOfStudy: user.education?.yearOfStudy || "",
     // currentModules: user.currentModules || [],
-    instagram: user.instagram || "",
-    github: user.github || "",
-    linkedIn: user.linkedIn || "",
+    instagram: user.social?.instagram || "",
+    github: user.social?.github || "",
+    linkedIn: user.social?.linkedIn || "",
   });
 
-  const [tags, setTags] = useState(user.currentModules || []);
+  const [tags, setTags] = useState(user.education?.currentModules || []);
   const [tagVal, setTagVal] = useState("");
   const [moduleInputFocus, setModuleInputFocus] = useState(tags.length !== 0);
 
@@ -64,12 +64,24 @@ export default function EditProfile({ user, dispatch, setIsEditing }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // dispatch({ type: "UPDATE_START" });
+    dispatch({ type: "UPDATE_START" });
 
     try {
       const updatedProfile = {
-        ...userProfile,
-        currentModules: tags,
+        userId: userProfile.userId,
+        bio: userProfile.bio,
+        education: {
+          school: userProfile.school,
+          major: userProfile.major,
+          yearOfStudy: userProfile.yearOfStudy,
+          currentModules: tags,
+        },
+        social: {
+          instagram: userProfile.instagram,
+          linkedIn: userProfile.linkedIn,
+          github: userProfile.github,
+        },
+        // ...userProfile,
       };
 
       const res = await axios.put(url + "/user/" + user._id, updatedProfile);

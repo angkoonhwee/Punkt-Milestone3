@@ -7,20 +7,19 @@ import BetsTable from "../../components/betsTable/BetsTable";
 import GoalsTable from "../../components/goalsTable/GoalsTable";
 import BuddyTable from "../../components/buddyTable/BuddyTable";
 import { UserContext } from "../../context/UserContext";
-import IconButton from "@material-ui/core/IconButton";
 import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
-import UserInfo from "../../components/userInfo/UserInfo";
 import EditProfile from "../../components/editProfile/EditProfile";
-import { motion } from "framer-motion";
 import UploadFile from "../../components/uploadFile/UploadFile";
+import SettingsInfo from "../../components/settingsInfo/SettingsInfo";
+import { motion } from "framer-motion";
 
 export default function Settings() {
   const { user, dispatch } = useContext(UserContext);
   const [isBetTableClicked, setBetTableClicked] = useState(true);
   const [isGoalTableClicked, setGoalTableClicked] = useState(true);
   const [isBuddyTableClicked, setBuddyTableClicked] = useState(true);
-  const [isFinancesClicked, setFinancesClicked] = useState(true);
+  // const [isFinancesClicked, setFinancesClicked] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -89,81 +88,8 @@ export default function Settings() {
               setIsEditing={setIsEditing}
             />
           ) : (
-            <motion.div
-              initial={{ opacity: 0.5 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              {user.bio && <UserInfo field={"Bio"} data={user.bio} />}
-              {user.school && <UserInfo field={"School"} data={user.school} />}
-              {user.major && <UserInfo field={"Major"} data={user.major} />}
-              {user.yearOfStudy && (
-                <UserInfo field={"Year of Study"} data={user.yearOfStudy} />
-              )}
-              {user.currentModules && (
-                <UserInfo
-                  field={"Current Modules"}
-                  data={user.currentModules}
-                />
-              )}
-              {user.instagram && (
-                <UserInfo field={"Instagram"} data={user.instagram} />
-              )}
-              {user.linkedIn && (
-                <UserInfo field={"LinkedIn"} data={user.linkedIn} />
-              )}
-              {user.github && <UserInfo field={"Github"} data={user.github} />}
-            </motion.div>
+            <SettingsInfo user={user} />
           )}
-        </div>
-        <div className="container-table">
-          <div className="table-title">
-            <h2>My Finances</h2>
-            <ArrowDropDownCircleIcon
-              fontSize="large"
-              onClick={() => setFinancesClicked(!isFinancesClicked)}
-              style={{
-                opacity: 0.9,
-                color: isFinancesClicked ? "#267b99" : "rgb(175, 175, 175)",
-              }}
-            />
-          </div>
-          <hr />
-
-          {isFinancesClicked && (
-            <div className="container-finances">
-              <h5 className="finances-subtitle">
-                <strong>Total Amount Won: </strong>${" "}
-                {user.totalAmtWon.toFixed(2)}
-              </h5>
-              <h5 className="finances-subtitle">
-                <strong>Total Amount Lost: </strong>${" "}
-                {user.totalAmtLost.toFixed(2)}
-              </h5>
-              <h5 className="finances-subtitle">
-                <strong>Nett Amount: </strong>${" "}
-                {(user.totalAmtWon - user.totalAmtLost).toFixed(2)}
-              </h5>
-              <h5 className="finances-subtitle">
-                <strong>Current Amount: </strong>$ {user.currAmt.toFixed(2)}
-              </h5>
-            </div>
-          )}
-        </div>
-        <div className="container-table">
-          <div className="table-title">
-            <h2>My Bets</h2>
-            <ArrowDropDownCircleIcon
-              fontSize="large"
-              onClick={() => setBetTableClicked(!isBetTableClicked)}
-              style={{
-                opacity: 0.9,
-                color: isBetTableClicked ? "#267b99" : "rgb(175, 175, 175)",
-              }}
-            />
-          </div>
-          <hr />
-          {isBetTableClicked && <BetsTable />}
         </div>
         <div className="container-table">
           <div className="table-title">
@@ -178,8 +104,25 @@ export default function Settings() {
             />
           </div>
           <hr />
-          {isGoalTableClicked && <GoalsTable />}
+          {isGoalTableClicked && <GoalsTable user={user} />}
         </div>
+
+        <div className="container-table">
+          <div className="table-title">
+            <h2>My Bets</h2>
+            <ArrowDropDownCircleIcon
+              fontSize="large"
+              onClick={() => setBetTableClicked(!isBetTableClicked)}
+              style={{
+                opacity: 0.9,
+                color: isBetTableClicked ? "#267b99" : "rgb(175, 175, 175)",
+              }}
+            />
+          </div>
+          <hr />
+          {isBetTableClicked && <BetsTable user={user} />}
+        </div>
+
         <div className="container-table">
           <div className="table-title">
             <h2>My Buddy History</h2>
@@ -193,7 +136,7 @@ export default function Settings() {
             />
           </div>
           <hr />
-          {isBuddyTableClicked && <BuddyTable />}
+          {isBuddyTableClicked && <BuddyTable user={user} />}
         </div>
       </div>
       <ScrollTop />

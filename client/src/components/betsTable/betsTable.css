@@ -1,3 +1,16 @@
-.bets-table {
-  /* padding: 50px 30px 0; */
+.reply-atonement {
+  padding: 2px 10px;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid #489fb5;
+  color: #489fb5;
+  font-weight: 500;
+  transition: 0.3s ease-in-out;
+  display: inline-block;
+}
+
+.reply-atonement:hover {
+  background-color: #489fb5;
+  border: 1px solid #489fb5;
+  color: white;
 }

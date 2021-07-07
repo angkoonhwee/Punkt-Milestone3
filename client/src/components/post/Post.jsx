@@ -9,7 +9,7 @@ import ImgRest from "./ImgRest";
 import Comment from "./Comment";
 import Report from "../report/Report";
 import DeleteIcon from "@material-ui/icons/Delete";
-import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
+import FaceIcon from "@material-ui/icons/Face";
 import axios from "axios";
 import { format } from "timeago.js";
 import { Link } from "react-router-dom";
@@ -19,15 +19,11 @@ import { url } from "../../utils/constants";
 /* *********************************************************************** */
 
 export default function Post({ post }) {
-  const PublicImg = process.env.REACT_APP_PUBLIC_URL;
   const [isLit, setIsLit] = useState(false);
   const [numLit, setNumLit] = useState(post.lits?.length);
   const [isCommenting, setIsCommenting] = useState(false);
   const [numComment, setNumComment] = useState(post.comments?.length);
-  // const comm = useRef();
   const [comment, setComment] = useState("");
-  // const [amtBetFor, setAmtBetFor] = useState()
-  const [isBetFor, setBetFor] = useState(false);
   const [isBetAgainst, setBetAgainst] = useState(false);
   const [user, setUser] = useState({});
   const { user: currUser } = useContext(UserContext);
@@ -57,23 +53,6 @@ export default function Post({ post }) {
     };
     fetchGoal();
   }, [post.goalId]);
-
-  useEffect(() => {
-    const fetchBetFor = async () => {
-      try {
-        if (goal._id) {
-          const res = await axios.get(
-            url + "/goal/" + goal._id + "/bet-for/" + currUser._id
-          );
-
-          setBetFor(res.data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchBetFor();
-  }, [goal, currUser._id]);
 
   useEffect(() => {
     const fetchBetAgainst = async () => {
@@ -124,14 +103,6 @@ export default function Post({ post }) {
     setIsCommenting(!isCommenting);
   }
 
-  function handleBetFor() {
-    setBetFor(true);
-  }
-
-  function handleBetAgainst() {
-    setBetAgainst(true);
-  }
-
   async function submitComment(event) {
     event.preventDefault();
     try {
@@ -172,8 +143,6 @@ export default function Post({ post }) {
   //   }
   // }
 
-  // console.log(Users.filter((u) => u.id === post.userId)[0].username);
-
   return (
     <div className="post">
       <div className="post-wrapper">
@@ -185,7 +154,7 @@ export default function Post({ post }) {
                 src={
                   user.profilePicture
                     ? user.profilePicture
-                    : PublicImg + "defaultDP.svg"
+                    : "/assets/img/defaultDP.svg"
                 }
                 alt="profilePic"
                 className="profilePic post-profile"
@@ -262,8 +231,8 @@ export default function Post({ post }) {
             <div className="post-goal-content">
               <div className="goal-bet-amount">
                 <p>
-                  <strong>SGD: </strong>
-                  {goal?.betAmount}
+                  <strong>Atonement: </strong>
+                  {goal?.atonement}
                 </p>
               </div>
               <div className="goal-title">
@@ -313,26 +282,16 @@ export default function Post({ post }) {
               <Fab
                 id="fire-icon"
                 style={{
-                  backgroundColor: isBetFor ? "rgb(57, 153, 57)" : "#95c9d4b0",
-                }}
-              >
-                <i className="far fa-laugh-wink"></i>
-              </Fab>
-              <p className="post-lit-counter">${goal?.amtBetFor}</p>
-            </div>
-
-            <div className="post-bottom-left-btn">
-              <Fab
-                id="fire-icon"
-                style={{
                   backgroundColor: isBetAgainst
                     ? "rgb(201, 90, 90)"
                     : "#95c9d4b0",
                 }}
               >
-                <i className="far fa-meh" />
+                <FaceIcon />
               </Fab>
-              <p className="post-lit-counter">${goal?.amtBetAgainst}</p>
+              <p className="post-lit-counter">
+                {goal?.usersBetAgainst?.length} bets
+              </p>
             </div>
           </div>
           <div className="post-comment">
@@ -350,6 +309,7 @@ export default function Post({ post }) {
                       className="comment-area"
                       placeholder="Write your comments"
                       onChange={handleChange}
+                      required
                       // ref={comm}
                     />
                     <button type="submit">Comment</button>

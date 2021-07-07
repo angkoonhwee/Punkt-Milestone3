@@ -17,9 +17,10 @@ export default function Profile() {
   const { user: currUser, dispatch } = useContext(UserContext);
   const [user, setUser] = useState({});
   const username = useParams().username;
-  const [isFollowing, setFollowing] = useState(false);
+  const [isFollowing, setFollowing] = useState(
+    currUser?.followings.includes(user?.id)
+  );
   const [isBuddy, setBuddy] = useState(false);
-  const [posts, setPosts] = useState([]);
   const [file, setFile] = useState(null);
 
   useEffect(() => {
@@ -38,7 +39,26 @@ export default function Profile() {
   }, [username, currUser]);
 
   async function handleFollowing() {
-    setFollowing(!isFollowing);
+    try {
+      if (user._id && currUser._id) {
+        if (isFollowing) {
+          const res = await axios.put(url + `/user/${user._id}/unfollow`, {
+            userId: currUser._id,
+          });
+
+          dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+        } else {
+          const res = await axios.put(url + `/user/${user._id}/follow`, {
+            userId: currUser._id,
+          });
+          dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+        }
+      }
+
+      setFollowing(!isFollowing);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function handleBuddy() {
@@ -104,9 +124,9 @@ export default function Profile() {
               />
             </div>
 
-            <h4>{user.username}</h4>
-            {user.username !== username && (
-              <div>
+            <h4>{username}</h4>
+            {username !== currUser.username && (
+              <div className="buttons-wrapper">
                 <button
                   className="follow-btn"
                   onClick={handleBuddy}
@@ -142,8 +162,8 @@ export default function Profile() {
               </div>
             )}
             <div className="social-media-icons">
-              {user.instagram && (
-                <a href={user.instagram}>
+              {user.social?.instagram && (
+                <a href={user.social?.instagram}>
                   <i
                     className="fab fa-instagram"
                     style={{ color: "#C13584", marginRight: "15px" }}
@@ -151,8 +171,8 @@ export default function Profile() {
                 </a>
               )}
 
-              {user.linkedIn && (
-                <a href={user.linkedIn}>
+              {user.social?.linkedIn && (
+                <a href={user.social?.linkedIn}>
                   <i
                     className="fab fa-linkedin"
                     style={{ color: "#2867B2", marginRight: "15px" }}
@@ -160,8 +180,8 @@ export default function Profile() {
                 </a>
               )}
 
-              {user.github && (
-                <a href={user.github}>
+              {user.social?.github && (
+                <a href={user.social?.github}>
                   <i className="fab fa-github" style={{ color: "#333" }}></i>
                 </a>
               )}
@@ -170,11 +190,13 @@ export default function Profile() {
             <ul className="user-info-list">
               <li>Rank: #{user.rank}</li>
               <li>Productivity Points: {user.productivityPoints}</li>
-              {user.school && <li>{user.school}</li>}
-              {user.major && <li>{user.major}</li>}
-              {user.yearOfStudy && <li>Year {user.yearOfStudy}</li>}
-              {user.currentModules &&
-                user.currentModules.map((m) => (
+              {user.education?.school && <li>{user.education?.school}</li>}
+              {user.education?.major && <li>{user.education?.major}</li>}
+              {user.education?.yearOfStudy && (
+                <li>Year {user.education?.yearOfStudy}</li>
+              )}
+              {user.education?.currentModules &&
+                user.education?.currentModules.map((m) => (
                   <li key={m}>{m.toUpperCase()}</li>
                 ))}
             </ul>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -16,6 +16,9 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import "./betsTable.css";
+import { motion } from "framer-motion";
+import axios from "axios";
+import { url } from "../../utils/constants";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -94,69 +97,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(date, goal, name, status, amt) {
-  return { date, goal, name, status, amt };
-}
-
-const rows = [
-  createData(
-    new Date(2021, 5, 19).toDateString(),
-    "test goal",
-    "john",
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 20).toDateString(),
-    "test goal",
-    "john",
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 21).toDateString(),
-    "test goal",
-    "john",
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 22).toDateString(),
-    "test goal test test test test",
-    "john",
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 23).toDateString(),
-    "test goal",
-    "john",
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 24).toDateString(),
-    "test goal",
-    "john",
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 25).toDateString(),
-    "test goal",
-    "john",
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 26).toDateString(),
-    "test goal",
-    "john",
-    "victory",
-    2
-  ),
-].sort((a, b) => a.date - b.date);
-
 const useStyles2 = makeStyles({
   table: {
     minWidth: 500,
@@ -164,32 +104,50 @@ const useStyles2 = makeStyles({
 });
 
 const columns = [
-  { id: "date", label: "Date", minWidth: 90 },
-  { id: "goal", label: "Goal", minWidth: 170 },
+  { id: "date", label: "Date", width: "10%" },
+  { id: "title", label: "Title", width: "27.5%" },
   {
-    id: "name",
-    label: "Name",
-    minWidth: 90,
+    id: "atonement",
+    label: "Atonement",
+    width: "27.5%",
   },
+
   {
     id: "status",
     label: "Status",
-    minWidth: 90,
+    width: "12.5%",
   },
   {
-    id: "amt",
-    label: "Nett ($)",
-    minWidth: 90,
+    id: "user",
+    label: "Username",
+    width: "12.5%",
+  },
+  {
+    id: "failed-message",
+    label: "Leave a Message",
+    width: "10%",
   },
 ];
 
-export default function BetsTable() {
+export default function BetsTable({ user }) {
   const classes = useStyles2();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [userBets, setUserBets] = useState([]);
+
+  useEffect(() => {
+    const fetchUserBets = async () => {
+      const res = await axios.get(url + `/goal/user/${user._id}/bet`);
+      const sortedBets = res.data.sort(
+        (g1, g2) => new Date(g2.createdAt) - new Date(g1.createdAt)
+      );
+      setUserBets(sortedBets);
+    };
+    fetchUserBets();
+  }, [user]);
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, userBets.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -201,7 +159,7 @@ export default function BetsTable() {
   };
 
   return (
-    <div className="bets-table">
+    <motion.div className="bets-table" layout transition={{ duration: 1 }}>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="custom pagination table">
           <TableHead>
@@ -210,7 +168,7 @@ export default function BetsTable() {
                 <TableCell
                   align="center"
                   key={index}
-                  style={{ minWidth: column.minWidth, fontWeight: "bold" }}
+                  style={{ width: column.width, fontWeight: "bold" }}
                 >
                   {column.label}
                 </TableCell>
@@ -220,25 +178,42 @@ export default function BetsTable() {
 
           <TableBody>
             {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map((row, index) => (
+              ? userBets.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+              : userBets
+            ).map((bet, index) => (
               <TableRow key={index}>
                 <TableCell align="center" component="th" scope="row">
-                  {row.date}
+                  {new Date(bet.createdAt).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {row.goal}
-                </TableCell>
-                <TableCell align="center" component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="center" component="th" scope="row">
-                  {row.status}
+                  {bet.title}
                 </TableCell>
 
-                <TableCell style={{ width: 100 }} align="center">
-                  {row.amt}
+                <TableCell align="center" component="th" scope="row">
+                  {bet.atonement}
+                </TableCell>
+
+                <TableCell align="center" component="th" scope="row">
+                  {bet.status}
+                </TableCell>
+
+                <TableCell align="center" component="th" scope="row">
+                  {bet.username}
+                </TableCell>
+
+                <TableCell align="center" component="th" scope="row">
+                  {bet.status === "Failed" || bet.status === "Draw" ? (
+                    <button className="reply-atonement">Reply</button>
+                  ) : (
+                    <div>NA</div>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -254,7 +229,7 @@ export default function BetsTable() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={5}
-                count={rows.length}
+                count={userBets.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
@@ -269,6 +244,6 @@ export default function BetsTable() {
           </TableFooter>
         </Table>
       </TableContainer>
-    </div>
+    </motion.div>
   );
 }

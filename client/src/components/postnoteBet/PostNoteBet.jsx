@@ -16,7 +16,7 @@ export default function PostNoteBet() {
   const [currGoal, setCurrGoal] = useState({});
   const [goal, setGoal] = useState({
     title: "",
-    amount: "",
+    atonement: "",
     days: "",
   });
 
@@ -39,7 +39,9 @@ export default function PostNoteBet() {
   }, [user._id, user.goalId, hasGoal, currGoal]);
   //user._id, hasGoal, user.goalId
 
-  const currDays = currGoal?.postIds?.length;
+  const currDays = currGoal?.madeAtonement
+    ? currGoal?.postIds?.length - 1
+    : currGoal?.postIds?.length;
 
   const totalDays = currGoal?.numDays;
   const currProgress = Math.round((currDays / totalDays) * 100);
@@ -58,12 +60,20 @@ export default function PostNoteBet() {
   async function submitGoal(event) {
     event.preventDefault();
     dispatch({ type: "UPDATE_START" });
-    const newGoal = {
-      userId: user._id,
-      title: goal.title,
-      betAmount: goal.amount,
-      numDays: goal.days,
-    };
+    const newGoal =
+      goal.atonement === ""
+        ? {
+            userId: user._id,
+            title: goal.title,
+            atonement: "Fulfil a request from the comment with most likes",
+            numDays: goal.days,
+          }
+        : {
+            userId: user._id,
+            title: goal.title,
+            atonement: goal.atonement,
+            numDays: goal.days,
+          };
 
     try {
       const newGoalObj = await axios.post(url + "/goal", newGoal);
@@ -93,7 +103,8 @@ export default function PostNoteBet() {
             {currGoal?.title}
           </p>
           <p>
-            <strong>Bet Amount: </strong>SGD {currGoal?.betAmount}
+            <strong>Atonement: </strong>
+            {currGoal?.atonement}
           </p>
           <div className="progressbarWrapper">
             <div className="progressbar-text-wrapper">
@@ -104,9 +115,6 @@ export default function PostNoteBet() {
                 <div
                   className="progress-bar"
                   role="progressbar"
-                  // aria-valuenow="10"
-                  // aria-valuemin="0"
-                  // aria-valuemax="30"
                   style={{ width: currProgress + "%" }}
                 >
                   {currProgress + "%"}
@@ -132,23 +140,20 @@ export default function PostNoteBet() {
                 name="title"
                 value={goal.title}
                 className="set-goal"
-                placeholder="State your goal(s)"
+                placeholder="State your goal"
                 onChange={handleChange}
                 required
               />
             </div>
             <div className="bet-component">
-              <strong>Bet Amount: </strong>
-              <input
+              <strong>Atonement: </strong>
+              <TextareaAutosize
+                name="atonement"
+                value={goal.atonement}
                 className="set-goal"
-                type="number"
-                placeholder="Amount"
-                name="amount"
-                value={goal.amount}
+                placeholder="State your atonement"
                 onChange={handleChange}
-                required
-                min="0"
-              ></input>
+              />
             </div>
             <div className="bet-component">
               <strong>No. of Days: </strong>

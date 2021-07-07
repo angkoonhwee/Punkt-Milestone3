@@ -13,8 +13,7 @@ import { UserContext } from "../../context/UserContext";
 import { url } from "../../utils/constants";
 
 export default function Progress() {
-  const PF = process.env.REACT_APP_PUBLIC_URL;
-  const { user: currUser } = useContext(UserContext);
+  const { user: currUser, dispatch } = useContext(UserContext);
   const username = useParams().username;
   const goalId = useParams().goalId;
   // console.log("goalid : " + goalId);
@@ -23,13 +22,18 @@ export default function Progress() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = username
-        ? await axios.get(url + `/user?username=${username}`)
-        : await axios.get(url + "/");
-      setUser(res.data);
+      if (username) {
+        if (username === currUser.username) {
+          setUser(currUser);
+        } else {
+          const res = await axios.get(url + `/user?username=${username}`);
+
+          setUser(res.data);
+        }
+      }
     };
     fetchUser();
-  }, [username]);
+  }, [username, currUser]);
 
   useEffect(() => {
     const fetchGoal = async () => {
@@ -46,7 +50,12 @@ export default function Progress() {
     <div>
       <NavbarMain />
       <div className="container-progress">
-        <BetStatus user={username ? user : currUser} goal={goal} />
+        <BetStatus
+          user={username ? user : currUser}
+          goal={goal}
+          dispatch={dispatch}
+          currUser={currUser}
+        />
         {!username || username === currUser.username ? (
           <RecordStatus goal={goal} />
         ) : (

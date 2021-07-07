@@ -45,6 +45,7 @@
   font-weight: 500;
   border-radius: 10px;
   width: fit-content;
+  margin-right: 7px;
 }
 
 .module-tags li button {

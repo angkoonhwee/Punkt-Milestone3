@@ -16,6 +16,7 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import "./buddyTable.css";
+import { motion } from "framer-motion";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {

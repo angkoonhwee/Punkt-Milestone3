@@ -73,7 +73,7 @@ export default function Searchbar() {
                     alt="profile-pic"
                     src={
                       u.profilePicture !== ""
-                        ? url + "/images/" + u.profilePicture
+                        ? u.profilePicture
                         : "/assets/img/defaultDP.svg"
                     }
                     className="profilePic"

@@ -36,16 +36,14 @@ function Feed({ username, page }) {
           : page === "explore"
           ? await axios.get(url + "/post") //explore page render all posts
           : await axios.get(url + "/post/speculate/" + user._id); // speculate page that render posts for which user has bet for the goal
-        setPosts(
-          res.data.sort(
-            (p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt)
-          )
+
+        const sortedPosts = res.data.sort(
+          (p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt)
         );
+        setPosts(sortedPosts);
         setPageCount(Math.ceil(res.data.length / postsPerPage));
         setDisplayPosts(
-          res.data
-            .sort((p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt))
-            .slice(postsVisited, postsVisited + postsPerPage)
+          sortedPosts.slice(postsVisited, postsVisited + postsPerPage)
         );
       } catch (err) {
         console.log(err);

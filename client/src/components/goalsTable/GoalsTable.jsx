@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -16,6 +16,10 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import "./goalsTable.css";
+import axios from "axios";
+import { url } from "../../utils/constants";
+import { motion } from "framer-motion";
+import Modal from "../modal/Modal";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -94,69 +98,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(date, goal, status, amt) {
-  return { date, goal, status, amt };
-}
-
-const rows = [
-  createData(
-    new Date(2021, 5, 19).toDateString(),
-    "test goal",
-
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 20).toDateString(),
-    "test goal",
-
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 21).toDateString(),
-    "test goal",
-
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 22).toDateString(),
-    "test goal test test test test",
-
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 23).toDateString(),
-    "test goal",
-
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 24).toDateString(),
-    "test goal",
-
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 25).toDateString(),
-    "test goal",
-
-    "victory",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 26).toDateString(),
-    "test goal",
-
-    "victory",
-    2
-  ),
-].sort((a, b) => a.date - b.date);
-
 const useStyles2 = makeStyles({
   table: {
     minWidth: 500,
@@ -164,28 +105,53 @@ const useStyles2 = makeStyles({
 });
 
 const columns = [
-  { id: "date", label: "Date", minWidth: 90 },
-  { id: "goal", label: "Goal", minWidth: 170 },
+  { id: "date", label: "Date", width: "12.5%" },
+  { id: "title", label: "Title", width: "27.5%" },
+  {
+    id: "atonement",
+    label: "Atonement",
+    width: "27.5%",
+  },
 
   {
     id: "status",
     label: "Status",
-    minWidth: 90,
+    width: "12.5%",
   },
   {
-    id: "amt",
-    label: "Nett ($)",
-    minWidth: 90,
+    id: "atonement-post",
+    label: "Atonement Post",
+    width: "10%",
+  },
+  {
+    id: "failed-messages",
+    label: "Messages",
+    width: "10%",
   },
 ];
 
-export default function GoalsTable() {
+export default function GoalsTable({ user }) {
   const classes = useStyles2();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [userGoals, setUserGoals] = useState([]);
+  const [isCreatingAtonement, setIsCreatingAtonement] = useState(false);
+  const [currGoal, setCurrGoal] = useState(null);
+  const [isViewMsg, setIsViewMsg] = useState(false);
+
+  useEffect(() => {
+    const fetchUserGoals = async () => {
+      const res = await axios.get(url + `/goal/user/${user._id}/all`);
+      const sortedGoals = res.data.sort(
+        (g1, g2) => new Date(g2.createdAt) - new Date(g1.createdAt)
+      );
+      setUserGoals(sortedGoals);
+    };
+    fetchUserGoals();
+  }, [user]);
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, userGoals.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -197,7 +163,7 @@ export default function GoalsTable() {
   };
 
   return (
-    <div className="goals-table">
+    <motion.div className="goals-table" layout transition={{ duration: 1 }}>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="custom pagination table">
           <TableHead>
@@ -206,7 +172,7 @@ export default function GoalsTable() {
                 <TableCell
                   align="center"
                   key={index}
-                  style={{ minWidth: column.minWidth, fontWeight: "bold" }}
+                  style={{ width: column.width, fontWeight: "bold" }}
                 >
                   {column.label}
                 </TableCell>
@@ -216,29 +182,100 @@ export default function GoalsTable() {
 
           <TableBody>
             {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map((row, index) => (
+              ? userGoals?.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+              : userGoals
+            ).map((userGoal, index) => (
               <TableRow key={index}>
-                <TableCell align="center" component="th" scope="row">
-                  {row.date}
+                <TableCell
+                  align="center"
+                  component="th"
+                  scope="row"
+                  style={{ width: "15%" }}
+                >
+                  {new Date(userGoal.createdAt).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </TableCell>
-                <TableCell align="center" component="th" scope="row">
-                  {row.goal}
+                <TableCell
+                  align="center"
+                  component="th"
+                  scope="row"
+                  style={{ width: "30%" }}
+                >
+                  {userGoal.title}
                 </TableCell>
 
-                <TableCell align="center" component="th" scope="row">
-                  {row.status}
+                <TableCell
+                  align="center"
+                  component="th"
+                  scope="row"
+                  style={{ width: "30%" }}
+                >
+                  {userGoal.atonement}
                 </TableCell>
 
-                <TableCell style={{ width: 100 }} align="center">
-                  {row.amt}
+                <TableCell
+                  align="center"
+                  component="th"
+                  scope="row"
+                  style={{ width: "15%" }}
+                >
+                  {userGoal.status}
+                </TableCell>
+
+                <TableCell
+                  align="center"
+                  component="th"
+                  scope="row"
+                  style={{ width: "10%" }}
+                >
+                  {userGoal.status === "Failed" ||
+                  userGoal.status === "Draw" ? (
+                    <button
+                      className="reply-atonement"
+                      onClick={() => {
+                        setIsCreatingAtonement(true);
+                        setCurrGoal(userGoal);
+                      }}
+                    >
+                      Create
+                    </button>
+                  ) : (
+                    <div>NA</div>
+                  )}
+                </TableCell>
+
+                <TableCell
+                  align="center"
+                  component="th"
+                  scope="row"
+                  style={{ width: "10%" }}
+                >
+                  {userGoal.status === "Failed" ||
+                  userGoal.status === "Draw" ? (
+                    <button
+                      className="reply-atonement"
+                      onClick={() => {
+                        setIsViewMsg(true);
+                        setCurrGoal(userGoal);
+                      }}
+                    >
+                      View
+                    </button>
+                  ) : (
+                    <div>NA</div>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
 
             {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
+              <TableRow style={{ height: 50 * emptyRows }}>
                 <TableCell colSpan={6} />
               </TableRow>
             )}
@@ -248,7 +285,7 @@ export default function GoalsTable() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={5}
-                count={rows.length}
+                count={userGoals.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
@@ -263,6 +300,16 @@ export default function GoalsTable() {
           </TableFooter>
         </Table>
       </TableContainer>
-    </div>
+      {isCreatingAtonement && currGoal && (
+        <Modal
+          setIsClicked={setIsCreatingAtonement}
+          task={"Create"}
+          goal={currGoal}
+        />
+      )}
+      {isViewMsg && currGoal && (
+        <Modal setIsClicked={setIsViewMsg} task={"View"} goal={currGoal} />
+      )}
+    </motion.div>
   );
 }
