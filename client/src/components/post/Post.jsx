@@ -99,10 +99,6 @@ export default function Post({ post }) {
     setIsLit(!isLit);
   }
 
-  function handleComment() {
-    setIsCommenting(!isCommenting);
-  }
-
   async function submitComment(event) {
     event.preventDefault();
     try {
@@ -223,10 +219,7 @@ export default function Post({ post }) {
             </button>
           </div>
         </div>
-        <Link
-          to={"/progress/" + user.username + "/" + goal?._id}
-          style={{ textDecoration: "none" }}
-        >
+        <Link to={"/progress/" + goal?._id} style={{ textDecoration: "none" }}>
           <div className="post-goal-section">
             <div className="post-goal-content">
               <div className="goal-bet-amount">
@@ -268,7 +261,7 @@ export default function Post({ post }) {
             <div className="post-bottom-left-btn">
               <Fab
                 id="comment-icon"
-                onClick={handleComment}
+                onClick={() => setIsCommenting(!isCommenting)}
                 style={{
                   backgroundColor: isCommenting ? "#daa078fa" : "#95c9d4b0",
                 }}
@@ -308,7 +301,7 @@ export default function Post({ post }) {
                       value={comment}
                       className="comment-area"
                       placeholder="Write your comments"
-                      onChange={handleChange}
+                      onChange={(event) => setComment(event.target.value)}
                       required
                       // ref={comm}
                     />

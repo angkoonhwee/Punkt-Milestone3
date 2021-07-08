@@ -4,6 +4,44 @@ const User = require("../models/user");
 const Post = require("../models/post");
 const Goal = require("../models/goal");
 
+// CREATE POST
+router.post("/", async (req, res) => {
+  const newPost = new Post(req.body);
+
+  try {
+    const savedPost = await newPost.save();
+    // console.log(savedPost);
+    // const currGoal = Goal.findById(req.body.goalId);
+    // await currGoal.updateOne(
+    //   { $push: { postIds: savedPost.id } },
+    //   { $set: { madeAtonement: req.body.atonement } }
+    // );
+
+    await Goal.bulkWrite([
+      {
+        updateOne: {
+          filter: { _id: req.body.goalId },
+          update: { $push: { postIds: savedPost.id } },
+        },
+      },
+      {
+        updateOne: {
+          filter: { _id: req.body.goalId },
+          update: { $set: { madeAtonement: req.body.atonement } },
+        },
+      },
+    ]);
+
+    // if (req.body.atonement) {
+    //   await currGoal.updateOne({ $set: { madeAtonement: true } });
+    // }
+
+    res.status(200).json(savedPost);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // GET ALL POSTS
 router.get("/", async (req, res) => {
   try {
@@ -84,21 +122,18 @@ router.get("/speculate/:userId", async (req, res) => {
 
     res.status(200).json(flattenedPosts);
   } catch (err) {
-    console.log(err);
+    res.status(500).json(err);
   }
 });
 
-// CREATE POST
-router.post("/", async (req, res) => {
-  const newPost = new Post(req.body);
-
+// GET ATONEMENT POST
+router.get("/atonement/:goalId", async (req, res) => {
   try {
-    const savedPost = await newPost.save();
-    // console.log(savedPost);
-    const currGoal = Goal.findById(req.body.goalId);
-    await currGoal.updateOne({ $push: { postIds: savedPost.id } });
-
-    res.status(200).json(savedPost);
+    const post = await Post.findOne({
+      goalId: req.params.goalId,
+      atonement: true,
+    });
+    res.status(200).json(post);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -131,6 +166,10 @@ router.delete("/:id", async (req, res) => {
     if (!post) {
       res.status(404).json("The post you are requesting does not exist.");
     } else if (post.userId === req.body._id) {
+      if (post.atonement) {
+        // post is an atonement post, when deleting, also need to reset currGoal madeAtonement to false
+        await currGoal.updateOne({ $set: { madeAtonement: false } });
+      }
       await post.deleteOne();
       await currGoal.updateOne({ $pull: { postIds: req.params.id } });
       res.status(200).json("Post has been deleted.");

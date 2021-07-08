@@ -80,6 +80,7 @@ export default function Contact() {
                   name="name"
                   value={enquiry.name}
                   onChange={handleChange}
+                  required
                 />
               </FormControl>
               <FormControl>
@@ -89,6 +90,7 @@ export default function Contact() {
                   type="email"
                   value={enquiry.email}
                   onChange={handleChange}
+                  required
                 />
               </FormControl>
               <TextareaAutosize
@@ -98,6 +100,7 @@ export default function Contact() {
                 onChange={handleChange}
                 type="text"
                 placeholder="Enter your enquiries..."
+                required
               />
               <button className="submit-enquiry-btn">Submit</button>
             </form>

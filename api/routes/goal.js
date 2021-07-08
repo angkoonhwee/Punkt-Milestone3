@@ -121,15 +121,19 @@ router.get("/user/:userId/bet", async (req, res) => {
     const goals = await Goal.find({ usersBetAgainst: req.params.userId });
     const goalsWithName = await Promise.all(
       goals.map((g) => {
-        const { title, atonement, status, createdAt } = g._doc;
+        // console.log(g._doc);
+        const { title, atonement, status, createdAt, _id, failedMessages } =
+          g._doc;
         return User.findById(g.userId)
           .then((u) => {
             return {
+              _id: _id,
               title: title,
               atonement: atonement,
               status: status,
               createdAt: createdAt,
               username: u.username,
+              failedMessages: failedMessages,
             };
           })
           .catch((err) => console.log(err));
@@ -287,6 +291,41 @@ router.put("/:id/status", async (req, res) => {
       );
       res.status(200).json(user);
     }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// UPDATE FAILED MESSAGES ARRAY WHEN BET USERS REPLY THIS LOST BET
+router.put("/failed-messages/:id", async (req, res) => {
+  try {
+    // const goal = await Goal.findById(req.params.id);
+    // await goal.updateOne({ $push: { failedMessages: req.body } });
+    const goal = await Goal.findByIdAndUpdate(
+      req.params.id,
+      { $push: { failedMessages: req.body } },
+      { new: true }
+    );
+
+    const userMessages = await goal.failedMessages.filter(
+      (msg) => msg.userId === req.body.userId
+    );
+
+    res.status(200).json(userMessages);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// GET FAILED MESSAGES ARRAY FOR A USER
+router.get("/failed-messages/:goalId/:userId", async (req, res) => {
+  try {
+    const goal = await Goal.findById(req.params.goalId);
+    const userMessages = await goal.failedMessages.filter(
+      (msg) => msg.userId === req.params.userId
+    );
+
+    res.status(200).json(userMessages);
   } catch (err) {
     res.status(500).json(err);
   }

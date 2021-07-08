@@ -7,6 +7,8 @@ import { url } from "../../utils/constants";
 export default function BetStatus({ user, goal, dispatch, currUser }) {
   const [latestPost, setLatestPost] = useState({});
   const [SecLatestPost, setSecLatestPost] = useState({});
+  console.log(goal.madeAtonement);
+  console.log(goal.postIds);
 
   const currDays = goal.madeAtonement
     ? goal.postIds?.length - 1

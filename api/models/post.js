@@ -22,10 +22,7 @@ const postSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    atonement: {
-      type: Boolean,
-      default: false,
-    },
+    atonement: Boolean,
     comments: {
       type: Array,
       default: [],

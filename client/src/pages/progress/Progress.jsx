@@ -20,20 +20,20 @@ export default function Progress() {
   const [goal, setGoal] = useState({});
   const [user, setUser] = useState({}); // owner of the goal
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (username) {
-        if (username === currUser.username) {
-          setUser(currUser);
-        } else {
-          const res = await axios.get(url + `/user?username=${username}`);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     if (username) {
+  //       if (username === currUser.username) {
+  //         setUser(currUser);
+  //       } else {
+  //         const res = await axios.get(url + `/user?username=${username}`);
 
-          setUser(res.data);
-        }
-      }
-    };
-    fetchUser();
-  }, [username, currUser]);
+  //         setUser(res.data);
+  //       }
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [username, currUser]);
 
   useEffect(() => {
     const fetchGoal = async () => {
@@ -46,17 +46,33 @@ export default function Progress() {
     fetchGoal();
   }, [currUser._id, goalId]);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (goal.userId) {
+        if (goal.userId === currUser._id) {
+          setUser(currUser);
+        } else {
+          const res = await axios.get(url + `/user?userId=${goal.userId}`);
+
+          setUser(res.data);
+        }
+      }
+    };
+    fetchUser();
+  }, [goal, currUser]);
+
   return (
     <div>
       <NavbarMain />
       <div className="container-progress">
         <BetStatus
-          user={username ? user : currUser}
+          // user={username ? user : currUser}
+          user={user}
           goal={goal}
           dispatch={dispatch}
           currUser={currUser}
         />
-        {!username || username === currUser.username ? (
+        {goal.userId === currUser._id ? (
           <RecordStatus goal={goal} />
         ) : (
           <SetBet user={user} goal={goal} />

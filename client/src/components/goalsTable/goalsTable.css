@@ -1,3 +1,7 @@
 .goals-table {
   /* padding: 50px 30px 0; */
 }
+
+.MuiTableCell-root {
+  font-family: "Mulish", "Roboto", "Helvetica", "Arial", sans-serif !important;
+}

@@ -74,12 +74,21 @@ export default function RecordStatus({ goal, atonement }) {
   async function submitRecord(event) {
     // setRecordText("");
     event.preventDefault();
-    const newPost = {
-      userId: user._id,
-      desc: desc.current.value,
-      goalId: goal._id,
-      img: [],
-    };
+    const newPost = isAtonement
+      ? {
+          userId: user._id,
+          desc: desc.current.value,
+          goalId: goal._id,
+          img: [],
+          atonement: true,
+        }
+      : {
+          userId: user._id,
+          desc: desc.current.value,
+          goalId: goal._id,
+          img: [],
+          atonement: false,
+        };
 
     if (imgURLs.length > 0) {
       newPost.img = imgURLs;
@@ -140,7 +149,11 @@ export default function RecordStatus({ goal, atonement }) {
             value={recordText}
             ref={desc}
             className="record-area"
-            placeholder="Have you completed your goals today? (You can only record once a day)"
+            placeholder={
+              isAtonement
+                ? "Have you made your atonement?"
+                : "Have you completed your goals today? (You can only record once a day)"
+            }
             disabled={isAtonement ? !isAtonement : isDisabled || isCompleted}
             onChange={handleChange}
             style={{

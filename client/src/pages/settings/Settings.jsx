@@ -16,9 +16,9 @@ import { motion } from "framer-motion";
 
 export default function Settings() {
   const { user, dispatch } = useContext(UserContext);
-  const [isBetTableClicked, setBetTableClicked] = useState(true);
-  const [isGoalTableClicked, setGoalTableClicked] = useState(true);
-  const [isBuddyTableClicked, setBuddyTableClicked] = useState(true);
+  const [isBetTableClicked, setBetTableClicked] = useState(false);
+  const [isGoalTableClicked, setGoalTableClicked] = useState(false);
+  const [isBuddyTableClicked, setBuddyTableClicked] = useState(false);
   // const [isFinancesClicked, setFinancesClicked] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);

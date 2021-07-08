@@ -12,7 +12,6 @@ export default function Comment({ comm }) {
   const { user: currUser } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(comm.likes.length);
-  const PublicImg = process.env.REACT_APP_PUBLIC_URL;
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -19,6 +19,9 @@
 
 .container-contact-pic {
   width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container-contact-pic img {

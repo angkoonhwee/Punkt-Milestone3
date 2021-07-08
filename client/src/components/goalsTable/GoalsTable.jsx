@@ -20,6 +20,7 @@ import axios from "axios";
 import { url } from "../../utils/constants";
 import { motion } from "framer-motion";
 import Modal from "../modal/Modal";
+import { Link } from "react-router-dom";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -163,7 +164,13 @@ export default function GoalsTable({ user }) {
   };
 
   return (
-    <motion.div className="goals-table" layout transition={{ duration: 1 }}>
+    <motion.div
+      className="goals-table"
+      layout
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.5 }}
+    >
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="custom pagination table">
           <TableHead>
@@ -207,7 +214,17 @@ export default function GoalsTable({ user }) {
                   scope="row"
                   style={{ width: "30%" }}
                 >
-                  {userGoal.title}
+                  <Link
+                    to={`/progress/${userGoal._id}`}
+                    style={{
+                      textDecoration: "none",
+                      color: "black",
+                      lineHeight: "1.43",
+                      fontSize: "0.875rem",
+                    }}
+                  >
+                    {userGoal.title}
+                  </Link>
                 </TableCell>
 
                 <TableCell
@@ -236,15 +253,24 @@ export default function GoalsTable({ user }) {
                 >
                   {userGoal.status === "Failed" ||
                   userGoal.status === "Draw" ? (
-                    <button
-                      className="reply-atonement"
-                      onClick={() => {
-                        setIsCreatingAtonement(true);
-                        setCurrGoal(userGoal);
-                      }}
-                    >
-                      Create
-                    </button>
+                    userGoal.madeAtonement ? (
+                      <a
+                        className="reply-atonement"
+                        href={`progress/${userGoal._id}`}
+                      >
+                        View
+                      </a>
+                    ) : (
+                      <button
+                        className="reply-atonement"
+                        onClick={() => {
+                          setIsCreatingAtonement(true);
+                          setCurrGoal(userGoal);
+                        }}
+                      >
+                        Create
+                      </button>
+                    )
                   ) : (
                     <div>NA</div>
                   )}

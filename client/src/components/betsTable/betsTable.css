@@ -7,10 +7,17 @@
   font-weight: 500;
   transition: 0.3s ease-in-out;
   display: inline-block;
+  font-size: 16px;
+  line-height: 2;
+  text-decoration: none;
 }
 
 .reply-atonement:hover {
   background-color: #489fb5;
   border: 1px solid #489fb5;
   color: white;
+}
+
+.MuiTableCell-root {
+  font-family: "Mulish", "Roboto", "Helvetica", "Arial", sans-serif;
 }

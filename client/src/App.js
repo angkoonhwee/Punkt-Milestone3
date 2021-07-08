@@ -62,7 +62,7 @@ function App() {
         <Route path="/progress" exact>
           {!user ? <Redirect to="/" /> : <Progress />}
         </Route>
-        <Route path="/progress/:username/:goalId">
+        <Route path="/progress/:goalId">
           {!user ? <Redirect to="/" /> : <Progress />}
         </Route>
         <Route path="/buddy" exact>

@@ -19,6 +19,7 @@ import "./betsTable.css";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { url } from "../../utils/constants";
+import Modal from "../modal/Modal";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -134,6 +135,8 @@ export default function BetsTable({ user }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [userBets, setUserBets] = useState([]);
+  const [currBet, setCurrBet] = useState(null);
+  const [isReplyingBet, setIsReplyingBet] = useState(false);
 
   useEffect(() => {
     const fetchUserBets = async () => {
@@ -159,7 +162,13 @@ export default function BetsTable({ user }) {
   };
 
   return (
-    <motion.div className="bets-table" layout transition={{ duration: 1 }}>
+    <motion.div
+      className="bets-table"
+      layout
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.5 }}
+    >
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="custom pagination table">
           <TableHead>
@@ -210,7 +219,24 @@ export default function BetsTable({ user }) {
 
                 <TableCell align="center" component="th" scope="row">
                   {bet.status === "Failed" || bet.status === "Draw" ? (
-                    <button className="reply-atonement">Reply</button>
+                    bet.madeAtonement ? (
+                      <a
+                        className="reply-atonement"
+                        href={`progress/${bet._id}`}
+                      >
+                        View
+                      </a>
+                    ) : (
+                      <button
+                        className="reply-atonement"
+                        onClick={() => {
+                          setIsReplyingBet(true);
+                          setCurrBet(bet);
+                        }}
+                      >
+                        Reply
+                      </button>
+                    )
                   ) : (
                     <div>NA</div>
                   )}
@@ -244,6 +270,14 @@ export default function BetsTable({ user }) {
           </TableFooter>
         </Table>
       </TableContainer>
+      {isReplyingBet && currBet && (
+        <Modal
+          setIsClicked={setIsReplyingBet}
+          task={"Reply"}
+          goal={currBet}
+          user={user}
+        />
+      )}
     </motion.div>
   );
 }
