@@ -86,7 +86,9 @@ export default function Post({ post }) {
     fetchComments();
   }, [post.comments, post._id]);
 
-  const currDays = goal?.postIds?.length;
+  const currDays = goal?.madeAtonement
+    ? goal?.postIds?.length - 1
+    : goal?.postIds?.length;
   const totalDays = goal?.numDays;
 
   function handleLit() {
@@ -118,11 +120,6 @@ export default function Post({ post }) {
     setComment("");
   }
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setComment(value);
-  }
-
   async function deletePost(postId) {
     try {
       await axios.delete(url + "/post/" + postId, { data: currUser });
@@ -131,13 +128,6 @@ export default function Post({ post }) {
       console.log(err);
     }
   }
-
-  // function handleKeyPress(event) {
-  //   console.log("onsubmit" + onsubmit);
-  //   if (event.key === "Enter" && !event.shiftKey) {
-  //     // submitComment(onsubmit);
-  //   }
-  // }
 
   return (
     <div className="post">

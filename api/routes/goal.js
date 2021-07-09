@@ -331,4 +331,33 @@ router.get("/failed-messages/:goalId/:userId", async (req, res) => {
   }
 });
 
+// GET FAILED MESSAGES ARRAY FOR A USER
+router.get("/failed-messages/:goalId", async (req, res) => {
+  try {
+    const goal = await Goal.findById(req.params.goalId);
+    const userMessages = await Promise.all(
+      goal.failedMessages.map((msg) => {
+        // console.log(g._doc);
+
+        return User.findById(msg.userId)
+          .then((u) => {
+            return {
+              _id: msg._id,
+              userId: msg.userId,
+              profilePicture: u.profilePicture,
+              username: u.username,
+              message: msg.message,
+              createdAt: msg.createdAt,
+            };
+          })
+          .catch((err) => console.log(err));
+      })
+    );
+
+    res.status(200).json(userMessages);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

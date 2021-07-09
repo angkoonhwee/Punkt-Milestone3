@@ -21,3 +21,10 @@
 .MuiTableCell-root {
   font-family: "Mulish", "Roboto", "Helvetica", "Arial", sans-serif;
 }
+
+@media (max-width: 450px) {
+  .reply-atonement {
+    font-size: 14px;
+    padding: 1px 9px;
+  }
+}

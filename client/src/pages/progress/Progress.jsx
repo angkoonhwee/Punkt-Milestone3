@@ -16,24 +16,9 @@ export default function Progress() {
   const { user: currUser, dispatch } = useContext(UserContext);
   const username = useParams().username;
   const goalId = useParams().goalId;
-  // console.log("goalid : " + goalId);
+
   const [goal, setGoal] = useState({});
   const [user, setUser] = useState({}); // owner of the goal
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     if (username) {
-  //       if (username === currUser.username) {
-  //         setUser(currUser);
-  //       } else {
-  //         const res = await axios.get(url + `/user?username=${username}`);
-
-  //         setUser(res.data);
-  //       }
-  //     }
-  //   };
-  //   fetchUser();
-  // }, [username, currUser]);
 
   useEffect(() => {
     const fetchGoal = async () => {
@@ -78,7 +63,7 @@ export default function Progress() {
           <SetBet user={user} goal={goal} />
         )}
 
-        <ProgressTimeline user={username ? user : currUser} goal={goal} />
+        <ProgressTimeline user={user} goal={goal} />
       </div>
       <ScrollTop />
       <Footer />

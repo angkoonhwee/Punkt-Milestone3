@@ -11,14 +11,13 @@ export default function FailedMessage({ message, user }) {
       animate={{ opacity: 1 }}
     >
       <img
-        className="profilePic"
+        className="profilePic failed-msg"
         src={
           user.profilePicture
             ? user.profilePicture
             : "/assets/img/defaultDP.svg"
         }
         alt="profile-pic"
-        style={{ margin: "5px 10px" }}
       />
 
       <div className="comment-content">

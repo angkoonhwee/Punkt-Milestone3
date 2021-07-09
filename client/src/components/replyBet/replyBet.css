@@ -30,3 +30,9 @@
 .chat-input-form.reply {
   margin-top: 7px;
 }
+
+@media (max-width: 450px) {
+  .reply-bet-wrapper {
+    width: 90vw;
+  }
+}

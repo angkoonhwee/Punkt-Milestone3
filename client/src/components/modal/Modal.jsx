@@ -3,6 +3,7 @@ import "./modal.css";
 import { motion } from "framer-motion";
 import RecordStatus from "../recordStatus/RecordStatus";
 import ReplyBet from "../replyBet/ReplyBet";
+import ViewFailedMessages from "../viewFailedMessages/ViewFailedMessages";
 
 export default function Modal({ setIsClicked, task, goal, user }) {
   const handleClick = (e) => {
@@ -23,7 +24,9 @@ export default function Modal({ setIsClicked, task, goal, user }) {
           <RecordStatus goal={goal} atonement={true} />
         </div>
       ) : task === "View" ? (
-        <div className="task-wrapper">view</div>
+        <div className="task-wrapper reply">
+          <ViewFailedMessages goal={goal} />
+        </div>
       ) : (
         <div className="task-wrapper reply">
           <ReplyBet user={user} goal={goal} />

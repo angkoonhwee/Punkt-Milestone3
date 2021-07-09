@@ -105,7 +105,7 @@ const useStyles2 = makeStyles({
 });
 
 const columns = [
-  { id: "date", label: "Date", width: "10%" },
+  { id: "date", label: "Date", width: "20%" },
   { id: "title", label: "Title", width: "27.5%" },
   {
     id: "atonement",
@@ -116,17 +116,17 @@ const columns = [
   {
     id: "status",
     label: "Status",
-    width: "12.5%",
+    width: "10%",
   },
   {
     id: "user",
     label: "Username",
-    width: "12.5%",
+    width: "7.5%",
   },
   {
     id: "failed-message",
     label: "Leave a Message",
-    width: "10%",
+    width: "7.5%",
   },
 ];
 

@@ -49,3 +49,14 @@
     font-size: 14px;
   }
 }
+
+@media (max-width: 380px) {
+  .chat-input-form textarea {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .chat-send-btn {
+    font-size: 12px;
+  }
+}

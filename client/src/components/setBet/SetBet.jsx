@@ -58,7 +58,9 @@ export default function SetBet({ user, goal }) {
           disabled={isBetDisabled}
           style={{
             cursor: isBetDisabled ? "not-allowed" : "pointer",
-            backgroundColor: isBetAgainst
+            backgroundColor: isBetDisabled
+              ? "grey"
+              : isBetAgainst
               ? "rgb(201, 90, 90)"
               : "rgb(216, 111, 111)",
           }}

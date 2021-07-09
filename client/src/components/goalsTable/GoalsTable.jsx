@@ -106,7 +106,7 @@ const useStyles2 = makeStyles({
 });
 
 const columns = [
-  { id: "date", label: "Date", width: "12.5%" },
+  { id: "date", label: "Date", width: "20%" },
   { id: "title", label: "Title", width: "27.5%" },
   {
     id: "atonement",
@@ -117,17 +117,17 @@ const columns = [
   {
     id: "status",
     label: "Status",
-    width: "12.5%",
+    width: "10%",
   },
   {
     id: "atonement-post",
     label: "Atonement Post",
-    width: "10%",
+    width: "7.5%",
   },
   {
     id: "failed-messages",
     label: "Messages",
-    width: "10%",
+    width: "7.5%",
   },
 ];
 
@@ -200,7 +200,7 @@ export default function GoalsTable({ user }) {
                   align="center"
                   component="th"
                   scope="row"
-                  style={{ width: "15%" }}
+                  style={{ width: "20%" }}
                 >
                   {new Date(userGoal.createdAt).toLocaleDateString("en-GB", {
                     year: "numeric",
@@ -212,7 +212,7 @@ export default function GoalsTable({ user }) {
                   align="center"
                   component="th"
                   scope="row"
-                  style={{ width: "30%" }}
+                  style={{ width: "27.5%" }}
                 >
                   <Link
                     to={`/progress/${userGoal._id}`}
@@ -231,7 +231,7 @@ export default function GoalsTable({ user }) {
                   align="center"
                   component="th"
                   scope="row"
-                  style={{ width: "30%" }}
+                  style={{ width: "27.5%" }}
                 >
                   {userGoal.atonement}
                 </TableCell>
@@ -240,7 +240,7 @@ export default function GoalsTable({ user }) {
                   align="center"
                   component="th"
                   scope="row"
-                  style={{ width: "15%" }}
+                  style={{ width: "10%" }}
                 >
                   {userGoal.status}
                 </TableCell>
@@ -249,7 +249,7 @@ export default function GoalsTable({ user }) {
                   align="center"
                   component="th"
                   scope="row"
-                  style={{ width: "10%" }}
+                  style={{ width: "7.5%" }}
                 >
                   {userGoal.status === "Failed" ||
                   userGoal.status === "Draw" ? (

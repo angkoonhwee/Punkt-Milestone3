@@ -15,6 +15,12 @@
 }
 
 .task-wrapper.reply {
-  top: 25vh;
-  left: 15vw;
+  top: 25%;
+  left: 15%;
+}
+
+@media (max-width: 450px) {
+  .task-wrapper.reply {
+    left: 5%;
+  }
 }

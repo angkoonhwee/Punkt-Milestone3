@@ -47,6 +47,7 @@ export default function ReplyBet({ goal, user }) {
       {failedMessages.map((msg) => (
         <FailedMessages user={user} message={msg} key={msg._id} />
       ))}
+
       <form className="chat-input-form reply" onSubmit={submitReply}>
         <TextareaAutosize
           className="reply-input"
