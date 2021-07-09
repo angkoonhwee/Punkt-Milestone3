@@ -25,18 +25,23 @@ export default function PostNoteBet() {
   useEffect(() => {
     if (!hasGoal) {
       const fetchGoal = async () => {
-        const res = await axios.get(url + "/goal/" + user.goalId);
-        if (res.data && res.data.status === "In Progress") {
-          // console.log(res.data);
-          setCurrGoal(res.data);
-          setHasGoal(true);
-        } else {
-          setHasGoal(false);
+        if (user.goalId !== "") {
+          const res = await axios.get(url + "/goal/" + user.goalId);
+          if (res.data && res.data.status === "In Progress") {
+            // console.log(res.data);
+            setCurrGoal(res.data);
+            setHasGoal(true);
+          } else if (res.data.status === "Failed") {
+            const response = await axios.get(
+              url + `/user?userId=${user.userId}`
+            );
+            dispatch({ type: "UPDATE_SUCCESS", payload: response.data });
+          }
         }
       };
       fetchGoal();
     }
-  }, [user._id, user.goalId, hasGoal, currGoal]);
+  }, [user, dispatch, hasGoal, currGoal]);
   //user._id, hasGoal, user.goalId
 
   const currDays = currGoal?.madeAtonement

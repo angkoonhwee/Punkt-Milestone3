@@ -96,7 +96,7 @@ export default function BetStatus({ user, goal, dispatch, currUser }) {
         currUser.goalId !== ""
       ) {
         // GET UPDATED CURR USER
-        const res = await axios.get(url + "/user/");
+        const res = await axios.get(url + `/user?userId=${currUser.userId}`);
         dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
       }
     };
