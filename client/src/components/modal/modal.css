@@ -10,16 +10,28 @@
 
 .task-wrapper {
   display: block;
-  position: relative;
+  width: 70%;
+  position: absolute;
   top: 47.5%;
+  left: 15%;
+}
+
+.task-wrapper .record-status {
+  margin: 0;
 }
 
 .task-wrapper.reply {
   top: 25%;
   left: 15%;
+  width: auto;
 }
 
 @media (max-width: 450px) {
+  .task-wrapper {
+    width: 90%;
+    left: 5%;
+  }
+
   .task-wrapper.reply {
     left: 5%;
   }
