@@ -234,10 +234,7 @@ router.put("/:id/status", async (req, res) => {
                 filter: { _id: userBetAgainst },
                 update: {
                   $push: {
-                    betHistory: {
-                      goalId: req.params.id,
-                      status: "Lost",
-                    },
+                    betHistory: req.params.id,
                   },
                 },
               },
@@ -278,10 +275,7 @@ router.put("/:id/status", async (req, res) => {
                 filter: { _id: userBetAgainst },
                 update: {
                   $push: {
-                    betHistory: {
-                      goalId: req.params.id,
-                      status: "Victory",
-                    },
+                    betHistory: req.params.id,
                   },
                 },
               },

@@ -15,6 +15,9 @@ const contactRoute = require("./routes/contact");
 const commentRoute = require("./routes/comment");
 const reportRoute = require("./routes/report");
 const cors = require("cors");
+const cron = require("node-cron");
+const User = require("./models/user");
+const Goal = require("./models/goal");
 
 const app = express();
 
@@ -56,6 +59,74 @@ app.use(
 
 app.get("/", (req, res) => {
   res.send("Test Punkt Server");
+});
+
+// CHECK AND UPDATE FAILED GOAL STATUS AT 00:00 EVERY DAY
+cron.schedule("0 0 * * *", async () => {
+  const dateDiffInDays = (a, b) => {
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
+  };
+  console.log("UPDATE START");
+  try {
+    const allGoalsInProgress = await Goal.find({ status: "In Progress" });
+    const updatedData = await Promise.all(
+      allGoalsInProgress.map(async (goal) => {
+        if (
+          goal.postIds.length <
+          dateDiffInDays(new Date(goal.createdAt), new Date())
+        ) {
+          // FAILED GOAL
+          const user = await User.findById(goal.userId);
+
+          // push goalId into goal history arr of user
+          await user.updateOne({ $push: { goalHistory: goal.id } });
+
+          // clear curr goal id of user
+          await user.updateOne({ $set: { goalId: "" } });
+
+          // update goal status
+          await goal.updateOne({ $set: { status: "Failed" } });
+
+          // update users bet against data --> win
+          await Promise.all(
+            // for all users who bet against this goal
+            goal.usersBetAgainst.map((userBetAgainst) => {
+              // pull this completed goal from currUser's betFor goal arr
+              // push this completed goal into currUser's bet history arr
+              return User.bulkWrite([
+                {
+                  updateOne: {
+                    filter: { _id: userBetAgainst },
+                    update: { $pull: { betAgainst: goal.id } },
+                  },
+                },
+                {
+                  updateOne: {
+                    filter: { _id: userBetAgainst },
+                    update: {
+                      $push: {
+                        betHistory: goal.id,
+                      },
+                    },
+                  },
+                },
+              ]);
+            })
+          );
+        }
+      })
+    );
+    console.log("UPDATED DATA");
+    console.log(updatedData);
+    // res.status(200).json(updatedData);
+  } catch (err) {
+    console.log(err);
+    // return res.status(500).json(err);
+  }
 });
 
 app.use("/user", userRoute);

@@ -17,7 +17,11 @@ export default function ReplyBet({ goal, user }) {
             url + "/goal/failed-messages/" + goal._id + "/" + user._id
           );
 
-          setFailedMessages(res.data);
+          setFailedMessages(
+            res.data.sort(
+              (f1, f2) => new Date(f2.createdAt) - new Date(f1.createdAt)
+            )
+          );
         }
       } catch (err) {
         console.log(err);
@@ -32,9 +36,14 @@ export default function ReplyBet({ goal, user }) {
       const res = await axios.put(url + "/goal/failed-messages/" + goal._id, {
         userId: user._id,
         message: reply,
+        createdAt: new Date(),
       });
 
-      setFailedMessages(res.data);
+      setFailedMessages(
+        res.data.sort(
+          (f1, f2) => new Date(f2.createdAt) - new Date(f1.createdAt)
+        )
+      );
     } catch (err) {
       console.log(err);
     }
@@ -44,10 +53,6 @@ export default function ReplyBet({ goal, user }) {
 
   return (
     <div className="reply-bet-wrapper">
-      {failedMessages.map((msg) => (
-        <FailedMessages user={user} message={msg} key={msg._id} />
-      ))}
-
       <form className="chat-input-form reply" onSubmit={submitReply}>
         <TextareaAutosize
           className="reply-input"
@@ -63,6 +68,9 @@ export default function ReplyBet({ goal, user }) {
           Reply
         </button>
       </form>
+      {failedMessages.map((msg) => (
+        <FailedMessages user={user} message={msg} key={msg._id} />
+      ))}
     </div>
   );
 }

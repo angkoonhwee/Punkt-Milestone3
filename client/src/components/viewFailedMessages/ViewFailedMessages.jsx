@@ -11,7 +11,11 @@ export default function ViewFailedMessages({ goal }) {
     const fetchFailedMessages = async () => {
       const res = await axios.get(url + `/goal/failed-messages/${goal._id}`);
 
-      setFailedMessages(res.data);
+      setFailedMessages(
+        res.data.sort(
+          (f1, f2) => new Date(f2.createdAt) - new Date(f1.createdAt)
+        )
+      );
     };
     fetchFailedMessages();
   }, [goal._id]);

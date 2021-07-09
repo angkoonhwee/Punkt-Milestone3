@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
     },
 
     betHistory: {
-      type: [{ goalId: String, status: String }],
+      type: [String], // ARRAY OF GOAL IDs
       default: [],
     },
     followings: {
