@@ -74,7 +74,8 @@
 input {
   border: none;
   border-radius: 10px;
-  padding: 2px 10px;
+  padding: 7px 10px;
+  line-height: 1.35;
 }
 
 .no-bet-text textarea,

@@ -1,8 +1,6 @@
-import React, { useContext, useRef, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./postNoteBet.css";
-import CreateIcon from "@material-ui/icons/Create";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import { TextareaAutosize } from "@material-ui/core";
 import { UserContext } from "../../context/UserContext";
@@ -31,10 +29,8 @@ export default function PostNoteBet() {
             // console.log(res.data);
             setCurrGoal(res.data);
             setHasGoal(true);
-          } else if (res.data.status === "Failed") {
-            const response = await axios.get(
-              url + `/user?userId=${user.userId}`
-            );
+          } else if (res.data && res.data.status === "Failed") {
+            const response = await axios.get(url + `/user?userId=${user._id}`);
             dispatch({ type: "UPDATE_SUCCESS", payload: response.data });
           }
         }

@@ -14,34 +14,20 @@ export default function ResetPassword() {
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
 
-  function checkPassword(input) {
-    var passwordReq = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-    return input.match(passwordReq);
-  }
-
   async function submitReset(event) {
     event.preventDefault();
-    if (!checkPassword(password.current.value)) {
-      password.current.setCustomValidity(
-        "Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit."
-      );
-    } else if (password.current.value !== password2.current.value) {
-      password.current.setCustomValidity("Passwords do not match.");
-    } else {
-      const user = {
-        // username: signupUsername.current.value,
-        // email: signupEmail.current.value,
-        password: password.current.value,
-        password2: password2.current.value,
-      };
-      try {
-        const res = await axios.post(url + "/auth/reset/" + resetToken, user);
-        // history.push("/login");
-        setSuccess(res.data.message);
-      } catch (err) {
-        console.log(err);
-        setFailure(err.response.data.message);
-      }
+
+    const user = {
+      password: password.current.value,
+      password2: password2.current.value,
+    };
+    try {
+      const res = await axios.post(url + "/auth/reset/" + resetToken, user);
+      // history.push("/login");
+      setSuccess(res.data.message);
+    } catch (err) {
+      console.log(err);
+      setFailure(err.response.data.message);
     }
   }
 
@@ -88,6 +74,12 @@ export default function ResetPassword() {
               required
               ref={password2}
             />
+          </div>
+          <div className="pw-requirements">
+            <p>
+              Password must be at least 6 characters with at least 1 UPPER case,
+              1 lower case and 1 numeric digit.
+            </p>
           </div>
 
           <button class="bton" type="submit" name="button">

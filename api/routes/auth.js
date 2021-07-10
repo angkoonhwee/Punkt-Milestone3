@@ -120,6 +120,12 @@ router.post("/signup", async (req, res) => {
     });
   }
 
+  if (req.body.password !== req.body.password2) {
+    return res.status(403).json({
+      message: "Passwords do not match",
+    });
+  }
+
   const duplicateUsername = await User.findOne({
     username: req.body.username,
   });
@@ -289,8 +295,6 @@ router.get("/reset/:token", function (req, res) {
 });
 
 router.post("/reset/:token", (req, res) => {
-  console.log(req.params.token);
-
   async.waterfall(
     [
       (done) => {

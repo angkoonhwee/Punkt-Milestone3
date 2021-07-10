@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
 });
 
 // CHECK AND UPDATE FAILED GOAL STATUS AT 00:00 EVERY DAY
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("18 14 * * *", async () => {
   const dateDiffInDays = (a, b) => {
     // Discard the time and time-zone information.
     const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());

@@ -37,41 +37,22 @@ function LoginSignupForms() {
     }
   }
 
-  function checkPassword(input) {
-    var passwordReq = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-    return input.match(passwordReq);
-  }
-
   const submitSignup = async (event) => {
     event.preventDefault();
-    if (!checkPassword(signupPassword.current.value)) {
-      signupPassword.current.setCustomValidity(
-        "Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit."
-      );
-    } else if (signupPassword.current.value !== signupPassword2.current.value) {
-      signupPassword.current.setCustomValidity("Passwords do not match.");
-    } else {
-      const user = {
-        username: signupUsername.current.value,
-        email: signupEmail.current.value,
-        password: signupPassword.current.value,
-        password2: signupPassword2.current.value,
-      };
 
-      signUpCall(user, dispatch);
+    const user = {
+      username: signupUsername.current.value,
+      email: signupEmail.current.value,
+      password: signupPassword.current.value,
+      password2: signupPassword2.current.value,
+    };
 
-      if (error) {
-        setSignUpError(error);
-      }
+    signUpCall(user, dispatch);
+
+    if (error) {
+      setSignUpError(error);
     }
   };
-
-  // function googleLogin(event) {
-  //   // console.log(event.target);
-
-  //   // window.open(`http://localhost:8000/auth/google`, "_self");
-  //   googleLoginCall(dispatch);
-  // }
 
   return (
     <div className="container-forms">
