@@ -15,6 +15,7 @@ export default function BetStatus({ user, goal, dispatch, currUser }) {
       if (
         goal.status === "Failed" &&
         goal.userId === currUser._id &&
+        currUser.goalId === goal._id &&
         currUser.goalId !== ""
       ) {
         // GET UPDATED CURR USER

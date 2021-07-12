@@ -28,21 +28,9 @@ export default function RecordStatus({ goal, atonement }) {
 
   function dateDiffInDays(a, b) {
     // Discard the time and time-zone information.
-    const utc1 = Date.UTC(
-      a.getFullYear(),
-      a.getMonth(),
-      a.getDate(),
-      a.getHours(),
-      a.getMinutes()
-    );
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
 
-    const utc2 = Date.UTC(
-      b.getFullYear(),
-      b.getMonth(),
-      b.getDate(),
-      b.getHours(),
-      b.getMinutes()
-    );
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
     return Math.round((utc2 - utc1) / (1000 * 60 * 60 * 24));
     // return 99;

@@ -30,12 +30,15 @@ function Feed({ username, page }) {
     const fetchPosts = async () => {
       try {
         const res = username
-          ? await axios.get(url + "/post/profile/" + username) // profile page render user's own posts
-          : page === "main"
-          ? await axios.get(url + "/post/main/" + user._id) // main page render user and followings posts
-          : page === "explore"
+          ? await axios.get(url + "/post/profile/" + username)
+          : // profile page render user's own posts
+          page === "main"
+          ? await axios.get(url + "/post/main/" + user._id)
+          : // main page render user and followings posts
+          page === "explore"
           ? await axios.get(url + "/post") //explore page render all posts
-          : await axios.get(url + "/post/speculate/" + user._id); // speculate page that render posts for which user has bet for the goal
+          : await axios.get(url + "/post/speculate/" + user._id);
+        // speculate page that render posts for which user has bet for the goal
 
         const sortedPosts = res.data.sort(
           (p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt)
