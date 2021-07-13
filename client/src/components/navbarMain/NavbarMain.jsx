@@ -13,16 +13,11 @@ import { Link, Redirect } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import Searchbar from "./Searchbar";
 import { logoutCall } from "../../apiCalls";
+import Notifications from "../notifications/Notifications";
 
 function NavbarMain() {
-  const PublicImg = process.env.REACT_APP_PUBLIC_URL;
   const { user, dispatch } = useContext(UserContext);
-  // console.log(user);
 
-  // function handleLogout() {
-  //   logoutCall(dispatch);
-  //   // to be fixed
-  // }
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
   };
@@ -90,12 +85,9 @@ function NavbarMain() {
               </Link>
             </li>
 
-            {/* <li className="nav-item">
-              <div className="nav-link navbar-link-item">
-                <NotificationsIcon className="searchIcon navbar-icon" />
-                <p className="nav-name">Notifications</p>
-              </div>
-            </li> */}
+            <li className="nav-item">
+              <Notifications user={user} />
+            </li>
 
             <li className="nav-item">
               <Link style={{ textDecoration: "none" }} to="/settings">

@@ -59,4 +59,41 @@ router.put("/:id/like", async (req, res) => {
   }
 });
 
+// GET ALL COMMENTS ON POSTS CREATED BY A USER
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const postsByUser = await Post.find({ userId: req.params.userId });
+
+    // for all posts, find all comments
+    const commentsWithNames = await Promise.all(
+      postsByUser.map(async (post) => {
+        // post.comments is an array of comment ids
+        const comments = await Comment.find({ postId: post.id }) //array of comments
+          .select(["userId", "postId", "createdAt"])
+          .then(async (comms) => {
+            return await Promise.all(
+              comms.map(async (c) => {
+                const user = await User.findById(c.userId);
+                const post = await Post.findById(c.postId);
+
+                return {
+                  postId: c.postId,
+                  goalId: post.goalId,
+                  desc: post.desc,
+                  createdAt: c.createdAt,
+                  username: user.username,
+                };
+              })
+            );
+          });
+
+        return comments;
+      })
+    );
+    res.status(200).json(commentsWithNames.flat());
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

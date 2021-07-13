@@ -90,6 +90,16 @@
     padding-left: 5%;
     padding-right: 5%;
   }
+
+  .post:first-child {
+    margin-top: 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  .post:first-child {
+    margin-top: 10px;
+  }
 }
 
 @media (max-width: 450px) {

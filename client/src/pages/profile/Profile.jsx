@@ -163,7 +163,7 @@ export default function Profile() {
             )}
             <div className="social-media-icons">
               {user.social?.instagram && (
-                <a href={user.social?.instagram}>
+                <a href={user.social?.instagram} style={{ fontSize: "30px" }}>
                   <i
                     className="fab fa-instagram"
                     style={{ color: "#C13584", marginRight: "15px" }}
@@ -172,7 +172,7 @@ export default function Profile() {
               )}
 
               {user.social?.linkedIn && (
-                <a href={user.social?.linkedIn}>
+                <a href={user.social?.linkedIn} style={{ fontSize: "30px" }}>
                   <i
                     className="fab fa-linkedin"
                     style={{ color: "#2867B2", marginRight: "15px" }}
@@ -181,7 +181,7 @@ export default function Profile() {
               )}
 
               {user.social?.github && (
-                <a href={user.social?.github}>
+                <a href={user.social?.github} style={{ fontSize: "30px" }}>
                   <i className="fab fa-github" style={{ color: "#333" }}></i>
                 </a>
               )}
