@@ -12,11 +12,12 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  height: 25%;
+  height: 35%;
 }
 
 .loading-text {
   color: #489fb5;
   font-family: "Sigmar One", cursive;
   font-size: 60px;
+  margin-bottom: 25px;
 }
