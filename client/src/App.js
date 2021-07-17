@@ -22,6 +22,7 @@ import Buddy from "./pages/buddy/Buddy";
 import Contact from "./pages/contact/Contact";
 import Leaderboard from "./pages/leaderboard/Leaderboard";
 import { url } from "./utils/constants";
+import Loading from "./pages/loading/Loading";
 
 function App() {
   const { user } = useContext(UserContext);
@@ -73,6 +74,9 @@ function App() {
         </Route>
         <Route path="/contact" exact>
           <Contact />
+        </Route>
+        <Route path="/loading" exact>
+          <Loading />
         </Route>
 
         <Route path="/forgot-password">
