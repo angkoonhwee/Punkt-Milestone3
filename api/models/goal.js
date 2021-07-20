@@ -26,6 +26,10 @@ const goalSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // usersBetFor: {
+    //   type: [{ userId: String, amt: Number }],
+    //   default: [],
+    // },
     usersBetAgainst: {
       type: [String],
       default: [],

@@ -8,6 +8,8 @@ import PublicIcon from "@material-ui/icons/Public";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
+import { logoutCall } from "../../apiCalls";
+import Notifications from "../notifications/Notifications";
 
 //redux
 import { connect } from "react-redux";
@@ -81,12 +83,9 @@ function NavbarMain({ user, logout }) {
               </Link>
             </li>
 
-            {/* <li className="nav-item">
-              <div className="nav-link navbar-link-item">
-                <NotificationsIcon className="searchIcon navbar-icon" />
-                <p className="nav-name">Notifications</p>
-              </div>
-            </li> */}
+            <li className="nav-item">
+              <Notifications user={user} />
+            </li>
 
             <li className="nav-item">
               <Link style={{ textDecoration: "none" }} to="/settings">

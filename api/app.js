@@ -6,17 +6,20 @@ const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const multer = require("multer");
 const path = require("path");
 const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
 const goalRoute = require("./routes/goal");
+const contactRoute = require("./routes/contact");
 const commentRoute = require("./routes/comment");
 const reportRoute = require("./routes/report");
 const contactRoute = require("./routes/contact");
 const buddyRoute = require("./routes/buddy");
 const cors = require("cors");
+const cron = require("node-cron");
+const User = require("./models/user");
+const Goal = require("./models/goal");
 
 //for scheduling buddy todos
 const cron = require('node-cron');

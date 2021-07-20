@@ -116,7 +116,7 @@
 
   .container-profile-feed {
     margin-top: -12%;
-    margin-left: -19%;
+    margin-left: -20%;
     margin-right: -12%;
   }
 
@@ -146,17 +146,8 @@
 @media (max-width: 780px) {
   .container-profile-feed {
     margin-left: -12%;
-    margin-top: -5%;
+    margin-top: -13%;
   }
-
-  /* .change-dp {
-    top: 2.5%;
-  } */
-
-  /* .container-profile-feed {
-    margin-top: -12.5%;
-    margin-left: -12%;
-  } */
 }
 
 @media (max-width: 660px) {

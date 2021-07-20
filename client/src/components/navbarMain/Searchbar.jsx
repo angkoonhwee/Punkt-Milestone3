@@ -37,6 +37,25 @@ function Searchbar({ fetchAllUser, userData }) {
     setFilteredData([]);
   }
 
+  function handleFilter(event) {
+    const searchUsername = event.target.value.toLowerCase();
+    setUsernameEntered(searchUsername);
+    const filteredUsers = userData.filter((u) => {
+      return u.username.toLowerCase().includes(searchUsername);
+    });
+
+    if (event.target.value === "") {
+      setFilteredData([]);
+    } else {
+      setFilteredData(filteredUsers);
+    }
+  }
+
+  function handleClear() {
+    setUsernameEntered("");
+    setFilteredData([]);
+  }
+
   return (
     <div className="searchbar-wrapper">
       <div className="nav-link searchBar" title="Search">

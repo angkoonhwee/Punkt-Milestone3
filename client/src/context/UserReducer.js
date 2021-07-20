@@ -50,8 +50,11 @@ const userReducer = (state, action) => {
       };
 
     case "GOOGLE_LOGIN":
-      console.log(action.payload);
-      break;
+      return {
+        user: action.payload,
+        isFetching: false,
+        error: false,
+      };
 
     case "UPDATE_START":
       return {

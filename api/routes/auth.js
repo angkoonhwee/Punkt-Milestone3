@@ -81,7 +81,7 @@ router.get(
     failureRedirect: "/google-login/failed",
   }),
   (req, res) => {
-    // console.log(req.user);
+    // console.log(reqs.user);
     // Successful authentication, redirect home.
     // console.log("successful authentication with google");
     res.status(200).json(req.user);
@@ -112,7 +112,6 @@ router.get("/logout", (req, res) => {
 
 // SIGN UP
 router.post("/signup", async (req, res) => {
-  console.log(req.body);
   if (!schema.validate(req.body.password)) {
     // password do not match requirements
     return res.status(403).json({

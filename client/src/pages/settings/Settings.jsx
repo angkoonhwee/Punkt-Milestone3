@@ -7,7 +7,6 @@ import Footer from "../../components/footer/Footer";
 import BetsTable from "../../components/betsTable/BetsTable";
 import GoalsTable from "../../components/goalsTable/GoalsTable";
 import BuddyTable from "../../components/buddyTable/BuddyTable";
-
 import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
 import EditProfile from "../../components/editProfile/EditProfile";

@@ -7,6 +7,8 @@ import LeaderboardFirst from "../../components/leaderboardItems/LeaderboardFirst
 import LeaderboardSec from "../../components/leaderboardItems/LeaderboardSec";
 import LeaderboardThird from "../../components/leaderboardItems/LeaderboardThird";
 import LeaderboardOthers from "../../components/leaderboardItems/LeaderboardOthers";
+import axios from "axios";
+import { url } from "../../utils/constants";
 
 import { connect } from "react-redux";
 import { fetchAllUser } from "../../redux/actions/user";
