@@ -14,7 +14,16 @@ const postRoute = require("./routes/post");
 const goalRoute = require("./routes/goal");
 const commentRoute = require("./routes/comment");
 const reportRoute = require("./routes/report");
+const contactRoute = require("./routes/contact");
+const buddyRoute = require("./routes/buddy");
 const cors = require("cors");
+
+//for scheduling buddy todos
+const cron = require('node-cron');
+const Buddy = require('./models/buddy');
+//goal scheduling
+const User = require("./models/user");
+const Goal = require("./models/goal");
 
 const app = express();
 
@@ -54,35 +63,107 @@ app.use(
   })
 );
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images");
-  },
-  filename: (req, file, cb) => {
-    // console.log(file);
-    // console.log(req.files);
-    // cb(null, file.originalname);
-    // const { originalname } = file;
-    // const fileExtension = (originalname.match(/\.+[\S]+$/) || [])[0];
-    // cb(null, `${Date.now()}${originalname}`);
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-app.post("/upload", upload.array("file", 6), (req, res) => {
-  try {
-    // console.log(req.fields);
-    // console.log(req.files);
-    return res.status(200).json("Files uploaded successfully");
-  } catch (err) {
-    console.log(err);
-  }
-}); // max count 6
-
 app.get("/", (req, res) => {
   res.send("Test Punkt Server");
+});
+
+cron.schedule('0 0 * * *', async () => {
+  try {
+    console.log("START UPDATES");
+    var allBuddies = await Buddy.find();
+    const promises = allBuddies.map(async buddy => {
+        if (buddy.dailys.length > 0) {
+            await buddy.update({ $pull: {dailys: { status: 'completed' }}});
+            const dailys = buddy.dailys;
+            dailys.map(daily => {
+                if (daily.status === "incomplete") {
+                    daily.status = "late";
+                }
+                console.log(daily);
+            });
+            console.log(dailys);
+            await buddy.update({ $set: { dailys: dailys }});
+        }
+        const todos = buddy.todos;
+        await buddy.update({ $push: { dailys: todos }});
+        await buddy.update({ $set: { todos: [] }});
+    })
+    await Promise.all(promises);
+    allBuddies = await Buddy.find();
+    console.log("DATA UPDATED");
+    //res.status(200).json(allBuddies);
+  } catch (err) {
+      console.log(err);
+      return res.status(500).json('Server Error');
+  }
+});
+
+// CHECK AND UPDATE FAILED GOAL STATUS AT 00:00 EVERY DAY
+cron.schedule("0 0 * * *", async () => {
+  const dateDiffInDays = (a, b) => {
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
+  };
+  console.log("UPDATE START");
+  try {
+    const allGoalsInProgress = await Goal.find({ status: "In Progress" });
+    const updatedData = await Promise.all(
+      allGoalsInProgress.map(async (goal) => {
+        if (
+          goal.postIds.length <
+          dateDiffInDays(new Date(goal.createdAt), new Date())
+        ) {
+          // FAILED GOAL
+          const user = await User.findById(goal.userId);
+
+          // push goalId into goal history arr of user
+          await user.updateOne({ $push: { goalHistory: goal.id } });
+
+          // clear curr goal id of user
+          await user.updateOne({ $set: { goalId: "" } });
+
+          // update goal status
+          await goal.updateOne({ $set: { status: "Failed" } });
+
+          // update users bet against data --> win
+          await Promise.all(
+            // for all users who bet against this goal
+            goal.usersBetAgainst.map((userBetAgainst) => {
+              // pull this completed goal from currUser's betFor goal arr
+              // push this completed goal into currUser's bet history arr
+              return User.bulkWrite([
+                {
+                  updateOne: {
+                    filter: { _id: userBetAgainst },
+                    update: { $pull: { betAgainst: goal.id } },
+                  },
+                },
+                {
+                  updateOne: {
+                    filter: { _id: userBetAgainst },
+                    update: {
+                      $push: {
+                        betHistory: goal.id,
+                      },
+                    },
+                  },
+                },
+              ]);
+            })
+          );
+        }
+      })
+    );
+    console.log("UPDATED DATA");
+    console.log(updatedData);
+    // res.status(200).json(updatedData);
+  } catch (err) {
+    console.log(err);
+    // return res.status(500).json(err);
+  }
 });
 
 app.use("/user", userRoute);
@@ -91,13 +172,15 @@ app.use("/post", postRoute);
 app.use("/goal", goalRoute);
 app.use("/comment", commentRoute);
 app.use("/report", reportRoute);
+app.use("/contact", contactRoute);
+app.use("/buddy", buddyRoute);
 
 const PORT = process.env.PORT || 8000;
 
 mongoose
   .connect(
-    // "mongodb+srv://punkt:1236Punkt@punkt.x8rbr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "mongodb://localhost:27017/testDB",
+    "mongodb+srv://punkt:1236Punkt@punkt.x8rbr.mongodb.net/Punkt?retryWrites=true&w=majority",
+    //"mongodb://localhost:27017/testDB",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,

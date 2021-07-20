@@ -1,0 +1,23 @@
+.container-loading {
+    background-color: #cfeef5;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .loading-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 35%;
+  }
+  
+  .loading-text {
+    color: #489fb5;
+    font-family: "Sigmar One", cursive;
+    font-size: 60px;
+    margin-bottom: 25px;
+  }

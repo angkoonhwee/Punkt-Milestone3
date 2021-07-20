@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
@@ -12,6 +11,9 @@ const User = require("../models/user");
 const flash = require("express-flash");
 const async = require("async");
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+
+const CLIENT_URL = "http://localhost:3000";
 
 schema
   .is()
@@ -46,17 +48,19 @@ passport.deserializeUser(function (id, done) {
 //       // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
 //     },
 //     function (accessToken, refreshToken, profile, cb) {
-//       console.log(profile);
-//       console.log(accessToken);
+//       // console.log(profile);
+//       // console.log(accessToken);
 
 //       User.findOrCreate(
 //         {
 //           googleId: profile.id,
 //           email: profile.emails[0].value,
-//           username: profile.name.familyName + profile.name.givenName,
+//           // username: profile.name.familyName + profile.name.givenName,
+//           username: profile.emails[0].value,
 //           profilePicture: profile.photos[0].value,
 //         },
 //         function (err, user) {
+//           // console.log(user);
 //           return cb(err, user);
 //         }
 //       );
@@ -64,68 +68,62 @@ passport.deserializeUser(function (id, done) {
 //   )
 // );
 
-// router.get(
-//   "/google",
-//   passport.authenticate("google", {
-//     scope: ["profile", "email"],
-//   })
-// );
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
 
-// router.get(
-//   "/google/punkt",
-//   passport.authenticate("google", {
-//     failureRedirect: "/login",
-//   }),
-//   (req, res) => {
-//     // Successful authentication, redirect home.
-//     console.log("successful authentication with google");
-//     res.status(200).json("successful authentication with google");
-//   }
-// );
-// router.get("/google/punkt", passport.authenticate("google"), (req, res) => {
-//   if (req.user) {
-//     res.redirect(`http://localhost:3000/`);
-//   } else {
-//     res.redirect(`http://localhost:3000/login`);
-//   }
-// });
+router.get(
+  "/google/punkt",
+  passport.authenticate("google", {
+    failureRedirect: "/google-login/failed",
+  }),
+  (req, res) => {
+    // console.log(req.user);
+    // Successful authentication, redirect home.
+    // console.log("successful authentication with google");
+    res.status(200).json(req.user);
+    // res.redirect(CLIENT_URL);
+  }
+);
 
-// router.get("/login/success", (req, res) => {
-//   if (req.user) {
-//     res.redirect(`http://localhost:8000/`);
-//   } else res.redirect(`http://localhost:3000/login`);
-// });
+router.get("/google-login/failed", (req, res) => {
+  res.status(401).json({ message: "Google authentication failed." });
+});
 
-// router.get("/login/failed", (req, res) => {
-//   res.status(401).json({
-//     success: false,
-//     message: "user failed to authenticate.",
-//   });
-// });
+router.get("/google-login/success", (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      success: true,
+      message: "user has successfully authenticated",
+      user: req.user,
+      cookies: req.cookies,
+    });
+  }
+});
 
 router.get("/logout", (req, res) => {
+  console.log("logout");
   req.logout();
-  res.redirect("http://localhost:3000");
+  res.redirect(CLIENT_URL);
 });
 
 // SIGN UP
 router.post("/signup", async (req, res) => {
-  const errors = [];
-
-  // const newUser = await new User({
-  //   username: req.body.username,
-  //   email: req.body.email,
-  //   password: req.body.password,
-  // });
-
+  console.log(req.body);
   if (!schema.validate(req.body.password)) {
     // password do not match requirements
-    errors.push({
-      msg: "Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit.",
-    });
     return res.status(403).json({
       message:
         "Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit.",
+    });
+  }
+
+  if (req.body.password !== req.body.password2) {
+    return res.status(403).json({
+      message: "Passwords do not match",
     });
   }
 
@@ -136,41 +134,31 @@ router.post("/signup", async (req, res) => {
 
   try {
     if (duplicateUsername) {
-      // errors.push({
-      //   msg: "Username has been registered",
-      // });
       return res.status(403).json({ message: "Username has been registered." });
     }
 
     if (duplicateEmail) {
-      // errors.push({
-      //   msg: "Email has been registered",
-      // });
       return res.status(403).json({ message: "Email has been registered." });
     }
 
-    if (errors.length > 0) {
-      res.status(403).json(errors);
-      console.log(errors);
-    } else {
-      User.register(
-        {
-          email: req.body.email,
-          username: req.body.username,
-        },
-        req.body.password,
-        (err, result) => {
-          if (err) {
-            console.log(err);
-            // res.render("failure");
-          } else {
-            passport.authenticate("local")(req, res, () => {
-              res.status(200).json(result);
-            });
-          }
+    User.register(
+      {
+        email: req.body.email,
+        username: req.body.username,
+      },
+      req.body.password,
+      (err, result) => {
+        if (err) {
+          console.log(err);
+
+          return res.status(500).json({ message: "Server Error." });
+        } else {
+          passport.authenticate("local")(req, res, () => {
+            res.status(200).json(result);
+          });
         }
-      );
-    }
+      }
+    );
   } catch (err) {
     res.status(500).json(err);
   }
@@ -178,27 +166,7 @@ router.post("/signup", async (req, res) => {
 
 // LOGIN
 router.post("/login", async (req, res, next) => {
-  let loginErrors = [];
-
-  // if (!req.body.email || !req.body.password) {
-  //   loginErrors.push({
-  //     msg: "Please fill in all fields.",
-  //   });
-  // }
-
-  const foundUser = await User.findOne({ email: req.body.email });
-
   try {
-    // if (!foundUser) {
-    //   loginErrors.push({
-    //     msg: "Invalid Email.",
-    //   });
-    // } else {
-    //   loginErrors.push({
-    //     msg: "Invalid Password. Try Again.",
-    //   });
-    // }
-
     passport.authenticate("local", function (err, user, info) {
       if (err) {
         return next(err);
@@ -238,8 +206,6 @@ router.post("/forgot-password", function (req, res, next) {
         });
       },
       (token, done) => {
-        // console.log("req.body: " + req.body);
-
         User.findOne(
           {
             email: req.body.email,
@@ -247,15 +213,11 @@ router.post("/forgot-password", function (req, res, next) {
           (err, user) => {
             if (err) {
               console.log(err);
+              return res.status(500).json({ message: "Server error." });
             }
             if (!user) {
-              console.log(
-                "error",
-                "No account with that email address exists."
-              );
-              return res.render("forgot", {
-                forgotErr: "Email has not been registered.",
-                forgotSuccess: "",
+              return res.status(401).json({
+                message: "No account with that email address exists.",
               });
             }
 
@@ -265,6 +227,7 @@ router.post("/forgot-password", function (req, res, next) {
             user.save((err) => {
               if (err) {
                 console.log(err);
+                return res.status(500).json({ message: "Server error." });
               }
               done(err, token, user);
             });
@@ -289,8 +252,7 @@ router.post("/forgot-password", function (req, res, next) {
             ", \n\n" +
             "You are receiving this because you have requested the reset of the password for your account.\n\n" +
             "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
-            "http://" +
-            req.headers.host +
+            CLIENT_URL +
             "/reset/" +
             token +
             "\n\n" +
@@ -298,14 +260,8 @@ router.post("/forgot-password", function (req, res, next) {
             "Punkt Developer Team",
         };
         transporter.sendMail(mailOptions, function (err) {
-          // console.log('mail sent');
-          // console.log('success', 'An email has been sent to ' + user.username + ' with further instructions.');
-          res.render("forgot", {
-            forgotErr: "",
-            forgotSuccess:
-              "Please check your email (including spam mail) at " +
-              user.email +
-              " for further instructions.",
+          res.status(200).json({
+            message: "Please check your email for further instructions.",
           });
           done(err, "done");
         });
@@ -316,7 +272,7 @@ router.post("/forgot-password", function (req, res, next) {
         console.log(err);
         return next(err);
       }
-      res.redirect("/forgot-password");
+      res.redirect(`${CLIENT_URL}/forgot-password`);
     }
   );
 });
@@ -331,26 +287,15 @@ router.get("/reset/:token", function (req, res) {
     },
     function (err, user) {
       if (!user) {
-        // console.log('error', 'Password reset token is invalid or has expired.');
-        // return res.redirect('/login');
-        return res.render("forgot", {
-          forgotErr: "Password reset token is invalid or has expired.",
-          forgotSuccess: "",
-        });
-      } else {
-        res.render("reset", {
-          token: req.params.token,
-          // resetSuccess: "",
-          // resetErr: []
-        });
+        return res
+          .status(401)
+          .json({ message: "Password reset token is invalid or has expired" });
       }
     }
   );
 });
 
 router.post("/reset/:token", (req, res) => {
-  const resetErr = [];
-
   async.waterfall(
     [
       (done) => {
@@ -364,48 +309,28 @@ router.post("/reset/:token", (req, res) => {
           (err, user) => {
             if (err) {
               console.log(err);
+              return res.status(500).json({ message: "Server error." });
             }
 
             if (!user) {
-              // console.log("error", 'Password reset token is invalid or has expired.');
-              // return res.redirect('/login');
-              return res.render("forgot", {
-                forgotErr: "Password reset token is invalid or has expired.",
-                forgotSuccess: "",
+              return res.status(401).json({
+                message: "Password reset token is invalid or has expired",
               });
             } else {
               if (req.body.password !== req.body.password2) {
-                // resetErr.push({
-                //   msg: "Passwords do not match."
-                // });
-                req.flash("resetErr", "Passwords do not match.");
-                return res.redirect("back");
+                return res.status(401).json({
+                  message: "Passwords do not match.",
+                });
               } else if (!schema.validate(req.body.password)) {
-                // password do not match requirements
-                // resetErr.push({
-                //   msg: "Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit."
-                // });
-                req.flash(
-                  "resetErr",
-                  "Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit."
-                );
-                return res.redirect("back");
-                // }
-                // console.log(resetErr);
-                //
-                // if (resetErr.length > 0) {
-                //   console.log(req.body);
-                //   // return res.render("reset", {
-                //   //   resetErr: resetErr,
-                //   //   resetSuccess: "",
-                //   //   token: req.body.token
-                //   // });
-                //   req.flash('resetErr', 'Flash is back!');
-                //   return res.redirect("back");
+                return res.status(401).json({
+                  message:
+                    "Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit.",
+                });
               } else {
                 user.setPassword(req.body.password, (err) => {
                   if (err) {
                     console.log(err);
+                    return res.status(500).json({ message: "Server error." });
                   } else {
                     user.resetPasswordToken = undefined;
                     user.resetPasswordExpires = undefined;
@@ -447,17 +372,11 @@ router.post("/reset/:token", (req, res) => {
         transporter.sendMail(mailOptions, function (err) {
           if (err) {
             console.log(err);
+            return res.status(500).json({ message: "Server error." });
           } else {
-            // console.log('success', 'Success! Your password has been changed.');
-            // res.render("reset", {
-            //   // resetErr: [],
-            //   resetSuccess: 'Success! Your password has been changed.',
-            //   token: req.body.token
-            // });
-            req.flash(
-              "resetSuccess",
-              "Yay! Your password has been changed successfully."
-            );
+            res.status(200).json({
+              message: "Yay! Your password has been changed successfully.",
+            });
             done(err);
           }
         });
@@ -466,8 +385,9 @@ router.post("/reset/:token", (req, res) => {
     (err) => {
       if (err) {
         console.log(err);
+        return res.status(500).json({ message: "Server error." });
       } else {
-        res.redirect("/login");
+        res.redirect(CLIENT_URL + "/login");
       }
     }
   );

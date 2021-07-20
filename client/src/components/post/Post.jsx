@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./post.css";
-import ReportIcon from "@material-ui/icons/Report";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
 import Fab from "@material-ui/core/Fab";
 import ModeCommentIcon from "@material-ui/icons/ModeComment";
@@ -10,188 +9,143 @@ import ImgRest from "./ImgRest";
 import Comment from "./Comment";
 import Report from "../report/Report";
 import DeleteIcon from "@material-ui/icons/Delete";
-import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import axios from "axios";
-import { format, render, cancel, register } from "timeago.js";
+import FaceIcon from "@material-ui/icons/Face";
+import { format } from "timeago.js";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
-import { url } from "../../utils/constants";
+
+//animation
+import { motion } from "framer-motion";
+
+//redux
+import { connect } from "react-redux";
+import { fetchUser } from "../../redux/actions/user";
+import { 
+  deletePost,
+  likePost,
+  fetchAllPosts,
+  fetchGoalPosts,
+  fetchMyPosts,
+  fetchSpeculatingPosts
+} from "../../redux/actions/posts";
+import {
+  fetchComments,
+  createComment
+} from "../../redux/actions/comments";
 
 /* *********************************************************************** */
 
-export default function Post({ post }) {
-  const PublicImg = process.env.REACT_APP_PUBLIC_URL;
+function Post({ 
+  post,
+  allPosts,
+  currUser,
+  deletePost,
+  fetchComments,
+  createComment,
+  comments,
+  likePost
+}) {
   const [isLit, setIsLit] = useState(false);
   const [numLit, setNumLit] = useState(post.lits?.length);
   const [isCommenting, setIsCommenting] = useState(false);
   const [numComment, setNumComment] = useState(post.comments?.length);
-  // const comm = useRef();
   const [comment, setComment] = useState("");
-  // const [amtBetFor, setAmtBetFor] = useState()
-  const [isBetFor, setBetFor] = useState(false);
-  const [isBetAgainst, setBetAgainst] = useState(false);
   const [user, setUser] = useState({});
-  const { user: currUser } = useContext(UserContext);
   const [allComments, setAllComments] = useState([]);
   const [goal, setGoal] = useState({});
+  const [isBetAgainst, setBetAgainst] = useState([]);
 
+
+  //console.log(post);
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await axios.get(url + `/user?userId=${post.userId}`);
-      setUser(res.data);
-    };
-    fetchUser();
-  }, [post.userId]);
+    //console.log("user has been set!");
+    //console.log(post);
+    setUser(post.user);
+  }, [post.user, fetchUser]);
 
   useEffect(() => {
     setIsLit(post.lits.includes(currUser._id));
-  }, [currUser, post.lits]);
-  // currUser._id
+  }, [currUser._id, post.lits]);
+
+  //post's goal
+  useEffect(() => {
+    if (post.goal) {
+      setGoal(post.goal)
+    }
+  }, [post.goal]);
+
+  //post's bet
+  useEffect(() => {
+    if (goal._id && currUser._id) {
+      setBetAgainst(goal.usersBetAgainst.includes(currUser._id));
+      //console.log(isBetAgainst);
+    }
+  }, [goal._id, currUser._id]);
 
   useEffect(() => {
-    const fetchGoal = async () => {
-      if (post.goalId) {
-        // console.log("goalid: " + user.goalId);
-        const res = await axios.get(url + "/goal/" + post.goalId);
-        setGoal(res.data);
-      }
-    };
-    fetchGoal();
-  }, [post.goalId]);
+    if (post.comments.length > 0) {
+      fetchComments(post._id);
+    }
+  }, [post, fetchComments]);
 
   useEffect(() => {
-    const fetchBetFor = async () => {
-      try {
-        if (goal._id) {
-          const res = await axios.get(
-            url + "/goal/" + goal._id + "/bet-for/" + currUser._id
-          );
-
-          setBetFor(res.data);
-        }
-      } catch (err) {
-        console.log(err);
+    if (comments.length > 0) {
+      const temp = comments.filter(comm => comm.postId === post._id);
+      //console.log(temp);
+      if (temp.length !== 0) {
+        setAllComments(temp[0].comments);
       }
     };
-    fetchBetFor();
-  }, [goal, currUser._id]);
+  }, [comments]);
 
-  useEffect(() => {
-    const fetchBetAgainst = async () => {
-      try {
-        if (goal._id) {
-          const res = await axios.get(
-            url + "/goal/" + goal._id + "/bet-against/" + currUser._id
-          );
-
-          setBetAgainst(res.data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchBetAgainst();
-  }, [goal, currUser._id]);
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        if (post.comments.length > 0) {
-          const res = await axios.get(url + "/comment/post/" + post._id);
-          console.log("res.data: " + res.data);
-
-          setAllComments(res.data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchComments();
-  }, [post.comments, post._id]);
-
-  const currDays = goal?.postIds?.length;
+  const currDays = goal?.madeAtonement
+    ? goal?.postIds?.length - 1
+    : goal?.postIds?.length;
   const totalDays = goal?.numDays;
 
   function handleLit() {
-    try {
-      axios.put(url + "/post/" + post._id + "/like", { userId: currUser._id });
-    } catch (err) {
-      console.log(err);
-    }
+    likePost(post._id, { userId: currUser._id });
     setNumLit(isLit ? numLit - 1 : numLit + 1);
     setIsLit(!isLit);
   }
 
-  function handleComment() {
-    setIsCommenting(!isCommenting);
-  }
-
-  function handleBetFor() {
-    setBetFor(true);
-  }
-
-  function handleBetAgainst() {
-    setBetAgainst(true);
-  }
-
-  async function submitComment(event) {
+  function submitComment(event) {
     event.preventDefault();
-    try {
-      await axios.post(url + "/comment", {
-        userId: currUser._id,
-        postId: post._id,
-        content: comment,
-      });
-      const res = await axios.get(url + "/comment/post/" + post._id);
-
-      setAllComments(res.data);
-      setNumComment(numComment + 1);
-    } catch (err) {
-      console.log(err);
+    const body = {
+      userId: currUser._id,
+      postId: post._id,
+      content: comment,
     }
-
+    createComment(post._id, body);
+    setNumComment(numComment + 1);
     setComment("");
+  };
+
+  function onDelete() {
+    deletePost(post._id, { data: currUser });
   }
-
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setComment(value);
-  }
-
-  async function deletePost(postId) {
-    try {
-      await axios.delete(url + "/post/" + postId, { data: currUser });
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  // function handleKeyPress(event) {
-  //   console.log("onsubmit" + onsubmit);
-  //   if (event.key === "Enter" && !event.shiftKey) {
-  //     // submitComment(onsubmit);
-  //   }
-  // }
-
-  // console.log(Users.filter((u) => u.id === post.userId)[0].username);
 
   return (
-    <div className="post">
+    <motion.div 
+      className="post"
+      layout
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.5 }}
+    >
       <div className="post-wrapper">
         <div className="post-top">
           <div className="post-top-left">
-            <Link to={`profile/${user.username}`}>
+            <Link to={`/profile/${user.username}`}>
               <img
                 // src={Users.filter((u) => u.id === post.userId)[0].profilePicture}
                 src={
                   user.profilePicture
-                    ? PublicImg + user.profilePicture
-                    : PublicImg + "defaultDP.svg"
+                    ? user.profilePicture
+                    : "/assets/img/defaultDP.svg"
                 }
                 alt="profilePic"
                 className="profilePic post-profile"
-              ></img>
+              />
             </Link>
             <div className="profile-name-date">
               <p className="post-name">
@@ -205,8 +159,17 @@ export default function Post({ post }) {
           <div className="post-top-right">
             {currUser._id === post.userId ? (
               <DeleteIcon
-                onClick={() => deletePost(post._id)}
-                style={{ cursor: "pointer", color: "#16697a" }}
+                onClick={() => goal.status === "In Progress" ? onDelete() : null}
+                style={{ 
+                  cursor: 
+                    goal.status === "In Progress"
+                    ? "pointer"
+                    : "not-allowed",
+                    color: 
+                      goal.status === "In Progress" 
+                      ? "#16697a" 
+                      :"gray"
+                  }}
               />
             ) : (
               <Report post={post} />
@@ -224,9 +187,9 @@ export default function Post({ post }) {
             <div className="carousel-inner">
               {post.img?.map((p, index) => {
                 return index === 0 ? (
-                  <ImgActive key={index} image={PublicImg + p} />
+                  <ImgActive key={index} image={p} />
                 ) : (
-                  <ImgRest key={index} image={PublicImg + p} />
+                  <ImgRest key={index} image={p} />
                 );
               })}
             </div>
@@ -256,16 +219,13 @@ export default function Post({ post }) {
             </button>
           </div>
         </div>
-        <Link
-          to={"/progress/" + user.username + "/" + goal?._id}
-          style={{ textDecoration: "none" }}
-        >
+        <Link to={"/progress/" + goal?._id} style={{ textDecoration: "none" }}>
           <div className="post-goal-section">
             <div className="post-goal-content">
               <div className="goal-bet-amount">
                 <p>
-                  <strong>SGD: </strong>
-                  {goal?.betAmount}
+                  <strong>Atonement: </strong>
+                  {goal?.atonement}
                 </p>
               </div>
               <div className="goal-title">
@@ -301,7 +261,7 @@ export default function Post({ post }) {
             <div className="post-bottom-left-btn">
               <Fab
                 id="comment-icon"
-                onClick={handleComment}
+                onClick={() => setIsCommenting(!isCommenting)}
                 style={{
                   backgroundColor: isCommenting ? "#daa078fa" : "#95c9d4b0",
                 }}
@@ -315,26 +275,16 @@ export default function Post({ post }) {
               <Fab
                 id="fire-icon"
                 style={{
-                  backgroundColor: isBetFor ? "rgb(57, 153, 57)" : "#95c9d4b0",
-                }}
-              >
-                <i className="far fa-laugh-wink"></i>
-              </Fab>
-              <p className="post-lit-counter">${goal?.amtBetFor}</p>
-            </div>
-
-            <div className="post-bottom-left-btn">
-              <Fab
-                id="fire-icon"
-                style={{
                   backgroundColor: isBetAgainst
                     ? "rgb(201, 90, 90)"
                     : "#95c9d4b0",
                 }}
               >
-                <i className="far fa-meh" />
+                <FaceIcon />
               </Fab>
-              <p className="post-lit-counter">${goal?.amtBetAgainst}</p>
+              <p className="post-lit-counter">
+                {goal?.usersBetAgainst?.length} bets
+              </p>
             </div>
           </div>
           <div className="post-comment">
@@ -351,7 +301,8 @@ export default function Post({ post }) {
                       value={comment}
                       className="comment-area"
                       placeholder="Write your comments"
-                      onChange={handleChange}
+                      onChange={(event) => setComment(event.target.value)}
+                      required
                       // ref={comm}
                     />
                     <button type="submit">Comment</button>
@@ -362,6 +313,27 @@ export default function Post({ post }) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    currUser: state.auth.user,
+    comments: state.comments,
+    allPosts: state.posts
+  };
 }
+
+export default connect(
+  mapStateToProps,
+  {
+    deletePost,
+    fetchComments,
+    createComment,
+    likePost,
+    fetchAllPosts,
+    fetchMyPosts,
+    fetchGoalPosts,
+    fetchSpeculatingPosts,
+  })(Post);

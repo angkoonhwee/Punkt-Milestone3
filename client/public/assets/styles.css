@@ -6,7 +6,10 @@
 
 body,
 input,
-button {
+button,
+a,
+table,
+th {
   font-family: "Mulish", sans-serif;
   font-weight: 400;
   font-size: 1rem;

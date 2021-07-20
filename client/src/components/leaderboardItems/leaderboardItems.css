@@ -22,6 +22,7 @@
   max-height: 92px;
   background-color: white;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .balloon-first-btm {
@@ -43,6 +44,7 @@
   margin: 0;
   font-size: 14px;
   font-family: "Jura", "Mulish", sans-serif;
+  font-weight: bold;
 }
 
 .balloon-first-btm p {
@@ -93,6 +95,7 @@
   max-height: 72px;
   background-color: white;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .balloon-sec-btm {
@@ -157,6 +160,7 @@
   max-height: 67px;
   background-color: white;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .balloon-third-btm {
@@ -235,6 +239,7 @@
   background-color: white;
   border-radius: 50%;
   margin: 0;
+  object-fit: cover;
 }
 
 @media (max-width: 630px) {

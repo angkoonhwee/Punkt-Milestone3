@@ -3,8 +3,8 @@ import "./homeContentTop.css";
 import { Link } from "react-router-dom";
 
 function HomeContentTop() {
-  const publicDir = process.env.REACT_APP_PUBLIC_URL;
-  console.log(publicDir);
+  // const publicDir = process.env.REACT_APP_PUBLIC_URL;
+  // console.log(publicDir);
   return (
     <div
       className="container-bg-img"

@@ -3,15 +3,29 @@ import "./buddyTodoList.css";
 import BuddyTodoItem from "./BuddyTodoItem";
 import BuddyTodoInput from "./BuddyTodoInput";
 
-export default function BuddyTodoList() {
+//redux
+import { connect } from "react-redux";
+
+function BuddyTodoList({ todos }) {
+  console.log(todos);
+
+  if (!todos) {
+    return <h1>LOADING...</h1>
+  }
   return (
     <div className="buddy-todo-list">
-      <BuddyTodoItem />
-      <BuddyTodoItem />
-      <BuddyTodoItem />
-      <BuddyTodoItem />
-
+      {todos.map(t => (
+        <BuddyTodoItem key={t._id} item={t} />
+      ))}
       <BuddyTodoInput />
     </div>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    todos: state.buddy.object.todos
+  };
+};
+
+export default connect(mapStateToProps)(BuddyTodoList);

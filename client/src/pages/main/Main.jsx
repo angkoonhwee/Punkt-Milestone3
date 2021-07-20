@@ -1,34 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Feed from "../../components/feed/Feed";
 import Footer from "../../components/footer/Footer";
 import NavbarMain from "../../components/navbarMain/NavbarMain";
 import Rightbar from "../../components/rightbar/Rightbar";
 import "./main.css";
 import ScrollTop from "../../components/scrollTop/ScrollTop";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import { url } from "../../utils/constants";
 
-function Main() {
-  const PF = process.env.REACT_APP_PUBLIC_URL;
-  const [user, setUser] = useState({});
-  const username = useParams().username;
+//redux
+import { connect } from "react-redux";
+import { fetchMyPosts } from "../../redux/actions/posts";
 
+function Main({ posts, fetchMyPosts }) {
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = username
-        ? await axios.get(url + `/user?username=${username}`)
-        : await axios.get(url + "/");
-      setUser(res.data);
-    };
-    fetchUser();
-  }, [username]);
+    fetchMyPosts();
+  }, [fetchMyPosts]);
+  //fetchMyPosts();
 
   return (
     <>
       <NavbarMain />
       <div className="container-success">
-        <Feed username={username} page="main" />
+        <Feed posts={posts} />
         <Rightbar />
       </div>
       <ScrollTop />
@@ -37,4 +29,10 @@ function Main() {
   );
 }
 
-export default Main;
+const mapStateToProps = state => {
+  return { 
+    posts: state.posts.main
+  }
+}
+
+export default connect(mapStateToProps, { fetchMyPosts })(Main);

@@ -1,25 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./post.css";
 import axios from "axios";
-import { UserContext } from "../../context/UserContext";
-import { format, render, cancel, register } from "timeago.js";
+import { format } from "timeago.js";
 import { url } from "../../utils/constants";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import { motion } from "framer-motion";
 
-export default function Comment({ comm }) {
+//redux
+import { connect } from "react-redux";
+
+function Comment({ comm, currUser }) {
   const [user, setUser] = useState({});
-  const { user: currUser } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(comm.likes.length);
-  const PublicImg = process.env.REACT_APP_PUBLIC_URL;
 
+  //console.log(comm);
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await axios.get(url + `/user?userId=${comm.userId}`);
-      setUser(res.data);
-    };
-    fetchUser();
-  }, [comm.userId]);
+    //console.log("COMMENT USEEFFECT");
+    setUser(comm.user);
+    //console.log(user);
+  }, [comm.user]);
 
   useEffect(() => {
     setIsLiked(comm.likes.includes(currUser._id));
@@ -39,16 +39,20 @@ export default function Comment({ comm }) {
 
   return (
     <div className="comment-wrapper">
-      <div className="post-user-comments">
+      <motion.div
+        className="post-user-comments"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
         <img
           className="profilePic"
           src={
             user.profilePicture
-              ? PublicImg + user.profilePicture
-              : PublicImg + "defaultDP.svg"
+              ? user.profilePicture
+              : "/assets/img/defaultDP.svg"
           }
           alt="profile-pic"
-        ></img>
+        />
 
         <div className="comment-content">
           <p>
@@ -58,7 +62,7 @@ export default function Comment({ comm }) {
 
           <p>{comm.content}</p>
         </div>
-      </div>
+      </motion.div>
       <div className="comment-like">
         <FavoriteIcon
           onClick={handleLike}
@@ -68,4 +72,12 @@ export default function Comment({ comm }) {
       </div>
     </div>
   );
-}
+};
+
+const mapStateToProps = state => {
+  return {
+    currUser: state.auth.user
+  };
+};
+
+export default connect(mapStateToProps)(Comment);

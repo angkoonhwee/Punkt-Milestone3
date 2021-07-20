@@ -1,3 +1,30 @@
-.bets-table {
-  /* padding: 50px 30px 0; */
+.reply-atonement {
+  padding: 2px 10px;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid #489fb5;
+  color: #489fb5;
+  font-weight: 500;
+  transition: 0.3s ease-in-out;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 2;
+  text-decoration: none;
+}
+
+.reply-atonement:hover {
+  background-color: #489fb5;
+  border: 1px solid #489fb5;
+  color: white;
+}
+
+.MuiTableCell-root {
+  font-family: "Mulish", "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+@media (max-width: 450px) {
+  .reply-atonement {
+    font-size: 14px;
+    padding: 1px 9px;
+  }
 }

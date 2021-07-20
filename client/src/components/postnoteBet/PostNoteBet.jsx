@@ -1,45 +1,64 @@
-import React, { useContext, useRef, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./postNoteBet.css";
-import CreateIcon from "@material-ui/icons/Create";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import { TextareaAutosize } from "@material-ui/core";
-import { UserContext } from "../../context/UserContext";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import { url } from "../../utils/constants";
 
-export default function PostNoteBet() {
-  const { user, dispatch } = useContext(UserContext);
+import { connect } from "react-redux";
+import { fetchGoalById, submitGoals } from "../../redux/actions/goals";
+import { loadMe } from "../../redux/actions/auth";
 
-  const [currGoal, setCurrGoal] = useState({});
+function PostNoteBet({
+  user,
+  currGoal,
+  postIds,
+  fetchGoalById,
+  submitGoals,
+  loadMe
+}) {
+  //this goal is purely for form management
   const [goal, setGoal] = useState({
     title: "",
-    amount: "",
+    atonement: "",
     days: "",
   });
+  const [currDays, setCurrDays] = useState(0);
 
   const [hasGoal, setHasGoal] = useState(false);
 
   useEffect(() => {
     if (!hasGoal) {
-      const fetchGoal = async () => {
-        const res = await axios.get(url + "/goal/" + user.goalId);
-        if (res.data && res.data.status === "In Progress") {
-          // console.log(res.data);
-          setCurrGoal(res.data);
+      if (user.goalId !== "") {
+        fetchGoalById(user.goalId);
+        if (currGoal && currGoal.status === "In Progress") {
           setHasGoal(true);
-        } else {
-          setHasGoal(false);
+        } else if (currGoal && currGoal.status === "Failed") {
+          loadMe();
         }
-      };
-      fetchGoal();
+      }
     }
-  }, [user._id, user.goalId, hasGoal, currGoal]);
-  //user._id, hasGoal, user.goalId
+  }, [
+    user, 
+    loadMe,
+    fetchGoalById,
+    currGoal
+  ]);
 
-  const currDays = currGoal?.postIds?.length;
+  useEffect(() => {
+    //to update user.goalId when new goal is created
+    loadMe();
+  }, [currGoal, loadMe]);
+  
+  useEffect(() => {
+    const temp = 
+    currGoal?.madeAtonement
+    ? postIds?.length - 1
+    : postIds?.length;
+    setCurrDays(temp);
+  }, [postIds, currDays])
+  // console.log(currGoal);
+  // console.log(postIds);
 
   const totalDays = currGoal?.numDays;
   const currProgress = Math.round((currDays / totalDays) * 100);
@@ -55,36 +74,23 @@ export default function PostNoteBet() {
     });
   }
 
-  async function submitGoal(event) {
+  function submitGoal(event) {
     event.preventDefault();
-    dispatch({ type: "UPDATE_START" });
-    const newGoal = {
-      userId: user._id,
-      title: goal.title,
-      betAmount: goal.amount,
-      numDays: goal.days,
-    };
-
-    try {
-      const newGoalObj = await axios.post(url + "/goal", newGoal);
-      const updatedUser = {
-        userId: user._id,
-        goalId: newGoalObj._id,
-      };
-      const res = await axios.put(url + "/user/" + user._id, updatedUser);
-
-      // setHasGoal(true);
-      dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
-      // setGoal({
-      //   title: "",
-      //   amount: "",
-      //   days: "",
-      // });
-      // window.location.reload();
-    } catch (err) {
-      console.log(err);
-      dispatch({ type: "UPDATE_FAILURE" });
-    }
+    const newGoal =
+      goal.atonement === ""
+        ? {
+            userId: user._id,
+            title: goal.title,
+            atonement: "Fulfil a request from the comment with most likes",
+            numDays: goal.days,
+          }
+        : {
+            userId: user._id,
+            title: goal.title,
+            atonement: goal.atonement,
+            numDays: goal.days,
+          };
+    submitGoals(newGoal);
   }
 
   return (
@@ -98,7 +104,8 @@ export default function PostNoteBet() {
             {currGoal?.title}
           </p>
           <p>
-            <strong>Bet Amount: </strong>SGD {currGoal?.betAmount}
+            <strong>Atonement: </strong>
+            {currGoal?.atonement}
           </p>
           <div className="progressbarWrapper">
             <div className="progressbar-text-wrapper">
@@ -109,9 +116,6 @@ export default function PostNoteBet() {
                 <div
                   className="progress-bar"
                   role="progressbar"
-                  // aria-valuenow="10"
-                  // aria-valuemin="0"
-                  // aria-valuemax="30"
                   style={{ width: currProgress + "%" }}
                 >
                   {currProgress + "%"}
@@ -137,23 +141,20 @@ export default function PostNoteBet() {
                 name="title"
                 value={goal.title}
                 className="set-goal"
-                placeholder="State your goal(s)"
+                placeholder="State your goal"
                 onChange={handleChange}
                 required
               />
             </div>
             <div className="bet-component">
-              <strong>Bet Amount: </strong>
-              <input
+              <strong>Atonement: </strong>
+              <TextareaAutosize
+                name="atonement"
+                value={goal.atonement}
                 className="set-goal"
-                type="number"
-                placeholder="Amount"
-                name="amount"
-                value={goal.amount}
+                placeholder="State your atonement"
                 onChange={handleChange}
-                required
-                min="0"
-              ></input>
+              />
             </div>
             <div className="bet-component">
               <strong>No. of Days: </strong>
@@ -179,4 +180,20 @@ export default function PostNoteBet() {
       )}
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  //console.log(state.goals.goals);
+  return {
+    user: state.auth.user,
+    currGoal: state.goals.goals,
+    postIds: state.goals.goals.postIds
+  }
 }
+
+export default connect(
+  mapStateToProps, { 
+    fetchGoalById, 
+    submitGoals, 
+    loadMe
+  })(PostNoteBet);

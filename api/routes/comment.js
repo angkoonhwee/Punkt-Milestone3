@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user");
 const Post = require("../models/post");
-const Goal = require("../models/goal");
 const Comment = require("../models/comment");
 
 // CREATE COMMENT
@@ -14,7 +12,6 @@ router.post("/", async (req, res) => {
     // console.log(savedPost);
     const currPost = Post.findById(req.body.postId);
     await currPost.updateOne({ $push: { comments: savedComment.id } });
-
     res.status(200).json(savedComment);
   } catch (err) {
     res.status(500).json(err);

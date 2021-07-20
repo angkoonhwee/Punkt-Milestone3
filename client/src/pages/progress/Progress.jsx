@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BetStatus from "../../components/betStatus/BetStatus";
 import Footer from "../../components/footer/Footer";
 import NavbarMain from "../../components/navbarMain/NavbarMain";
@@ -7,56 +7,123 @@ import RecordStatus from "../../components/recordStatus/RecordStatus";
 import ScrollTop from "../../components/scrollTop/ScrollTop";
 import SetBet from "../../components/setBet/SetBet";
 import "./progress.css";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
-import { url } from "../../utils/constants";
+import { isEmpty } from "lodash";
 
-export default function Progress() {
-  const PF = process.env.REACT_APP_PUBLIC_URL;
-  const { user: currUser } = useContext(UserContext);
-  const username = useParams().username;
+import Loading from "../loading/Loading";
+
+//redux
+import { connect } from "react-redux";
+import { 
+  fetchGoalById,
+  fetchGoal,
+  updateStatus
+ } from "../../redux/actions/goals";
+ import { fetchUserById } from "../../redux/actions/user";
+
+
+function Progress({
+  currUser,
+  storeUser,
+  fetchUserById,
+  updateStatus,
+  goal,
+  fetchGoal,
+  fetchGoalById
+}) {
+  //Progress have 2 different routes to be accessed by
+  //1. /progress
+  //2. /progress/:goalId
   const goalId = useParams().goalId;
-  // console.log("goalid : " + goalId);
-  const [goal, setGoal] = useState({});
+
   const [user, setUser] = useState({}); // owner of the goal
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = username
-        ? await axios.get(url + `/user?username=${username}`)
-        : await axios.get(url + "/");
-      setUser(res.data);
-    };
-    fetchUser();
-  }, [username]);
+    console.log("GOAL USEEFFECT");
+    if (goalId) {
+      fetchGoalById(goalId);
+    } else {
+      fetchGoal(currUser._id);
+    }
+  }, [
+    currUser._id,
+    fetchGoal,
+    fetchGoalById,
+    //goal.postIds.length
+  ]);
+
+  console.log(goal);
 
   useEffect(() => {
-    const fetchGoal = async () => {
-      const res = goalId
-        ? await axios.get(url + "/goal/" + goalId)
-        : await axios.get(url + "/goal/user/" + currUser._id);
+    // console.log(goal);
+    console.log(!isEmpty(goal));
+    if(!isEmpty(goal)) {  
+      if (goal.userId === currUser._id) {
+        console.log("GOAL BELONGS TO ME");
+        setUser(currUser);
+      } else {
+        console.log("GOAL BELONGS TO SOMEONE ELSE");
+        fetchUserById(goal.userId);
+      }
+    }
+  }, [currUser, fetchUserById, user, goal]);
 
-      setGoal(res.data);
-    };
-    fetchGoal();
-  }, [currUser._id, goalId]);
+  useEffect(() => {
+    if (isEmpty(user)) {
+      setUser(storeUser);
+    }
+  }, [storeUser, user])
 
-  return (
-    <div>
-      <NavbarMain />
-      <div className="container-progress">
-        <BetStatus user={username ? user : currUser} goal={goal} />
-        {!username || username === currUser.username ? (
-          <RecordStatus goal={goal} />
-        ) : (
-          <SetBet user={user} goal={goal} />
-        )}
+  useEffect(() => {
+    if (!isEmpty(goal) && goal.status === "In Progress") {
+      if (goal.postIds.length === goal.numDays) {
+        updateStatus(goal._id);
+      }
+    }
+  }, [updateStatus, goal.postIds])
 
-        <ProgressTimeline user={username ? user : currUser} goal={goal} />
+  if (!isEmpty(goal) && !isEmpty(user)) {
+    return (
+      <div>
+        <NavbarMain />
+        <div className="container-progress">
+          <BetStatus
+            user={user}
+          />
+          {goal.userId === currUser._id ? (
+            <RecordStatus goal={goal} />
+          ) : (
+            <SetBet user={user} goal={goal} />
+          )}
+
+          <ProgressTimeline goalId={
+            goalId 
+            ? goalId
+            : goal._id} />
+        </div>
+        <ScrollTop />
+        <Footer />
       </div>
-      <ScrollTop />
-      <Footer />
-    </div>
-  );
+    );
+  } else {
+    return (
+      <Loading />
+    )
+  }
 }
+
+const mapStateToProps = state => {
+  return {
+    currUser: state.auth.user,
+    goal: state.goals.goals,
+    storeUser: state.user.user
+  };
+};
+
+export default connect(
+  mapStateToProps, 
+  { fetchGoal,
+    fetchGoalById,
+    fetchUserById,
+    updateStatus
+  })(Progress);

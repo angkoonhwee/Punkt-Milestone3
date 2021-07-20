@@ -1,53 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./buddyDaily.css";
-import { useSelector, useDispatch } from "react-redux";
-//import { getDailysAsync } from '../../../redux/dailysSlice'
 import TodoItem from "../postnoteTodo/TodoItem";
 import { Users, Todos } from "../../dummyDate";
 import DailyItems from "./DailyItems";
 
-//get list of todos from the day before
+//redux
+import { connect } from "react-redux";
+import { fetchDailys } from "../../redux/actions/buddy";
+import { isEmpty } from "lodash";
 
-export default function BuddyDailys() {
-  // const dispatch = useDispatch();
-  // const dailys = useSelector((state) => state.dailys);
-  //console.log(dailys);
-
-  // useEffect(() => {
-  //     dispatch(getDailysAsync());
-  // }, [dispatch])
+function BuddyDailys({ dailys, fetchDailys }) {
   const currDays = 21;
   const totalDays = 30;
-  const currProgress = Math.round((currDays / totalDays) * 100);
+  //const currProgress = Math.round((currDays / totalDays) * 100);
+  const [user, setUser] = useState([]);
+  const [buddy, setBuddy] = useState([]);
+
+
+  useEffect(() => {
+    fetchDailys();
+  }, [fetchDailys]);
+
+  useEffect(() => {
+    if (!isEmpty(dailys)) {
+      setUser(dailys.user);
+      setBuddy(dailys.buddy);
+    };
+  }, [user, buddy, dailys])
 
   return (
     <div className="container-buddy-daily">
       <div className="buddy-daily">
         <h2>My Todo</h2>
         <hr />
-        {Todos.map((t) => (
-          <DailyItems key={t.id} item={t} />
+        {user.map((t) => (
+          <DailyItems key={t._id} item={t} />
         ))}
-
-        {/* <form className="item">
-          <input
-            type="text"
-            name="newItem"
-            placeholder="New ToDo Item"
-            autocomplete="off"
-          />
-          <button type="submit" name="list">
-            +
-          </button>
-        </form> */}
       </div>
       <div className="buddy-daily">
         <h2>Buddy Todo</h2>
         <hr />
-        {Todos.map((t) => (
-          <DailyItems key={t.id} item={t} />
+        {buddy.map((t) => (
+          <DailyItems key={t._id} item={t} buddy={true}/>
         ))}
       </div>
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    dailys: state.buddy.dailys
+  }
 }
+
+export default connect(mapStateToProps, { fetchDailys })(BuddyDailys);

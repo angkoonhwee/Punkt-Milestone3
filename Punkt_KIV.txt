@@ -1,0 +1,12 @@
+UX Features that still has error:
+
+#SOLVED# BetStatus ->
+- Progress not updated
+- Cannot detect change in store when goal is updated
+
+
+Create Post in Settings Goals Table:
+- not responsive after clicking create even though button is working
+
+BetAgainst:
+- after bet against set by another user, post component does not update

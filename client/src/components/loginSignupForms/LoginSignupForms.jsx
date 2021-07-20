@@ -1,18 +1,16 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./loginSignup.css";
-import { Link, useHistory } from "react-router-dom";
-import { loginCall, signUpCall } from "../../apiCalls";
-import { UserContext } from "../../context/UserContext";
 import { CircularProgress } from "@material-ui/core";
-import axios from "axios";
-import { GoogleLogin } from "react-google-login";
-import { url } from "../../utils/constants";
 import Alert from "@material-ui/lab/Alert";
+import { Link } from "react-router-dom";
 
-function LoginSignupForms() {
+//redux
+import { connect } from "react-redux";
+import { login, signup, signupStart } from "../../redux/actions/auth";
+
+function LoginSignupForms({ login, signup, isFetching, errorLogin, errorSignup }) {
   const loginEmail = useRef();
   const loginPassword = useRef();
-  const { isFetching, dispatch, error } = useContext(UserContext);
 
   const signupUsername = useRef();
   const signupEmail = useRef();
@@ -22,35 +20,28 @@ function LoginSignupForms() {
   const [loginError, setLoginError] = useState(false);
   const [signUpError, setSignUpError] = useState(false);
 
+
+  useEffect(() => {
+    if(errorLogin) {
+      setLoginError(errorLogin);
+    } else if (errorSignup) {
+      setSignUpError(errorSignup);
+    }
+  }, [errorSignup, errorLogin]);
+
   function submitLogin(event) {
     event.preventDefault();
-    loginCall(
-      {
-        email: loginEmail.current.value,
-        password: loginPassword.current.value,
-      },
-      dispatch
-    );
+    login({
+      email: loginEmail.current.value,
+      password: loginPassword.current.value
+    });
 
-    if (error) {
-      setLoginError(error);
-    }
   }
 
-  function checkPassword(input) {
-    var passwordReq = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-    return input.match(passwordReq);
-  }
 
   const submitSignup = async (event) => {
     event.preventDefault();
-    if (!checkPassword(signupPassword.current.value)) {
-      signupPassword.current.setCustomValidity(
-        "Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit."
-      );
-    } else if (signupPassword.current.value !== signupPassword2.current.value) {
-      signupPassword.current.setCustomValidity("Passwords do not match.");
-    } else {
+      signupStart();
       const user = {
         username: signupUsername.current.value,
         email: signupEmail.current.value,
@@ -58,37 +49,22 @@ function LoginSignupForms() {
         password2: signupPassword2.current.value,
       };
 
-      signUpCall(user, dispatch);
-
-      if (error) {
-        setSignUpError(error);
-      }
-    }
+      signup(user);
   };
 
-  function googleLogin(event) {
-    console.log(event.target);
-
-    window.open(`http://localhost:8000/auth/google`, "_self");
-  }
 
   return (
     <div className="container-forms">
       <div className="signup-login">
         <form className="form-login" onSubmit={submitLogin}>
           <h2 className="form-title">Login to Punkt.</h2>
-          <div className="google-login">
-            <div
-              className="google-icon"
-              style={{ cursor: "pointer" }}
-              // onClick={googleLogin}
-            >
-              <i className="fab fa-google"></i> Login with Google
-            </div>
-          </div>
-          <p className="gmail-text">Or use your email account</p>
+         
           {loginError && (
-            <Alert severity="error" onClose={() => setLoginError(false)}>
+            <Alert
+              severity="error"
+              onClose={() => setLoginError(false)}
+              stlye={{ maxWidth: "400px", width: "100%" }}
+            >
               {loginError}
             </Alert>
           )}
@@ -119,9 +95,9 @@ function LoginSignupForms() {
             />
           </div>
 
-          {/* <Link className="forgot-pw" to="/forgot-password">
+          <Link className="forgot-pw" to="/forgot-password">
             Forgot your password?
-          </Link> */}
+          </Link>
           <button
             className="bton"
             type="submit"
@@ -138,17 +114,7 @@ function LoginSignupForms() {
 
         <form className="form-signup" onSubmit={submitSignup}>
           <h2 className="form-title">Create Account</h2>
-          <div className="google-login">
-            <div
-              className="google-icon"
-              style={{ cursor: "pointer" }}
-              onClick={googleLogin}
-            >
-              <i className="fab fa-google"></i> Login with Google
-            </div>
-          </div>
-
-          <p className="gmail-text">Or use your email for registration</p>
+          
           {signUpError && (
             <Alert severity="error" onClose={() => setSignUpError(false)}>
               {signUpError}
@@ -228,6 +194,14 @@ function LoginSignupForms() {
       </div>
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    isFetching: state.auth.isFetching,
+    errorLogin: state.auth.errorLogin,
+    errorSignup: state.auth.errorSignup
+  };
 }
 
-export default LoginSignupForms;
+export default connect(mapStateToProps, { login, signup, signupStart })(LoginSignupForms);

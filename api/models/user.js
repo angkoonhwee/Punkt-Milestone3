@@ -2,16 +2,6 @@ const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
 const findOrCreate = require("mongoose-findorcreate");
 
-// const userSchema = new mongoose.Schema({
-//   username: String,
-//   displayName: String,
-//   password: String,
-//   googleId: String,
-//   posts: Array,
-//   resetPasswordToken: String,
-//   resetPasswordExpires: Date,
-// });
-
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -41,8 +31,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    bio: String,
+    education: {
+      school: String,
+      major: String,
+      yearOfStudy: Number,
+      currentModules: [String],
+    },
+    social: {
+      instagram: String,
+      github: String,
+      linkedIn: String,
+    },
+
     betHistory: {
-      type: [{ goalId: String, amt: Number, status: String }],
+      type: [String], // ARRAY OF GOAL IDs
       default: [],
     },
     followings: {
@@ -61,24 +64,8 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 9999,
     },
-    currAmt: {
-      type: Number,
-      default: 0,
-    },
-    totalAmtWon: {
-      type: Number,
-      default: 0,
-    },
-    totalAmtLost: {
-      type: Number,
-      default: 0,
-    },
-    betFor: {
-      type: [{ goalId: String, amt: Number }],
-      default: [],
-    },
     betAgainst: {
-      type: [{ goalId: String, amt: Number }],
+      type: [String],
       default: [],
     },
     buddyHistory: {
@@ -97,6 +84,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    //currentBuddy stores a buddy object that belongs to user
+    currentBuddy: {
+      type: String,
+      default: ""
+    },
+
     resetPasswordToken: String,
     resetPasswordExpires: Date,
   },

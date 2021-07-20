@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 const Post = require("../models/post");
-const Goal = require("../models/goal");
-const Comment = require("../models/comment");
 const Report = require("../models/report");
 
 // CREATE REPORT

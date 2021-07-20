@@ -6,6 +6,10 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    username: {
+      type: String,
+      required: true
+    },
     goalId: {
       type: String,
       required: true,
@@ -22,14 +26,7 @@ const postSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    // comments: [
-    //   {
-    //     userId: String,
-    //     comment: String,
-    //     numLikes: Array,
-    //     createdAt: Date,
-    //   },
-    // ],
+    atonement: Boolean,
     comments: {
       type: Array,
       default: [],

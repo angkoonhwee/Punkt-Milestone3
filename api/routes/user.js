@@ -1,4 +1,3 @@
-// jshint esversion: 8
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
@@ -23,10 +22,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET ALL USERS' USERNAME AND PROFILE PIC ARRAY
+// GET ALL USERS' USERNAME, PROFILE PIC, PRODUCTIVITY POINTS ARRAY
 router.get("/all", async (req, res) => {
   try {
-    const users = await User.find({}).select(["username", "profilePicture"]);
+    const users = await User.find({}).select([
+      "username",
+      "profilePicture",
+      "productivityPoints",
+    ]);
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
@@ -37,109 +40,6 @@ router.get("/all", async (req, res) => {
 router.put("/:id", async (req, res) => {
   // console.log(req.body);
   if (req.body.userId === req.params.id || req.body.isAdmin) {
-    if (req.body.password) {
-      async.waterfall(
-        [
-          (done) => {
-            crypto.randomBytes(20, (err, buf) => {
-              if (err) {
-                console.log(err);
-              } else {
-                const token = buf.toString("hex");
-                done(err, token);
-              }
-            });
-          },
-          (token, done) => {
-            User.findOne(
-              {
-                email: req.body.email,
-              },
-              (err, user) => {
-                if (err) {
-                  console.log(err);
-                }
-                if (!user) {
-                  // console.log(
-                  //   "error",
-                  //   "No account with that email address exists."
-                  // );
-                  return res
-                    .status(403)
-                    .json({ msg: "email has not been registered" });
-                  // return res.render("forgot", {
-                  //   forgotErr: "Email has not been registered.",
-                  //   forgotSuccess: "",
-                  // });
-                }
-
-                user.resetPasswordToken = token;
-                user.resetPasswordExpires = Date.now() + 1200000; // 20min
-
-                user.save((err) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                  done(err, token, user);
-                });
-              }
-            );
-          },
-          (token, user, done) => {
-            let transporter = nodemailer.createTransport({
-              service: "gmail",
-              auth: {
-                user: "punkt.orbital@gmail.com",
-                pass: process.env.GMAILPW,
-              },
-            });
-            const mailOptions = {
-              from: "punkt.orbital@gmail.com",
-              to: user.email,
-              subject: "Punkt Password Reset",
-              text:
-                "Dear " +
-                user.username +
-                ", \n\n" +
-                "You are receiving this because you have requested the reset of the password for your account.\n\n" +
-                "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
-                "http://" +
-                req.headers.host +
-                "/reset/" +
-                token +
-                "\n\n" +
-                "If you did not request for password reset, please ignore this email and your password will remain unchanged.\n\n" +
-                "Punkt Developer Team",
-            };
-            transporter.sendMail(mailOptions, function (err) {
-              // console.log('mail sent');
-              console.log(
-                "success",
-                "An email has been sent to " +
-                  user.username +
-                  " with further instructions."
-              );
-              // res.render("forgot", {
-              //   forgotErr: "",
-              //   forgotSuccess:
-              //     "Please check your email (including spam mail) at " +
-              //     user.email +
-              //     " for further instructions.",
-              // });
-              done(err, "done");
-            });
-          },
-        ],
-        (err) => {
-          if (err) {
-            console.log(err);
-            return next(err);
-          }
-          // res.redirect("/forgot-password");
-        }
-      );
-    }
-
     try {
       const user = await User.findByIdAndUpdate(
         req.params.id,
@@ -178,12 +78,19 @@ router.put("/:id/follow", async (req, res) => {
   } else {
     try {
       const userToFollow = await User.findById(req.params.id);
-      const currUser = await User.findById(req.body.userId);
+      // const currUser = await User.findById(req.body.userId);
 
       if (!userToFollow.followers.includes(req.body.userId)) {
         await userToFollow.updateOne({ $push: { followers: req.body.userId } });
-        await currUser.updateOne({ $push: { followings: req.params.id } });
-        res.status(200).json("User has been followed");
+        const updatedUser = await User.findByIdAndUpdate(
+          req.body.userId,
+          {
+            $push: { followings: req.params.id },
+          },
+          { new: true }
+        );
+
+        res.status(200).json(updatedUser);
       } else {
         res.status(403).json("You are already following this user.");
       }
@@ -200,14 +107,22 @@ router.put("/:id/unfollow", async (req, res) => {
   } else {
     try {
       const userToUnfollow = await User.findById(req.params.id);
-      const currUser = await User.findById(req.body.userId);
+      // const currUser = await User.findById(req.body.userId);
 
       if (userToUnfollow.followers.includes(req.body.userId)) {
         await userToUnfollow.updateOne({
           $pull: { followers: req.body.userId },
         });
-        await currUser.updateOne({ $pull: { followings: req.params.id } });
-        res.status(200).json("User has been unfollowed");
+
+        const updatedUser = await User.findByIdAndUpdate(
+          req.body.userId,
+          {
+            $pull: { followings: req.params.id },
+          },
+          { new: true }
+        );
+
+        res.status(200).json(updatedUser);
       } else {
         res.status(403).json("You are not following this user.");
       }

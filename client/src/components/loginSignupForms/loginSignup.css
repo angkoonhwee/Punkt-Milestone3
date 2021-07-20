@@ -310,6 +310,11 @@ form.form-login {
   padding-right: 45px;
 }
 
+.MuiAlert-standardError {
+  max-width: 400px;
+  width: 100%;
+}
+
 @media (max-width: 870px) {
   .container-main {
     min-height: 139vh;

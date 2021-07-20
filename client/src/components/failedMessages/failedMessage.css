@@ -1,0 +1,9 @@
+.profilePic.failed-msg {
+    margin: 5px 10px;
+  }
+  
+  @media (max-width: 450px) {
+    .profilePic.failed-msg {
+      margin: 2px 10px 2px 7px;
+    }
+  }

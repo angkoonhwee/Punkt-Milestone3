@@ -1,30 +1,21 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./navbarMain.css";
 import MessageIcon from "@material-ui/icons/Message";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import PeopleIcon from "@material-ui/icons/People";
-import SearchIcon from "@material-ui/icons/Search";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ExploreIcon from "@material-ui/icons/Explore";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PublicIcon from "@material-ui/icons/Public";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { Link, Redirect } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
+import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
 
-function NavbarMain() {
-  const PublicImg = process.env.REACT_APP_PUBLIC_URL;
-  const { user, dispatch } = useContext(UserContext);
-  // console.log(user);
+//redux
+import { connect } from "react-redux";
+import { logout } from "../../redux/actions/auth";
 
-  // async function handleLogout() {
-  //   // logoutCall(dispatch);
-  //   // to be fixed
-  //   console.log("logout");
-  // }
+function NavbarMain({ user, logout }) {
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
+    logout();
   };
 
   return (
@@ -128,7 +119,7 @@ function NavbarMain() {
                     className="profilePic"
                     src={
                       user.profilePicture !== ""
-                        ? PublicImg + user.profilePicture
+                        ? user.profilePicture
                         : "/assets/img/defaultDP.svg"
                     }
                     alt="Profile-Pic"
@@ -148,4 +139,8 @@ function NavbarMain() {
   );
 }
 
-export default NavbarMain;
+const mapStateToProps = state => {
+  return { user: state.auth.user };
+}
+
+export default connect(mapStateToProps, { logout })(NavbarMain);

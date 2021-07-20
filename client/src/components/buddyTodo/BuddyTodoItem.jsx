@@ -2,17 +2,27 @@ import React from "react";
 import { Edit, Delete } from "@material-ui/icons";
 import "./buddyTodoItem.css";
 
-export default function BuddyTodoItem() {
+//redux
+import { connect } from "react-redux";
+import { deleteTodos } from "../../redux/actions/buddy";
+
+function BuddyTodoItem({ item, deleteTodos }) {
+
+  function onDelete() {
+    console.log(item._id);
+    deleteTodos(item._id);
+  };
+
   return (
     <div className="buddy-todo-item">
       <div className="edit-todo-item">
-        <Edit style={{ cursor: "pointer", color: "#1f788a" }} />
+        <Edit style={{ color: "#1f788a" }} />
         <h6>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry.
+          {item.task}
         </h6>
       </div>
       <Delete
+        onClick={onDelete}
         style={{
           width: "8%",
           alignContent: "center",
@@ -22,4 +32,6 @@ export default function BuddyTodoItem() {
       />
     </div>
   );
-}
+};
+
+export default connect(null, { deleteTodos })(BuddyTodoItem);

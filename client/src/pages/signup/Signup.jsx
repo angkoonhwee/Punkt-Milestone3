@@ -4,10 +4,14 @@ import Footer from "../../components/footer/Footer";
 import NavbarHome from "../../components/navbarHome/NavbarHome";
 import LoginSignupForms from "../../components/loginSignupForms/LoginSignupForms";
 import LoginSignupPanels from "../../components/loginSignupForms/LoginSignupPanels";
+import { Redirect } from "react-router-dom";
 
-// import { Container } from './styles';
+import { connect } from "react-redux";
 
-function Signup() {
+function Signup({ isAuthenticated }) {
+  if(isAuthenticated) {
+    return <Redirect to="/main" /> 
+  }
   return (
     <>
       <NavbarHome />
@@ -20,4 +24,8 @@ function Signup() {
   );
 }
 
-export default Signup;
+const mapStateToProps = state => {
+  return { isAuthenticated: state.auth.isAuthenticated };
+};
+
+export default connect(mapStateToProps)(Signup);

@@ -9,29 +9,41 @@
   padding: 5% 10%;
 }
 
-.basic-setting {
+.basic-setting-wrapper {
   background-color: white;
   -webkit-box-shadow: 0px 0px 11px -2px #9e9e9e;
   box-shadow: 0px 0px 11px -2px #9e9e9e;
   margin: 50px 10px 0;
-  padding: 50px 100px;
+  padding: 40px 70px;
   border-radius: 5px;
+}
+
+.basic-setting {
   display: flex;
-  /* align-items: stretch; */
-  justify-content: flex-start;
+  align-items: center;
+  padding-bottom: 20px;
+  justify-content: center;
 }
 
 .change-dp-setting-wrapper {
   position: relative;
 }
 
+.change-dp-label {
+  cursor: pointer;
+}
+
+.profile-pic-setting {
+  padding: 0 10px;
+}
+
 .profile-pic-setting img {
-  height: 170px;
-  width: 170px;
+  height: 130px;
+  width: 130px;
   border-radius: 50%;
   background-color: white;
   object-fit: cover;
-  margin: 0 30px;
+  /* margin: 0 30px; */
   border: 1px solid #81acb4;
 }
 
@@ -40,9 +52,9 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  bottom: 6%;
+  bottom: 2%;
   cursor: pointer;
-  right: 15%;
+  right: 5%;
   position: absolute;
 }
 
@@ -51,11 +63,29 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 0 20px;
+  padding: 0 10px;
 }
 
 .user-info {
   display: flex;
+  align-items: center;
+}
+
+.edit-profile {
+  padding: 3px 15px;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid #489fb5;
+  color: #489fb5;
+  font-weight: 500;
+  transition: 0.3s ease-in-out;
+  display: inline-block;
+}
+
+.edit-profile:hover {
+  background-color: #489fb5;
+  border: 1px solid #489fb5;
+  color: white;
 }
 
 .container-table {
@@ -103,14 +133,26 @@
   color: rgb(66, 66, 66);
 }
 
+.user-info-username {
+  font-size: 24px;
+}
+
+.change-dp-input {
+  height: 0;
+  width: 0;
+  opacity: 0;
+  position: absolute;
+}
+
+.upload-progress-bar {
+  height: 5px;
+  background-color: #489fb5;
+  margin-top: 20px;
+}
+
 @media (max-width: 750px) {
   .container-settings {
     padding: 3%;
-  }
-
-  .basic-setting {
-    margin: 65px 10px 0;
-    padding: 30px 80px;
   }
 
   .profile-pic-setting img {
@@ -119,37 +161,32 @@
     margin: 0;
   }
 
-  .user-info h4 {
-    font-size: 16px;
-    margin: 0;
-  }
-
   .change-dp {
     bottom: 0%;
     right: -5%;
     position: absolute;
   }
+
+  .user-info-username {
+    font-size: 20px;
+  }
+
+  .basic-setting-wrapper {
+    margin: 50px 10px 0;
+    padding: 40px 0;
+  }
 }
 
 @media (max-width: 550px) {
-  .basic-setting {
-    padding: 30px 50px;
-  }
-
   .finances-subtitle {
     font-size: 16px;
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 440px) {
   .finances-subtitle {
     font-size: 14px;
     margin-bottom: 5px;
-  }
-
-  .basic-setting {
-    margin: 65px 10px 0;
-    padding: 20px 25px;
   }
 
   .profile-pic-setting img {
@@ -170,5 +207,15 @@
     width: 19px;
     top: 7% !important;
     left: 16% !important;
+  }
+
+  .info-setting {
+    padding-left: 10px;
+  }
+
+  .edit-profile {
+    padding: 3px 8px;
+    line-height: 1.3;
+    font-size: 14px;
   }
 }

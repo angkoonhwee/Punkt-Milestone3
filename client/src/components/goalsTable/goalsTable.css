@@ -1,3 +1,19 @@
 .goals-table {
   /* padding: 50px 30px 0; */
 }
+
+.MuiTableCell-root {
+  font-family: "Mulish", "Roboto", "Helvetica", "Arial", sans-serif !important;
+  line-height: 1.35 !important;
+  padding: 14px !important;
+}
+
+.MuiTableCell-head {
+  line-height: 1.35 !important;
+}
+
+@media (max-width: 450px) {
+  .MuiTableCell-root {
+    padding: 8px 10px !important;
+  }
+}
