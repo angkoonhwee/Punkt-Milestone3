@@ -14,12 +14,8 @@ const goalRoute = require("./routes/goal");
 const contactRoute = require("./routes/contact");
 const commentRoute = require("./routes/comment");
 const reportRoute = require("./routes/report");
-const contactRoute = require("./routes/contact");
 const buddyRoute = require("./routes/buddy");
 const cors = require("cors");
-const cron = require("node-cron");
-const User = require("./models/user");
-const Goal = require("./models/goal");
 
 //for scheduling buddy todos
 const cron = require('node-cron');

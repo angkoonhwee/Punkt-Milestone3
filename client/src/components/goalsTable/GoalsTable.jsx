@@ -16,15 +16,10 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import "./goalsTable.css";
-import axios from "axios";
-import { url } from "../../utils/constants";
 import { motion } from "framer-motion";
 import Modal from "../modal/Modal";
 import { Link } from "react-router-dom";
 
-import { motion } from "framer-motion";
-import Modal from "../modal/Modal";
-import { Link } from "react-router-dom";
 
 
 import { connect } from "react-redux";

@@ -4,20 +4,6 @@ import "./feed.css";
 import ReactPaginate from "react-paginate";
 
 function Feed({ posts }) {
-  const [pageNum, setPageNum] = useState(0);
-  const postsPerPage = 5;
-  const postsVisited = pageNum * postsPerPage;
-  const [pageCount, setPageCount] = useState(
-    Math.ceil(posts.length / postsPerPage)
-  );
-  const [displayPosts, setDisplayPosts] = useState(
-    posts.slice(postsVisited, postsVisited + postsPerPage)
-  );
-
-  const changePage = ({ selected }) => {
-    setPageNum(selected);
-  };
-
   // PAGINATION
   const [pageNum, setPageNum] = useState(0);
   const postsPerPage = 5;
