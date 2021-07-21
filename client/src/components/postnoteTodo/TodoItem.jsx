@@ -26,7 +26,11 @@ function TodoItem({ item, toggleDailys }) {
     <form className="delete-todo">
       <div className="checkbox-container">
         <label className="checkbox-label">
-          <input type="checkbox" onChange={handleCheck} />
+          <input 
+            type="checkbox" 
+            onChange={handleCheck} 
+            defaultChecked={item.status === "completed"}
+          />
           <span className="checkbox-custom "></span>
         </label>
         <div className={isDone === "completed"

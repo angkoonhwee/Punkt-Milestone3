@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./buddyDaily.css";
-import TodoItem from "../postnoteTodo/TodoItem";
-import { Users, Todos } from "../../dummyDate";
 import DailyItems from "./DailyItems";
 
 //redux
 import { connect } from "react-redux";
 import { fetchDailys } from "../../redux/actions/buddy";
-import { isEmpty } from "lodash";
+import { isEmpty, isUndefined } from "lodash";
 
-function BuddyDailys({ dailys, fetchDailys }) {
+function BuddyDailys({ userDailys, buddyDailys, fetchDailys }) {
   const currDays = 21;
   const totalDays = 30;
   //const currProgress = Math.round((currDays / totalDays) * 100);
@@ -22,11 +20,11 @@ function BuddyDailys({ dailys, fetchDailys }) {
   }, [fetchDailys]);
 
   useEffect(() => {
-    if (!isEmpty(dailys)) {
-      setUser(dailys.user);
-      setBuddy(dailys.buddy);
+    if (!isUndefined(userDailys) && !isUndefined(buddyDailys)) {
+      setUser(userDailys);
+      setBuddy(buddyDailys);
     };
-  }, [user, buddy, dailys])
+  }, [user, buddy, userDailys, buddyDailys]);
 
   return (
     <div className="container-buddy-daily">
@@ -50,7 +48,8 @@ function BuddyDailys({ dailys, fetchDailys }) {
 
 const mapStateToProps = state => {
   return {
-    dailys: state.buddy.dailys
+    userDailys: state.buddy.dailys.user,
+    buddyDailys: state.buddy.dailys.buddy
   }
 }
 

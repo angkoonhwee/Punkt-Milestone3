@@ -10,3 +10,6 @@ Create Post in Settings Goals Table:
 
 BetAgainst:
 - after bet against set by another user, post component does not update
+
+Forget Password:
+- backend error but message sent back to frontend

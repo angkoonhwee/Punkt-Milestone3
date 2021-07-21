@@ -27,7 +27,6 @@ function Profile({ currUser, posts, fetchUserPosts, fetchUser, fetchedUser, load
   const [isBuddy, setBuddy] = useState(false);
   const [file, setFile] = useState(null);
 
-  console.log(username);
   //check if searched up profile belongs to currUser
   //if yes then do nothing else fetchuser
   useEffect(() => {

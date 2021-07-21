@@ -22,9 +22,14 @@ const buddy = (state = initialState, action) => {
 
     switch(type) {
         case GET_BUDDY:
+            const tempDailys = state.dailys;
             return {
                 ...state,
-                object: payload
+                object: payload,
+                dailys: {
+                    ...tempDailys,
+                    user: [...payload.dailys]
+                }
             };
         case FETCH_BUDDYUSER:
             return {
@@ -42,7 +47,7 @@ const buddy = (state = initialState, action) => {
         case ADD_TODOS:
         case DELETE_TODOS:
             const todosA = {...state};
-            todosA.object.todos = payload;
+            todosA.object.todos = [...payload];
             return todosA;
         case BUDDY_ERROR:
         default:

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./postNoteTodo.css";
 import TodoItem from "./TodoItem";
-import { Users, Todos } from "../../dummyDate";
 import { Link } from "react-router-dom";
 
 //redux
 import { connect } from "react-redux";
-import { fetchBuddy, toggleDailys } from "../../redux/actions/buddy";
+import { fetchBuddy } from "../../redux/actions/buddy";
 import { isUndefined } from "lodash";
 
 function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
@@ -73,7 +72,7 @@ function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
 const mapStateToProps = state => {
   console.log(state.auth.user.currentBuddy);
   return {
-    dailys: state.buddy.object.dailys,
+    dailys: state.buddy.dailys.user,
     buddyId: state.auth.user.currentBuddy
   };
 };

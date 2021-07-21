@@ -25,10 +25,19 @@ function DailyItems({ item, toggleDailys, buddy }) {
   return (
     <form className="delete-todo daily-item">
       <div className="checkbox-container daily-item">
+        {!buddy && (
         <label className="checkbox-label daily-item">
-          <input type={"checkbox"} onChange={handleCheck} disabled={buddy} />
-          <span className="checkbox-custom daily-item"></span>
-        </label>
+            <input 
+              type={"checkbox"} 
+              onChange={handleCheck} 
+              disabled={buddy} 
+              defaultChecked={item.status === "completed"}
+            />
+            <span className="checkbox-custom daily-item"></span>
+          </label>
+        )}
+
+        {buddy && <i className="fas fa-map-pin" />}
         <div
           className={
             isDone === "completed"

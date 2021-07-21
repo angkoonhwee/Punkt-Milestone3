@@ -30,7 +30,7 @@ function Buddy({buddyId, buddyObject, buddy, fetchBuddy, fetchBuddyUser}) {
     if (!isEmpty(buddyObject)) {
       fetchBuddyUser(buddyObject.buddy);
     }
-  }, [buddyObject]);
+  }, [buddyObject, fetchBuddyUser]);
 
   if (buddyId === "") {
     return (

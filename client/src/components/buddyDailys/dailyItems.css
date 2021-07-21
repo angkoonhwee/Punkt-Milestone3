@@ -156,6 +156,11 @@
   -o-transition: all 0.3s ease-out;
 }
 
+.fa-map-pin {
+  margin-right: 15px;
+  color: #338ea5;
+}
+
 @media (max-width: 770px) {
   .checkbox-container.daily-item {
     margin: 2px 5px;
