@@ -84,7 +84,7 @@ function NavbarMain({ user, logout }) {
             </li>
 
             <li className="nav-item">
-              <Notifications user={user} />
+              <Notifications />
             </li>
 
             <li className="nav-item">

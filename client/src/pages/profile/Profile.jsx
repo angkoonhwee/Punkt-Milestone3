@@ -14,9 +14,25 @@ import UploadFile from "../../components/uploadFile/UploadFile";
 import { connect } from "react-redux";
 import { fetchUser } from "../../redux/actions/user";
 import { fetchUserPosts } from "../../redux/actions/posts";
+import { fetchBuddy } from "../../redux/actions/buddy";
 import { loadMe } from "../../redux/actions/auth";
+import { makeRequest, fetchRequest, deleteRequest } from "../../redux/actions/request";
+import { isUndefined } from "lodash";
 
-function Profile({ currUser, posts, fetchUserPosts, fetchUser, fetchedUser, loadMe}) {
+function Profile({ 
+  currUser,
+  posts,
+  fetchUserPosts,
+  fetchUser,
+  fetchedUser,
+  loadMe,
+  buddyId,
+  fetchBuddy,
+  fetchRequest,
+  makeRequest,
+  deleteRequest,
+  request
+}) {
   
   //default is currUser's profile
   const [user, setUser] = useState(currUser);
@@ -25,28 +41,56 @@ function Profile({ currUser, posts, fetchUserPosts, fetchUser, fetchedUser, load
     currUser?.followings.includes(user?.id)
   );
   const [isBuddy, setBuddy] = useState(false);
+  const [requested, setRequested] = useState(false);
   const [file, setFile] = useState(null);
+
+  console.log("Profile running");
 
   //check if searched up profile belongs to currUser
   //if yes then do nothing else fetchuser
   useEffect(() => {
     if (username !== currUser.username) {
-      console.log("PROFILE DOES NOT BELONG TO ME!");
+      console.log("not me, fetching user");
       fetchUser(username);
     }
-    if (fetchedUser) {
-      console.log(fetchedUser);
+  }, [username, currUser, fetchUser]);
+
+  useEffect(() => {
+    if (fetchedUser && username !== currUser.username) {
       setUser(fetchedUser);
+      if (!isUndefined(buddyId) && fetchedUser._id === buddyId) {
+        setBuddy(true);
+      }
     }
-  }, [username, currUser, user]);
+  }, [fetchedUser, user])
 
   useEffect(() => {
     fetchUserPosts(username);
   }, [fetchUserPosts, username]);
 
-  console.log(user);
+  useEffect(() => {
+    if (isUndefined(buddyId) && currUser.currentBuddy) {
+      fetchBuddy(currUser.currentBuddy);
+    }
+  }, [fetchBuddy, currUser.currentBuddy]);
 
-  //temporarily stays here
+  useEffect(() => {
+    console.log(currUser.request);
+    if (currUser.request !== null) {
+      console.log(currUser.request);
+      fetchRequest(currUser.request);
+    }
+  }, [currUser.request, fetchRequest]);
+
+  useEffect(() => {
+    if (request !== null && request.status === "Pending" && request.receiver._id === user._id) {
+      console.log("I have requested!");
+      setRequested(true);
+    }
+  }, [requested, request])
+  
+  console.log(requested);
+
   async function handleFollowing() {
     try {
       if (user._id && currUser._id) {
@@ -70,8 +114,14 @@ function Profile({ currUser, posts, fetchUserPosts, fetchUser, fetchedUser, load
     }
   }
 
-  function handleBuddy() {
-    setBuddy(!isBuddy);
+  function handleRequest(e) {
+    e.preventDefault();
+    if (requested) {
+      deleteRequest(request.requestId);
+    } else {
+      makeRequest(user._id)
+    }
+    setRequested(!requested);
   }
 
   return (
@@ -135,20 +185,46 @@ function Profile({ currUser, posts, fetchUserPosts, fetchUser, fetchedUser, load
             <h4>{username}</h4>
             {username !== currUser.username && (
               <div className="buttons-wrapper">
-                <button
-                  className="follow-btn"
-                  onClick={handleBuddy}
-                  style={{
-                    backgroundColor: isBuddy ? "#7f8fad" : "#4d6591",
-                  }}
-                >
-                  {isBuddy ? (
-                    <EmojiPeople style={{ marginRight: "3px" }} />
-                  ) : (
-                    <GroupAdd style={{ marginRight: "5px" }} />
-                  )}
-                  {isBuddy ? "My Buddy !" : "Request Buddy"}
-                </button>
+                { isBuddy
+                  ? <button
+                      className="follow-btn"
+                      onClick={null}
+                      style={{ backgroundColor: "#7f8fad" }}
+                    >
+                        <EmojiPeople style={{ marginRight: "3px" }} />
+                        "My Buddy !"
+                    </button>
+                    //show button if currentUser has not requested someone else, has no buddy and this user has no buddy
+                  : requested
+                    ? <button
+                        className="follow-btn"
+                        onClick={handleRequest}
+                        style={{
+                          backgroundColor: "#7f8fad",
+                        }}
+                      >
+                        <GroupAdd style={{ marginRight: "5px" }} />
+                        Requested
+                      </button>
+                    : (
+                        currUser.request !== null
+                        && request !== null && request.status === "Rejected"
+                        && currUser.currentBuddy === ""
+                        && user.currentBuddy === ""
+                      )
+                      || (currUser.request === null && !currUser.currentBuddy)
+                      ?  <button
+                          className="follow-btn"
+                          onClick={handleRequest}
+                          style={{
+                            backgroundColor: requested ? "#7f8fad" : "#4d6591",
+                          }}
+                        >
+                          <GroupAdd style={{ marginRight: "5px" }} />
+                          {requested ? "Requested" : "Request Buddy"}
+                        </button>
+                      : null
+                }
                 <button
                   className="follow-btn"
                   onClick={handleFollowing}
@@ -228,8 +304,19 @@ const mapStateToProps = state => {
   return {
     currUser: state.auth.user,
     posts: state.posts.user,
-    fetchedUser: state.user.user
+    fetchedUser: state.user.user,
+    buddyId: state.buddy.object.buddy,
+    //this is the request made by currUser, if no request made should be {}
+    request: state.request.request
   }
 }
 
-export default connect(mapStateToProps, { fetchUserPosts, fetchUser, loadMe })(Profile);
+export default connect(mapStateToProps, { 
+  fetchUserPosts,
+  fetchUser,
+  loadMe,
+  fetchBuddy,
+  makeRequest,
+  deleteRequest,
+  fetchRequest
+})(Profile);

@@ -10,17 +10,17 @@ const buddySchema = new mongoose.Schema({
     dailys: [
         {
             task: String,
-            status: String
+            status: Array
         }
     ],
     //For you to set your todos for the next day
     todos: [
         {
             task: String,
-            status: String
+            status: Array
         }
     ],
-    //Buddy's buddy objectId to populate their dailys
+    //Buddy's userId to populate their dailys
     buddy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Buddy',
@@ -29,6 +29,10 @@ const buddySchema = new mongoose.Schema({
     daysLeft: {
         type: Number,
         default: 30,
+        required: true
+    },
+    chatId: {
+        type: String,
         required: true
     }
 },

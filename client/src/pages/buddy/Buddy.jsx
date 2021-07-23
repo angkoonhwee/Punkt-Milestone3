@@ -46,7 +46,6 @@ function Buddy({buddyId, buddyObject, buddy, fetchBuddy, fetchBuddyUser}) {
   } else if (buddyObject === null || isEmpty(buddy)) {
     return <Loading />
   } else {
-    console.log(buddy);
     return (
       <div>
         <NavbarMain />

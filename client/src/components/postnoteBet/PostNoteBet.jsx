@@ -28,6 +28,7 @@ function PostNoteBet({
   const [hasGoal, setHasGoal] = useState(false);
 
   useEffect(() => {
+    console.log("post note bet fetch goal");
     if (!hasGoal) {
       if (user.goalId !== "") {
         fetchGoalById(user.goalId);
@@ -42,13 +43,12 @@ function PostNoteBet({
     user, 
     loadMe,
     fetchGoalById,
-    currGoal
   ]);
 
   useEffect(() => {
     //to update user.goalId when new goal is created
     loadMe();
-  }, [currGoal, loadMe]);
+  }, [loadMe]);
   
   useEffect(() => {
     const temp = 

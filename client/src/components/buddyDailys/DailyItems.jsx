@@ -5,21 +5,25 @@ import { connect } from "react-redux";
 import { toggleDailys } from "../../redux/actions/buddy";
 
 function DailyItems({ item, toggleDailys, buddy }) {
-  const [isDone, setDone] = useState(null);
+  const [isDone, setDone] = useState(false);
+  const [isLate, setLate] = useState(false)
 
   useEffect(() => {
-    if (item) {
-      setDone(item.status);
+    if (item.status[0] === "completed") {
+      setDone(true);
+    } else {
+      setDone(false);
     }
-  }, [isDone, item.status]);
+  }, [isDone, item.status[0]]);
 
   function handleCheck() {
     toggleDailys(item);
-    if (isDone === "incomplete") {
-      setDone("completed");
-    } else {
-      setDone("incomplete");
-    }
+    // if (isDone === "incomplete") {
+    //   setDone("completed");
+    // } else {
+    //   setDone("incomplete");
+    // }
+    setDone(!isDone);
   }
 
   return (

@@ -15,7 +15,8 @@ function RecordStatus({
   goal,
   atonement,
   loadMe,
-  createPost
+  createPost,
+  status
 }) {
   const desc = useRef("");
 
@@ -24,9 +25,15 @@ function RecordStatus({
   const [error, setError] = useState(null);
 
   const [isCompleted, setCompleted] = useState(
-    goal.status !== "In Progress" ||
+    status !== "In Progress" ||
       (goal.postIds ? goal.postIds.length === goal.numDays : false)
   );
+
+  useEffect(() => {
+    if ( status !== "In Progress") {
+      setCompleted(true);
+    }
+  }, [status, isCompleted]);
 
   const [isDisabled, setDisabled] = useState(false);
   const [isAtonement, setIsAtonement] = useState(atonement);
@@ -72,13 +79,15 @@ function RecordStatus({
 
     createPost(newPost);
     desc.current.value = "";
-    //console.log(desc.current.value);
+    if (atonement) {
+      window.location.reload();
+    }
   }
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setRecordText(value);
-  }
+  // function handleChange(event) {
+  //   const { name, value } = event.target;
+  //   setRecordText(value);
+  // }
 
   function handleUpload(event) {
     let fileList = [];
@@ -119,7 +128,7 @@ function RecordStatus({
         <div className="record-container">
           <TextareaAutosize
             name="record-text"
-            value={recordText}
+            //value={recordText}
             ref={desc}
             className="record-area"
             placeholder={
@@ -128,7 +137,7 @@ function RecordStatus({
                 : "Have you completed your goals today? (You can only record once a day)"
             }
             disabled={isAtonement ? !isAtonement : isDisabled || isCompleted}
-            onChange={handleChange}
+            //onChange={handleChange}
             style={{
               cursor: (isAtonement ? !isAtonement : isDisabled || isCompleted)
                 ? "not-allowed"
@@ -213,7 +222,9 @@ function RecordStatus({
 const mapStateToProps = state => {
   return {
     user: state.auth.user,
-    post: state.posts.goals
+    post: state.posts.goals,
+    goal: state.goals.goals,
+    status: state.goals.goals.status
   };
 };
 

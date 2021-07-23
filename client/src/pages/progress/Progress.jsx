@@ -91,7 +91,7 @@ function Progress({
             user={user}
           />
           {goal.userId === currUser._id ? (
-            <RecordStatus goal={goal} />
+            <RecordStatus />
           ) : (
             <SetBet user={user} goal={goal} />
           )}

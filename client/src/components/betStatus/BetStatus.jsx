@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 
 function BetStatus({ user, goal, postIds }) {
   const [currDays, setCurrDays] = useState(goal.postIds.length);
-  console.log(goal);
 
   useEffect(() => {
     const temp = goal.madeAtonement

@@ -82,6 +82,7 @@ router.get("/user/:userId", async (req, res) => {
                   desc: post.desc,
                   createdAt: c.createdAt,
                   username: user.username,
+                  _id: c.id
                 };
               })
             );

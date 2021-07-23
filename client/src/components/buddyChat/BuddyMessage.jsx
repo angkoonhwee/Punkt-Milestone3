@@ -1,13 +1,22 @@
 import React from "react";
 import "./buddyMessage.css";
 import ReactEmoji from "react-emoji";
+import { format } from "timeago.js";
 
-export default function BuddyMessage({ message: { text, user }, name }) {
+import { connect } from "react-redux";
+
+function BuddyMessage({ 
+  message: { 
+    text,
+    sender,
+    createdAt
+  }, userId,
+  userProfilePic,
+  buddyProfilePic 
+}) {
   let isSentByCurrentUser = false;
 
-  const trimmedName = name.trim().toLowerCase();
-
-  if (user === trimmedName) {
+  if (sender === userId) {
     isSentByCurrentUser = true;
   }
 
@@ -17,12 +26,12 @@ export default function BuddyMessage({ message: { text, user }, name }) {
         <div className="message-box own ">
           <p className="message-text own ">{ReactEmoji.emojify(text)}</p>
         </div>
-        <p className="buddy-message-date">10 mins ago</p>
+        <p className="buddy-message-date">{format(createdAt)}</p>
       </div>
       <div className="container-buddy-chat-user own">
         <img
           className="buddy-message-profile-pic"
-          src="/assets/img/defaultDP.svg"
+          src={userProfilePic === "" ? "/assets/img/defaultDP.svg" : userProfilePic}
           alt="sender-dp"
         ></img>
         {/* <p className="sent-username own">{trimmedName}</p> */}
@@ -33,7 +42,7 @@ export default function BuddyMessage({ message: { text, user }, name }) {
       <div className="container-buddy-chat-user">
         <img
           className="buddy-message-profile-pic"
-          src="/assets/img/among-nature.svg"
+          src={buddyProfilePic === "" ? "/assets/img/defaultDP.svg" : buddyProfilePic}
           alt="sender-dp"
         ></img>
         {/* <p className="sent-username">{user}</p> */}
@@ -43,8 +52,17 @@ export default function BuddyMessage({ message: { text, user }, name }) {
           <p className="message-text">{ReactEmoji.emojify(text)}</p>
         </div>
 
-        <p className="buddy-message-date">10 mins ago</p>
+        <p className="buddy-message-date">{format(createdAt)}</p>
       </div>
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    userProfilePic: state.auth.user.profilePicture,
+    buddyProfilePic: state.buddy.buddy.profilePicture
+  }
 }
+
+export default connect(mapStateToProps)(BuddyMessage);

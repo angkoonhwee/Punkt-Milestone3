@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./postNoteTodo.css";
 import TodoItem from "./TodoItem";
 import { Link } from "react-router-dom";
@@ -19,7 +19,6 @@ function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
     }
   }, [fetchBuddy, buddyId]);
 
-  console.log(dailys);
 
   if (buddyId === "") {
     return (
@@ -70,7 +69,6 @@ function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
 };
 
 const mapStateToProps = state => {
-  console.log(state.auth.user.currentBuddy);
   return {
     dailys: state.buddy.dailys.user,
     buddyId: state.auth.user.currentBuddy

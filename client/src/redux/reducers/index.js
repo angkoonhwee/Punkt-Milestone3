@@ -5,6 +5,8 @@ import posts from "./posts";
 import goals from "./goals";
 import comments from "./comments";
 import buddy from "./buddy";
+import notifications from "./notifications";
+import request from "./request";
 
 const rootReducer = combineReducers({
     auth,
@@ -12,7 +14,9 @@ const rootReducer = combineReducers({
     posts,
     goals,
     comments,
-    buddy
+    buddy,
+    notifications,
+    request
 });
 
 export default rootReducer;

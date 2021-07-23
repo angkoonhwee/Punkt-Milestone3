@@ -47,4 +47,18 @@ export const GET_DAILYS = "GET_BUDDY_DAILYS";
 export const TOGGLE_DAILYS = "TOGGLE_DAILYS";
 export const ADD_TODOS = "ADD_TODOS";
 export const DELETE_TODOS = "DELETE_TODOS";
+export const GET_CHAT = "GET_CHAT";
+export const MESSAGE_SENT = "MESSAGE_SENT";
+export const GET_BUDDY_HISTORY = "GET_BUDDYHISTORY";
 export const BUDDY_ERROR = "BUDDY_ERROR";
+
+export const REQ_NOTIF = "REQ_NOTIF";
+export const COMMENT_NOTIF = "COMMENT_NOTIF";
+export const NOTIF_ERROR = "NOTIF_ERROR";
+
+export const SEND_REQ = "SEND_REQ";
+export const FETCH_REQ = "FETCH_REQ";
+export const DELETE_REQ = "DELETE_REQ";
+export const ACCEPT_REQ = "ACCEPT_REQ";
+export const REJECT_REQ = "REJECT_REQ";
+export const REQ_ERROR = "REQ_ERROR";

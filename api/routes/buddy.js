@@ -67,7 +67,6 @@ router.get('/:userId/dailys', async (req, res) => {
             user: user.dailys,
             buddy: buddy.dailys
         }
-        console.log(dailys);
         res.status(200).json(dailys);
     } catch (err) {
         console.log(err);
@@ -81,18 +80,20 @@ router.get('/:userId/dailys', async (req, res) => {
 router.put('/:todoId/dailys', async (req, res) => {
     const todoId = req.params.todoId;
     const { userId, state } = req.body;
-    console.log(req.body);
 
     try {
-        if (state === "incomplete") {
+        const buddy = await Buddy.findOne({ user: userId });
+        const prev = buddy.dailys.filter(d => d._id === todoId);
+        console.log(prev);
+        if (state[0] === "incomplete") {
             await Buddy.updateOne(
                 { user: userId, "dailys._id": todoId },
-                { $set: {"dailys.$.status": "completed"}}
+                { $set: {"dailys.$.status": ["completed", prev.status[1]] }}
             );
         } else {
             await Buddy.updateOne(
                 { user: userId, "dailys._id": todoId },
-                { $set: {"dailys.$.status": "incomplete"}}
+                { $set: {"dailys.$.status": ["incomplete", prev.status[1]] }}
             );
         }
         const user = await Buddy.findOne({ user: userId });
@@ -116,7 +117,7 @@ router.post('/todos/add', async (req, res) => {
         var buddy = await Buddy.findOne({ user: userId });
         const newTask = {
             task: add,
-            status: 'incomplete'
+            status: ['incomplete', 'on time']
         }
         await buddy.updateOne({ $push: { todos: newTask }});
 
@@ -134,7 +135,6 @@ router.post('/todos/add', async (req, res) => {
 router.delete('/:todoId/delete', async (req, res) => {
     const todoId = req.params.todoId;
     const userId = req.body.userId;
-    console.log(req.body);
     try {
         var buddy = await Buddy.findOne({ user: userId });
         console.log(buddy);
@@ -163,7 +163,33 @@ router.get('/todos', async (req, res) => {
     }
 });
 
-
+/***********************HISTORY SECTION*****************************/
+//@route   GET buddy/:userId/buddyHistory
+//@desc    get buddy history
+//access   Private
+router.get("/:userId/buddyHistory", async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findById(userId);
+        const result = [];
+        const all = user.buddyHistory;
+        for (let i = 0; i < all.length; i++) {
+            const temp = all[i];
+            const tempBuddy = await Buddy.findById(temp)
+            const buddy = await User.findById(tempBuddy.buddy)
+            //console.log(tempBuddy);
+            result.push({
+                username: buddy.username,
+                _id: tempBuddy._id,
+                createdAt: tempBuddy.createdAt
+            });
+        }
+        res.status(200).json(result);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json("Server error");
+    }
+})
 
 module.exports = router;
 

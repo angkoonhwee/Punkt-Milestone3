@@ -89,6 +89,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: ""
     },
+    request: {
+      type: mongoose.Types.ObjectId,
+      default: null
+    },
+    requestedBy: {
+      type: Array,
+      default: []
+    },
 
     resetPasswordToken: String,
     resetPasswordExpires: Date,

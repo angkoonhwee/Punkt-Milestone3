@@ -60,6 +60,9 @@ const goals = (state = initialState, action) => {
             const updatedCreate = {...state};
             updatedCreate.goals.postIds.push(payload);
             updatedCreate.goals.postIds = [...updatedCreate.goals.postIds];
+            if (updatedCreate.goals.postIds.length === updatedCreate.goals.numDays) {
+                updatedCreate.goals.status = "Success"
+            }
             return updatedCreate;
         default:
             return {...state};

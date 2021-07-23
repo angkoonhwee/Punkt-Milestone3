@@ -17,6 +17,10 @@ router.post("/", async (req, res) => {
     });
 
     const savedGoal = await newGoal.save();
+    
+    // push goalId into goal history arr of user
+    await user.updateOne({ $push: { goalHistory: savedGoal._id } });
+    
     res.status(200).json(savedGoal);
   } catch (err) {
     res.status(500).json(err);
@@ -159,10 +163,6 @@ router.put("/:id/status", async (req, res) => {
     const user = await User.findById(req.body.userId);
 
     if (req.body.status === "Success") {
-      console.log("success status block");
-
-      // push goalId into goal history arr of user
-      await user.updateOne({ $push: { goalHistory: req.params.id } });
 
       // clear curr goal id of user
       await user.updateOne({ $set: { goalId: "" } });
@@ -216,10 +216,8 @@ router.put("/:id/status", async (req, res) => {
         })
       );
       // console.log(updateUsersBetAgainstData);
-      console.log(goal);
       res.status(200).json(goal);
     } else if (req.body.status === "Failed") {
-      console.log("failed status block");
       // failed goals dont need update productivity points & ranking
 
       // push goalId into goal history arr of user

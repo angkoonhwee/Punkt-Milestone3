@@ -5,7 +5,10 @@ import {
     ADD_TODOS,
     DELETE_TODOS,
     BUDDY_ERROR,
-    TOGGLE_DAILYS
+    TOGGLE_DAILYS,
+    GET_CHAT,
+    GET_BUDDY_HISTORY,
+    MESSAGE_SENT
 } from "./types";
 import { url } from "../../utils/constants";
 import axios from "axios";
@@ -71,7 +74,6 @@ export const toggleDailys = dailys => async dispatch => {
         userId: user._id,
         state: dailys.status
     }
-    console.log(body);
     try {
         const res = await axios.put(url + `/buddy/${dailys._id}/dailys`, body);
         console.log(res.data);
@@ -127,3 +129,46 @@ export const deleteTodos = todoId => async dispatch => {
         });
     }
 }
+
+export const fetchChat = chatId => async dispatch => {
+    try {
+        const res = await axios.get(url + `/chat/${chatId}`);
+        console.log(res.data);
+        dispatch({
+            type: GET_CHAT,
+            payload: res.data.messages
+        })
+    } catch (err) {
+        console.log(err);
+        dispatch({
+            type: BUDDY_ERROR
+        });
+    }
+};
+
+export const messageSent = message => {
+    return {
+        type: MESSAGE_SENT,
+        payload: message
+    };
+}
+
+export const fetchBuddyHistory = () => async dispatch => {
+    const user = loadUser();
+    try {
+        const res = await axios.get(url + `/buddy/${user._id}/buddyHistory`);
+        res.data.sort(
+            (p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt)
+        );
+        dispatch({
+            type: GET_BUDDY_HISTORY,
+            payload: res.data
+        })
+    } catch (err) {
+        console.log(err);
+        dispatch({
+            type: BUDDY_ERROR
+        });
+    }
+}
+

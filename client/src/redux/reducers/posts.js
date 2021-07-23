@@ -53,16 +53,12 @@ const posts = (state = initialState, action) => {
             newGoals.sort(
                 (p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt)
             );
-            console.log(newGoals);
-            console.log(payload.goal.postIds);
             newGoals.map(g => {
-                console.log(g.goal.postIds);
-                if (g.goal.postIds !== newGoals.length) {
-                    g.goal.postIds = payload.goal.postIds;
-                    console.log(g.goal.postIds);
+                g.goal.postIds = payload.goal.postIds;
+                if (g.goal.postIds.length === g.goal.numDays) {
+                    g.goal.status = "Success"
                 }
             });
-            console.log(newGoals);
             return {
                 ...state,
                 goals: newGoals

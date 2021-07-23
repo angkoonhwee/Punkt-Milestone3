@@ -145,7 +145,6 @@ function GoalsTable({ user, userGoals, fetchUserGoals }) {
   useEffect(() => {
     fetchUserGoals();
   }, [user, fetchUserGoals]);
-  console.log(userGoals);
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, userGoals.length - page * rowsPerPage);
@@ -338,7 +337,7 @@ function GoalsTable({ user, userGoals, fetchUserGoals }) {
 
 const mapStateToProps = state => {
   return {
-    userGoals: state.goals.userGoals
+    userGoals: state.goals.userGoals,
   };
 }
 
