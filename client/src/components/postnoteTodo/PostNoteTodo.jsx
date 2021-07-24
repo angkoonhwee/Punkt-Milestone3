@@ -17,7 +17,7 @@ function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
     const temp = dailys.filter(d => d.status[0] === "completed").length;
     console.log(temp);
     setCompleted(temp);
-    setProgress(Math.round((completed/total) * 100));
+    setProgress(Math.round((completed / total) * 100));
   }, [currProgress, completed, dailys]);
 
   useEffect(() => {
@@ -44,7 +44,11 @@ function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
     <div className="post-note-todo">
       <h3>Todos with Buddy</h3>
       <p className="todayDate">
-        <strong>Date:</strong> {new Date().toDateString()}
+        <strong>Date:</strong> {new Date().toLocaleDateString("en-GB", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}
       </p>
 
       <div className="progressbarWrapper">
@@ -58,7 +62,7 @@ function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
           </div>
         </div>
       </div>
-      <p className="buddy-days">{completed + " / " + total + " days"}</p>
+      <p className="buddy-days">{completed + " / " + total + " items"}</p>
       {dailys.map((t) => (
         <TodoItem key={t._id} item={t} />
       ))}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -100,68 +100,9 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(start, end, name, rank) {
-  return { start, end, name, rank };
-}
 
-const rows = [
-  createData(
-    new Date(2021, 5, 19).toDateString(),
-    new Date(2021, 5, 19).toDateString(),
 
-    "jane",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 20).toDateString(),
-    new Date(2021, 5, 20).toDateString(),
 
-    "jane",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 21).toDateString(),
-    new Date(2021, 5, 21).toDateString(),
-
-    "jane",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 22).toDateString(),
-    new Date(2021, 5, 22).toDateString(),
-
-    "jane",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 23).toDateString(),
-    new Date(2021, 5, 23).toDateString(),
-
-    "jane",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 24).toDateString(),
-    new Date(2021, 5, 24).toDateString(),
-
-    "jane",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 25).toDateString(),
-    new Date(2021, 5, 25).toDateString(),
-
-    "jane",
-    2
-  ),
-  createData(
-    new Date(2021, 5, 26).toDateString(),
-    new Date(2021, 5, 26).toDateString(),
-
-    "jane",
-    2
-  ),
-].sort((a, b) => a.date - b.date);
 
 const useStyles2 = makeStyles({
   table: {
@@ -182,11 +123,20 @@ const columns = [
 
 function BuddyTable({ history, fetchBuddyHistory }) {
   const classes = useStyles2();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [emptyRows, setEmptyRows] = useState(0);
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const endDate = (createdAt) => {
+    const startDate = new Date(createdAt);
+    const endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 30);
+
+    return endDate.toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -201,7 +151,13 @@ function BuddyTable({ history, fetchBuddyHistory }) {
     if (history === null) {
       fetchBuddyHistory();
     }
-  }, [fetchBuddyHistory]);
+  }, [fetchBuddyHistory, history]);
+
+  useEffect(() => {
+    if (history) {
+      setEmptyRows(rowsPerPage - Math.min(rowsPerPage, history.length - page * rowsPerPage))
+    }
+  }, [history, rowsPerPage, page]);
 
   return (
     <motion.div
@@ -241,11 +197,7 @@ function BuddyTable({ history, fetchBuddyHistory }) {
                   })}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {new Date(row.createdAt + 30*24*60*60*1000).toLocaleDateString("en-GB", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {endDate(row.createdAt)}
                 </TableCell>
 
                 <TableCell align="center" component="th" scope="row">
@@ -265,7 +217,7 @@ function BuddyTable({ history, fetchBuddyHistory }) {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={5}
-                count={rows.length}
+                count={history && history.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

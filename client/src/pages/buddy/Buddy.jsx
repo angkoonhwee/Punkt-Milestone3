@@ -14,7 +14,8 @@ import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 import { fetchBuddy, fetchBuddyUser } from "../../redux/actions/buddy";
 
-function Buddy({buddyId, buddyObject, buddy, fetchBuddy, fetchBuddyUser}) {
+function Buddy({ buddyId, buddyObject, buddy, fetchBuddy, fetchBuddyUser }) {
+  const currProgress = Math.round((30 - buddyObject.daysLeft) / 30 * 100);
   const [isChatClicked, setChatClicked] = useState(false);
   const [isDailyClicked, setDailyClicked] = useState(true);
   const [isTodoClicked, setTodoClicked] = useState(false);
@@ -40,8 +41,8 @@ function Buddy({buddyId, buddyObject, buddy, fetchBuddy, fetchBuddyUser}) {
           <div className="loading-wrapper">
             <h1 className="loading-text">Please find a Buddy first.</h1>
           </div>
+        </div>
       </div>
-    </div>  
     )
   } else if (buddyObject === null || isEmpty(buddy)) {
     return <Loading />
@@ -55,12 +56,30 @@ function Buddy({buddyId, buddyObject, buddy, fetchBuddy, fetchBuddyUser}) {
               className="buddy-profile-pic"
               alt="buddy-profile-pic"
               src={
-                    buddy.profilePicture
-                      ? buddy.profilePicture
-                      : "/assets/img/defaultDP.svg"
-                  }
+                buddy.profilePicture
+                  ? buddy.profilePicture
+                  : "/assets/img/defaultDP.svg"
+              }
             />
             <h4>{buddy.username}</h4>
+            <div className="progressbarWrapper" style={{ minWidth: "200px" }}>
+              <div className="progress buddy-page">
+                <div
+                  className="progress-bar"
+                  role="progressbar"
+                  style={{ width: currProgress + "%" }}
+                >
+                  {currProgress + "%"}
+                </div>
+              </div>
+            </div>
+
+            <p className="buddy-days buddy-page"
+              style={{ minWidth: "200px", color: "#308aa0", marginBottom: "10px" }}
+            >
+              {buddyObject.daysLeft + " days left"}
+            </p>
+
             <div className="container-buddy-btn">
               <button
                 className={
@@ -108,7 +127,7 @@ function Buddy({buddyId, buddyObject, buddy, fetchBuddy, fetchBuddyUser}) {
                 Live Chat
               </button>
             </div>
-            <h4>{buddyObject.daysLeft + " Days Left"}</h4>
+
           </div>
           <div className="buddy-content">
             {isDailyClicked ? (

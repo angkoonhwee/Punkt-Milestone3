@@ -96,13 +96,13 @@
 }
 
 .navbar-icon-badge {
-  width: 10px;
-  height: 10px;
-  background-color: #fdbf39;
+  width: 11px;
+  height: 11px;
+  background-color: #FFA62B;
   border-radius: 50%;
   position: absolute;
-  top: 7px;
-  right: 5px;
+  top: 6px;
+  right: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -228,6 +228,10 @@
 
   .data-result {
     width: 97%;
+  }
+
+  .fas.fa-trophy,.fas.fa-user-friends {
+    margin-left: 11px;
   }
 }
 
