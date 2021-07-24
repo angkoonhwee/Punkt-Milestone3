@@ -189,11 +189,11 @@ function Profile({
                 {isBuddy
                   ? <button
                     className="follow-btn"
-                    onClick={null}
-                    style={{ backgroundColor: "#7f8fad" }}
+                    disabled
+                    style={{ backgroundColor: "#7f8fad", cursor: "not-allowed" }}
                   >
                     <EmojiPeople style={{ marginRight: "3px" }} />
-                    "My Buddy !"
+                    My Buddy !
                   </button>
                   //show button if currentUser has not requested someone else, has no buddy and this user has no buddy
                   : requested

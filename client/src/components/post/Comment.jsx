@@ -39,11 +39,7 @@ function Comment({ comm, currUser }) {
 
   return (
     <div className="comment-wrapper">
-      <motion.div
-        className="post-user-comments"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
+      <div className="post-user-comments">
         <img
           className="profilePic"
           src={
@@ -62,7 +58,7 @@ function Comment({ comm, currUser }) {
 
           <p>{comm.content}</p>
         </div>
-      </motion.div>
+      </div>
       <div className="comment-like">
         <FavoriteIcon
           onClick={handleLike}

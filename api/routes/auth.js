@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const session = require("express-session");
 const passport = require("passport");
-const passportLocalMongoose = require("passport-local-mongoose");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const findOrCreate = require("mongoose-findorcreate");
 const passwordValidator = require("password-validator");
 const schema = new passwordValidator();
 const User = require("../models/user");
