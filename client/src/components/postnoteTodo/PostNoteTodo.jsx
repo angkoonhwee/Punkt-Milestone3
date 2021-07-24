@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./postNoteTodo.css";
 import TodoItem from "./TodoItem";
 import { Link } from "react-router-dom";
@@ -9,9 +9,16 @@ import { fetchBuddy } from "../../redux/actions/buddy";
 import { isUndefined } from "lodash";
 
 function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
-  const currDays = 21;
-  const totalDays = 30;
-  const currProgress = Math.round((currDays / totalDays) * 100);
+  const [completed, setCompleted] = useState(0);
+  const [currProgress, setProgress] = useState(0);
+  const total = dailys.length;
+
+  useEffect(() => {
+    const temp = dailys.filter(d => d.status[0] === "completed").length;
+    console.log(temp);
+    setCompleted(temp);
+    setProgress(Math.round((completed/total) * 100));
+  }, [currProgress, completed, dailys]);
 
   useEffect(() => {
     if (buddyId !== "") {
@@ -51,7 +58,7 @@ function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
           </div>
         </div>
       </div>
-      <p className="buddy-days">{currDays + " / " + totalDays + " days"}</p>
+      <p className="buddy-days">{completed + " / " + total + " days"}</p>
       {dailys.map((t) => (
         <TodoItem key={t._id} item={t} />
       ))}

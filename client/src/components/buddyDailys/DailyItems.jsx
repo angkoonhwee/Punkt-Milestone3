@@ -16,6 +16,14 @@ function DailyItems({ item, toggleDailys, buddy }) {
     }
   }, [isDone, item.status[0]]);
 
+  useEffect(() => {
+    if (item.status[1] === "late") {
+      setLate(true);
+    } else {
+      setLate(false);
+    }
+  }, [isLate, item.status[1]]);
+
   function handleCheck() {
     toggleDailys(item);
     // if (isDone === "incomplete") {
@@ -35,7 +43,7 @@ function DailyItems({ item, toggleDailys, buddy }) {
               type={"checkbox"} 
               onChange={handleCheck} 
               disabled={buddy} 
-              defaultChecked={item.status === "completed"}
+              defaultChecked={isDone}
             />
             <span className="checkbox-custom daily-item"></span>
           </label>
@@ -44,9 +52,9 @@ function DailyItems({ item, toggleDailys, buddy }) {
         {buddy && <i className="fas fa-map-pin" />}
         <div
           className={
-            isDone === "completed"
+            isDone
               ? "input-title daily-item todo-done"
-              : isDone === "late"
+              : isLate
                 ? "input-title daily-item red"
                 : "input-title daily-item"
           }

@@ -5,23 +5,36 @@ import { connect } from "react-redux";
 import { toggleDailys } from "../../redux/actions/buddy";
 
 function TodoItem({ item, toggleDailys }) {
-  const [isDone, setDone] = useState(null);
+  const [isDone, setDone] = useState(false);
+  const [isLate, setLate] = useState(false)
 
   useEffect(() => {
-    if (item) {
-      setDone(item.status);
+    if (item.status[0] === "completed") {
+      setDone(true);
+    } else {
+      setDone(false);
     }
-  }, [isDone, item.status]);
+  }, [isDone, item.status[0]]);
+
+  useEffect(() => {
+    if (item.status[1] === "late") {
+      setLate(true);
+    } else {
+      setLate(false);
+    }
+  }, [isLate, item.status[1]]);
 
   function handleCheck() {
     toggleDailys(item);
-    if (isDone === "incomplete") {
-      setDone("completed");
-    } else {
-      setDone("incomplete");
-    }
+    // if (isDone === "incomplete") {
+    //   setDone("completed");
+    // } else {
+    //   setDone("incomplete");
+    // }
+    setDone(!isDone);
   }
   
+  console.log(isLate);
   return (
     <form className="delete-todo">
       <div className="checkbox-container">
@@ -29,16 +42,18 @@ function TodoItem({ item, toggleDailys }) {
           <input 
             type="checkbox" 
             onChange={handleCheck} 
-            defaultChecked={item.status === "completed"}
+            defaultChecked={isDone}
           />
           <span className="checkbox-custom "></span>
         </label>
-        <div className={isDone === "completed"
+        <div className={isDone
               ? "input-title todo-done"
-              : isDone === "late"
-                ? "input-title red"
+              : isLate
+                ? "input-title"
                 : "input-title"
-         }>
+              }
+              style={{ color: "red" }}
+        >
           {item.task}
         </div>
         {/* add todo-done when input is checked using onChange handler */}

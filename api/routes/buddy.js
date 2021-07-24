@@ -83,17 +83,17 @@ router.put('/:todoId/dailys', async (req, res) => {
 
     try {
         const buddy = await Buddy.findOne({ user: userId });
-        const prev = buddy.dailys.filter(d => d._id === todoId);
+        const prev = buddy.dailys.filter(d => d._id.toString() === todoId);
         console.log(prev);
         if (state[0] === "incomplete") {
             await Buddy.updateOne(
                 { user: userId, "dailys._id": todoId },
-                { $set: {"dailys.$.status": ["completed", prev.status[1]] }}
+                { $set: {"dailys.$.status": ["completed", prev[0].status[1]] }}
             );
         } else {
             await Buddy.updateOne(
                 { user: userId, "dailys._id": todoId },
-                { $set: {"dailys.$.status": ["incomplete", prev.status[1]] }}
+                { $set: {"dailys.$.status": ["incomplete", prev[0].status[1]] }}
             );
         }
         const user = await Buddy.findOne({ user: userId });
@@ -189,6 +189,58 @@ router.get("/:userId/buddyHistory", async (req, res) => {
         console.log(err);
         return res.status(500).json("Server error");
     }
+});
+
+//Test update route
+router.post("/test/update", async (req, res) => {
+    try {
+        console.log("START UPDATES");
+        var allBuddies = await Buddy.find();
+        const promises = allBuddies.map(async buddy => {
+            
+            if (buddy.daysLeft >= 0) {
+              //update days left first
+              const end = buddy.daysLeft - 1;
+              //only update if buddy has not ended
+              await buddy.update({ $set: { daysLeft: end}});
+              if (end < 0) {
+                console.log(buddy.daysLeft);
+                //when end is less than 0 clear currentBuddy
+                const user = await User.findById(buddy.user);
+                await user.updateOne({
+                  $set: { currentBuddy: "" }
+                });
+                const buddyUser = await User.findById(buddy.buddy);
+                await buddyUser.updateOne({
+                  $set: { currentBuddy: "" }
+                });
+              }
+              if (buddy.dailys.length > 0) {
+                  const cleared = buddy.dailys.filter(d => d.status[0] !== "completed");
+                  console.log("filtered");
+                  console.log(cleared);
+                  cleared.map(daily => {
+                      if (daily.status[0] === "incomplete") {
+                          daily.status[1] = "late";
+                      }
+                      //console.log(daily);
+                  });
+                  console.log("after updating incomplete to late");
+                  await buddy.updateOne({ $set: { dailys: cleared }});
+              }
+              const todos = buddy.todos;
+              await buddy.update({ $push: { dailys: todos }});
+              await buddy.update({ $set: { todos: [] }});
+            }
+        });
+        await Promise.all(promises);
+        allBuddies = await Buddy.find();
+        console.log("DATA UPDATED");
+        res.status(200).json(allBuddies);
+      } catch (err) {
+          console.log(err);
+          return res.status(500).json('Server Error');
+      }
 })
 
 module.exports = router;

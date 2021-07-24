@@ -116,7 +116,7 @@ io.on("connection", socket => {
   });
 });
 
-cron.schedule('49 2 * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
   try {
     console.log("START UPDATES");
     var allBuddies = await Buddy.find();
@@ -141,16 +141,16 @@ cron.schedule('49 2 * * *', async () => {
           }
           if (buddy.dailys.length > 0) {
               const cleared = buddy.dailys.filter(d => d.status[0] !== "completed");
-              await buddy.update({ $pull: {dailys: cleared }});
-              const dailys = buddy.dailys;
-              dailys.map(daily => {
+              console.log("filtered");
+              console.log(cleared);
+              cleared.map(daily => {
                   if (daily.status[0] === "incomplete") {
                       daily.status[1] = "late";
                   }
-                  console.log(daily);
+                  //console.log(daily);
               });
-              console.log(dailys);
-              await buddy.update({ $set: { dailys: dailys }});
+              console.log("after updating incomplete to late");
+              await buddy.updateOne({ $set: { dailys: cleared }});
           }
           const todos = buddy.todos;
           await buddy.update({ $push: { dailys: todos }});
