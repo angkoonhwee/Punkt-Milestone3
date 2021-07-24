@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./postNoteBet.css";
 import Fab from "@material-ui/core/Fab";
 import EditIcon from "@material-ui/icons/Edit";
@@ -28,7 +28,7 @@ function PostNoteBet({
   const [hasGoal, setHasGoal] = useState(false);
 
   useEffect(() => {
-    console.log("post note bet fetch goal");
+
     if (!hasGoal) {
       if (user.goalId !== "") {
         fetchGoalById(user.goalId);
@@ -40,7 +40,7 @@ function PostNoteBet({
       }
     }
   }, [
-    user, 
+    user,
     loadMe,
     fetchGoalById,
   ]);
@@ -49,16 +49,15 @@ function PostNoteBet({
     //to update user.goalId when new goal is created
     loadMe();
   }, [loadMe]);
-  
+
   useEffect(() => {
-    const temp = 
-    currGoal?.madeAtonement
-    ? postIds?.length - 1
-    : postIds?.length;
+    const temp =
+      currGoal?.madeAtonement
+        ? postIds?.length - 1
+        : postIds?.length;
     setCurrDays(temp);
   }, [postIds, currDays])
-  // console.log(currGoal);
-  // console.log(postIds);
+
 
   const totalDays = currGoal?.numDays;
   const currProgress = Math.round((currDays / totalDays) * 100);
@@ -79,17 +78,17 @@ function PostNoteBet({
     const newGoal =
       goal.atonement === ""
         ? {
-            userId: user._id,
-            title: goal.title,
-            atonement: "Fulfil a request from the comment with most likes",
-            numDays: goal.days,
-          }
+          userId: user._id,
+          title: goal.title,
+          atonement: "Fulfil a request from the comment with most likes",
+          numDays: goal.days,
+        }
         : {
-            userId: user._id,
-            title: goal.title,
-            atonement: goal.atonement,
-            numDays: goal.days,
-          };
+          userId: user._id,
+          title: goal.title,
+          atonement: goal.atonement,
+          numDays: goal.days,
+        };
     submitGoals(newGoal);
   }
 
@@ -183,7 +182,6 @@ function PostNoteBet({
 };
 
 const mapStateToProps = state => {
-  //console.log(state.goals.goals);
   return {
     user: state.auth.user,
     currGoal: state.goals.goals,
@@ -192,8 +190,8 @@ const mapStateToProps = state => {
 }
 
 export default connect(
-  mapStateToProps, { 
-    fetchGoalById, 
-    submitGoals, 
-    loadMe
-  })(PostNoteBet);
+  mapStateToProps, {
+  fetchGoalById,
+  submitGoals,
+  loadMe
+})(PostNoteBet);

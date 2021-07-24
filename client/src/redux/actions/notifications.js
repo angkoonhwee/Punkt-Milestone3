@@ -14,7 +14,6 @@ export const fetchCommentNotif = userId => async dispatch => {
         res.data
             .sort((c1, c2) => new Date(c2.createdAt))
             .slice(0, 15);
-        console.log(res.data);
         dispatch({
             type: COMMENT_NOTIF,
             payload: res.data
@@ -22,7 +21,7 @@ export const fetchCommentNotif = userId => async dispatch => {
     } catch (err) {
         console.log(err);
         dispatch({
-            type: NOTIF_ERROR 
+            type: NOTIF_ERROR
         });
     }
 }
@@ -37,9 +36,9 @@ export const fetchReqNotif = userId => async dispatch => {
     } catch (err) {
         console.log(err);
         dispatch({
-            type: NOTIF_ERROR 
+            type: NOTIF_ERROR
         });
-    } 
+    }
 }
 
 export const acceptRequest = requestId => async dispatch => {

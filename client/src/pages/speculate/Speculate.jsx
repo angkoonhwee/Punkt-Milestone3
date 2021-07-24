@@ -4,6 +4,7 @@ import Footer from "../../components/footer/Footer";
 import NavbarMain from "../../components/navbarMain/NavbarMain";
 import Rightbar from "../../components/rightbar/Rightbar";
 import ScrollTop from "../../components/scrollTop/ScrollTop";
+import Loading from "../loading/Loading";
 
 //redux
 import { connect } from "react-redux";
@@ -19,8 +20,8 @@ function Speculate({ fetchSpeculatingPosts, posts }) {
     <>
       <NavbarMain />
       <div className="container-success">
-        <Feed posts={posts} />
-        <Rightbar />
+        {posts ? <Feed posts={posts} /> : <Loading />}
+        {posts && <Rightbar />}
       </div>
       <ScrollTop />
       <Footer />

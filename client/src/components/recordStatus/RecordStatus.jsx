@@ -38,16 +38,14 @@ function RecordStatus({
   const [isDisabled, setDisabled] = useState(false);
   const [isAtonement, setIsAtonement] = useState(atonement);
 
-
-
   function dateDiffInDays(a, b) {
     // Discard the time and time-zone information.
     const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
 
     const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-    //return Math.round((utc2 - utc1) / (1000 * 60 * 60 * 24));
-    return 99;
+    return Math.round((utc2 - utc1) / (1000 * 60 * 60 * 24));
+    // return 99;
   }
 
   const dayDiff = dateDiffInDays(new Date(goal.createdAt), new Date());
@@ -85,11 +83,6 @@ function RecordStatus({
       window.location.reload();
     }
   }
-
-  // function handleChange(event) {
-  //   const { name, value } = event.target;
-  //   setRecordText(value);
-  // }
 
   function handleUpload(event) {
     let fileList = [];

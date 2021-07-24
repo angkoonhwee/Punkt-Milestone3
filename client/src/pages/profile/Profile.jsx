@@ -9,6 +9,7 @@ import { Add, Remove, GroupAdd, EmojiPeople } from "@material-ui/icons";
 import "./profile.css";
 import { url } from "../../utils/constants";
 import UploadFile from "../../components/uploadFile/UploadFile";
+import Loading from "../loading/Loading";
 
 //redux
 import { connect } from "react-redux";
@@ -19,7 +20,7 @@ import { loadMe } from "../../redux/actions/auth";
 import { makeRequest, fetchRequest, deleteRequest } from "../../redux/actions/request";
 import { isUndefined } from "lodash";
 
-function Profile({ 
+function Profile({
   currUser,
   posts,
   fetchUserPosts,
@@ -33,7 +34,7 @@ function Profile({
   deleteRequest,
   request
 }) {
-  
+
   //default is currUser's profile
   const [user, setUser] = useState(currUser);
   const username = useParams().username;
@@ -88,7 +89,7 @@ function Profile({
       setRequested(true);
     }
   }, [requested, request])
-  
+
   console.log(requested);
 
   async function handleFollowing() {
@@ -185,44 +186,44 @@ function Profile({
             <h4>{username}</h4>
             {username !== currUser.username && (
               <div className="buttons-wrapper">
-                { isBuddy
+                {isBuddy
                   ? <button
-                      className="follow-btn"
-                      onClick={null}
-                      style={{ backgroundColor: "#7f8fad" }}
-                    >
-                        <EmojiPeople style={{ marginRight: "3px" }} />
-                        "My Buddy !"
-                    </button>
-                    //show button if currentUser has not requested someone else, has no buddy and this user has no buddy
+                    className="follow-btn"
+                    onClick={null}
+                    style={{ backgroundColor: "#7f8fad" }}
+                  >
+                    <EmojiPeople style={{ marginRight: "3px" }} />
+                    "My Buddy !"
+                  </button>
+                  //show button if currentUser has not requested someone else, has no buddy and this user has no buddy
                   : requested
                     ? <button
+                      className="follow-btn"
+                      onClick={handleRequest}
+                      style={{
+                        backgroundColor: "#7f8fad",
+                      }}
+                    >
+                      <GroupAdd style={{ marginRight: "5px" }} />
+                      Requested
+                    </button>
+                    : (
+                      currUser.request !== null
+                      && request !== null && request.status === "Rejected"
+                      && currUser.currentBuddy === ""
+                      && user.currentBuddy === ""
+                    )
+                      || (currUser.request === null && !currUser.currentBuddy)
+                      ? <button
                         className="follow-btn"
                         onClick={handleRequest}
                         style={{
-                          backgroundColor: "#7f8fad",
+                          backgroundColor: requested ? "#7f8fad" : "#4d6591",
                         }}
                       >
                         <GroupAdd style={{ marginRight: "5px" }} />
-                        Requested
+                        {requested ? "Requested" : "Request Buddy"}
                       </button>
-                    : (
-                        currUser.request !== null
-                        && request !== null && request.status === "Rejected"
-                        && currUser.currentBuddy === ""
-                        && user.currentBuddy === ""
-                      )
-                      || (currUser.request === null && !currUser.currentBuddy)
-                      ?  <button
-                          className="follow-btn"
-                          onClick={handleRequest}
-                          style={{
-                            backgroundColor: requested ? "#7f8fad" : "#4d6591",
-                          }}
-                        >
-                          <GroupAdd style={{ marginRight: "5px" }} />
-                          {requested ? "Requested" : "Request Buddy"}
-                        </button>
                       : null
                 }
                 <button
@@ -289,7 +290,7 @@ function Profile({
           <div className="container-user-feed">
             <h2>Recent Activities</h2>
             <div className="container-profile-feed">
-              <Feed posts={posts} />
+              {posts ? <Feed posts={posts} /> : <Loading />}
             </div>
           </div>
         </div>
@@ -311,7 +312,7 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { 
+export default connect(mapStateToProps, {
   fetchUserPosts,
   fetchUser,
   loadMe,

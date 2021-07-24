@@ -12,6 +12,7 @@ const flash = require("express-flash");
 const async = require("async");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const nodemailerSendgrid = require('nodemailer-sendgrid');
 
 const CLIENT_URL = "http://localhost:3000";
 
@@ -37,71 +38,6 @@ passport.deserializeUser(function (id, done) {
   User.findById(id, function (err, user) {
     done(err, user);
   });
-});
-
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "http://localhost:8000/auth/google/punkt",
-//       // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-//     },
-//     function (accessToken, refreshToken, profile, cb) {
-//       // console.log(profile);
-//       // console.log(accessToken);
-
-//       User.findOrCreate(
-//         {
-//           googleId: profile.id,
-//           email: profile.emails[0].value,
-//           // username: profile.name.familyName + profile.name.givenName,
-//           username: profile.emails[0].value,
-//           profilePicture: profile.photos[0].value,
-//         },
-//         function (err, user) {
-//           // console.log(user);
-//           return cb(err, user);
-//         }
-//       );
-//     }
-//   )
-// );
-
-router.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
-
-router.get(
-  "/google/punkt",
-  passport.authenticate("google", {
-    failureRedirect: "/google-login/failed",
-  }),
-  (req, res) => {
-    // console.log(reqs.user);
-    // Successful authentication, redirect home.
-    // console.log("successful authentication with google");
-    res.status(200).json(req.user);
-    // res.redirect(CLIENT_URL);
-  }
-);
-
-router.get("/google-login/failed", (req, res) => {
-  res.status(401).json({ message: "Google authentication failed." });
-});
-
-router.get("/google-login/success", (req, res) => {
-  if (req.user) {
-    res.status(200).json({
-      success: true,
-      message: "user has successfully authenticated",
-      user: req.user,
-      cookies: req.cookies,
-    });
-  }
 });
 
 router.get("/logout", (req, res) => {
@@ -234,17 +170,24 @@ router.post("/forgot-password", function (req, res, next) {
         );
       },
       (token, user, done) => {
-        let transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: "punkt.orbital@gmail.com",
-            pass: process.env.GMAILPW,
-          },
-        });
+        const transport = nodemailer.createTransport(
+          nodemailerSendgrid({
+            apiKey: process.env.SENDGRID_API_KEY
+          })
+        );
+
+
+        // let transporter = nodemailer.createTransport({
+        //   service: "gmail",
+        //   auth: {
+        //     user: "punkt.orbital@gmail.com",
+        //     pass: process.env.GMAILPW,
+        //   },
+        // });
         const mailOptions = {
           from: "punkt.orbital@gmail.com",
           to: user.email,
-          subject: "Punkt Password Reset",
+          subject: "Punkt - Password Reset",
           text:
             "Dear " +
             user.username +
@@ -258,12 +201,24 @@ router.post("/forgot-password", function (req, res, next) {
             "If you did not request for password reset, please ignore this email and your password will remain unchanged.\n\n" +
             "Punkt Developer Team",
         };
-        transporter.sendMail(mailOptions, function (err) {
-          res.status(200).json({
-            message: "Please check your email for further instructions.",
+        // transporter.sendMail(mailOptions, function (err) {
+        //   res.status(200).json({
+        //     message: "Please check your email for further instructions.",
+        //   });
+        //   done(err, "done");
+        // });
+
+        transport.sendMail(mailOptions)
+          .then((response) => {
+            console.log("email sent");
+            return res
+              .status(200)
+              .json({ message: "Please check your email (incl. spam mail) for further instructions." });
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(500).json(err);
           });
-          done(err, "done");
-        });
       },
     ],
     (err) => {
@@ -347,18 +302,23 @@ router.post("/reset/:token", (req, res) => {
         );
       },
       (user, done) => {
-        let transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: "punkt.orbital@gmail.com",
-            pass: process.env.GMAILPW,
-          },
-        });
+        const transport = nodemailer.createTransport(
+          nodemailerSendgrid({
+            apiKey: process.env.SENDGRID_API_KEY
+          })
+        );
+        // let transporter = nodemailer.createTransport({
+        //   service: "gmail",
+        //   auth: {
+        //     user: "punkt.orbital@gmail.com",
+        //     pass: process.env.GMAILPW,
+        //   },
+        // });
 
         const mailOptions = {
           to: user.email,
           from: "punkt.orbital@gmail.com",
-          subject: "Your password has been changed",
+          subject: "Punkt - Your password has been reset",
           text:
             "Dear " +
             user.username +
@@ -368,17 +328,28 @@ router.post("/reset/:token", (req, res) => {
             " has just been changed.\n\n" +
             "Punkt Developer Team",
         };
-        transporter.sendMail(mailOptions, function (err) {
-          if (err) {
+        // transporter.sendMail(mailOptions, function (err) {
+        //   if (err) {
+        //     console.log(err);
+        //     return res.status(500).json({ message: "Server error." });
+        //   } else {
+        //     res.status(200).json({
+        //       message: "Yay! Your password has been changed successfully.",
+        //     });
+        //     done(err);
+        //   }
+        // });
+        transport.sendMail(mailOptions)
+          .then((response) => {
+            console.log("email sent");
+            return res
+              .status(200)
+              .json({ message: "Yay! Your password has been changed successfully." });
+          })
+          .catch((err) => {
             console.log(err);
-            return res.status(500).json({ message: "Server error." });
-          } else {
-            res.status(200).json({
-              message: "Yay! Your password has been changed successfully.",
-            });
-            done(err);
-          }
-        });
+            return res.status(500).json(err);
+          });
       },
     ],
     (err) => {

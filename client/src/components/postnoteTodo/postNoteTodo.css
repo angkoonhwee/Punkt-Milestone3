@@ -61,16 +61,6 @@
   font-size: 18px;
 }
 
-/* .bet-btn-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} */
-
-/* input[type="checkbox"] {
-  margin: 10px 15px;
-} */
-
 form.delete-todo {
   display: flex;
   flex-direction: column;
@@ -93,7 +83,6 @@ form.delete-todo {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  /* padding: 40px 0px; */
 }
 
 .input-title {
@@ -253,6 +242,29 @@ form.delete-todo {
   text-align: left;
   margin: 0 15px;
   color: #b17043;
+}
+
+.input-title.red {
+  color: red;
+}
+
+.checkbox-label.red input:checked ~ .checkbox-custom::after {
+  -webkit-transform: rotate(45deg) scale(1);
+  -ms-transform: rotate(45deg) scale(1);
+  transform: rotate(45deg) scale(1);
+  opacity: 1;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 12px;
+  border: solid red;
+  border-width: 0 2px 2px 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.checkbox-label .checkbox-custom.red {
+  border: 1px solid red;
 }
 
 @media (max-width: 770px) {

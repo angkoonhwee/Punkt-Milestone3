@@ -7,8 +7,6 @@ import BuddyTodoInput from "./BuddyTodoInput";
 import { connect } from "react-redux";
 
 function BuddyTodoList({ todos }) {
-  console.log(todos);
-
   if (!todos) {
     return <h1>LOADING...</h1>
   }

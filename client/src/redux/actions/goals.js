@@ -6,7 +6,8 @@ import {
     GET_BETAGAINST,
     GET_BET,
     GET_ALL_GOALS,
-    CREATE_BET
+    CREATE_BET,
+    UPDATE_AFTER_GOAL_SUBMIT
 } from "./types";
 import axios from "axios";
 import { url } from "../../utils/constants";
@@ -30,7 +31,6 @@ export const fetchGoalById = goalId => async dispatch => {
 export const fetchGoal = userId => async dispatch => {
     try {
         const res = await axios.get(url + "/goal/user/" + userId);
-        console.log(res.data);
         dispatch({
             type: LOAD_GOALS,
             payload: res.data
@@ -51,6 +51,10 @@ export const submitGoals = (newGoal) => async dispatch => {
             payload: res.data
         });
         //loadMe();
+        dispatch({
+            type: UPDATE_AFTER_GOAL_SUBMIT,
+            payload: res.data._id
+        })
     } catch (err) {
         console.log(err);
         dispatch({
@@ -64,7 +68,7 @@ export const fetchBetAgainst = (goalId, userId) => async dispatch => {
         const res = await axios.get(
             url + "/goal/" + goalId + "/bet-against/" + userId
         );
-        
+
         dispatch({
             type: GET_BETAGAINST,
             payload: res.data
@@ -86,7 +90,6 @@ export const fetchUserGoals = () => async dispatch => {
         res.data.sort(
             (g1, g2) => new Date(g2.createdAt) - new Date(g1.createdAt)
         );
-        console.log(res.data);
         dispatch({
             type: GET_ALL_GOALS,
             payload: res.data

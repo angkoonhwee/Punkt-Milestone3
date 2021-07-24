@@ -10,14 +10,10 @@ function BetStatus({ user, goal, postIds }) {
 
   useEffect(() => {
     const temp = goal.madeAtonement
-    ? postIds.length - 1
-    : postIds.length;
-    console.log(temp);
+      ? postIds.length - 1
+      : postIds.length;
     setCurrDays(temp);
-   }, [postIds, currDays]);
-  // const currDays = goal.madeAtonement
-  // ? goal.postIds?.length - 1
-  // : goal.postIds?.length
+  }, [postIds, currDays]);
 
   const totalDays = goal.numDays;
 

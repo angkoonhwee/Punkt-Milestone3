@@ -3,6 +3,7 @@ import "./buddyChat.css";
 import BuddyMessage from "./BuddyMessage";
 import { TextareaAutosize } from "@material-ui/core";
 import { io } from "socket.io-client";
+import { url } from "../../utils/constants";
 
 //redux
 import { connect } from "react-redux";
@@ -15,13 +16,14 @@ function BuddyChat({ messages, fetchChat, chatId, userId, buddyId, messageSent }
   const scrollRef = useRef();
 
   useEffect(() => {
-    console.log("should connect to socket!");
-    socket.current = io("ws://localhost:8000");
+    // DEPLOYMENT TODO
+
+    socket.current = io(url);
     socket.current.emit("Join Room", chatId);
     //must put on first render so socket would 
     //start listening for this event on first render
+    console.log("socket connected")
     socket.current.on("Receive Message", message => {
-      console.log(message);
       //a action for after message posted to update redux store
       messageSent(message.message);
     });
@@ -45,7 +47,7 @@ function BuddyChat({ messages, fetchChat, chatId, userId, buddyId, messageSent }
       receiver: buddyId,
       text: message
     };
-
+    console.log("send message")
     socket.current.emit("Send Message", chatId, body);
     setMessage("");
   }
@@ -78,7 +80,7 @@ function BuddyChat({ messages, fetchChat, chatId, userId, buddyId, messageSent }
           >
             Send
           </button>
-      </form>
+        </form>
       </div>
     </div>
   );

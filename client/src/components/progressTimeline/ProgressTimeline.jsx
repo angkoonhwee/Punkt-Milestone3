@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./progressTimeline.css";
 import Post from "../post/Post";
+import Loading from "../../pages/loading/Loading";
 
 //redux
 import { connect } from "react-redux";
@@ -13,16 +14,14 @@ function ProgressTimeline({ posts, goalId, fetchGoalPosts }) {
   //to get posts for goal
   useEffect(() => {
     if (goalId) {
-      console.log("FETCHING POSTS");
       fetchGoalPosts(goalId);
     }
   }, [fetchGoalPosts, goalId]);
 
-  console.log(posts);
-
-  return (
-    <div className="progress-timeline">
+  return (posts
+    ? <div className="progress-timeline">
       <h2>Progress</h2>
+
       {posts.map((p, index) => (
         <div key={p._id} className="progress-post">
           <div className="status-day">
@@ -33,13 +32,12 @@ function ProgressTimeline({ posts, goalId, fetchGoalPosts }) {
           </div>
           <Post post={p} />
         </div>
-      ))}
-    </div>
+      ))}</div>
+    : <Loading />
   );
 }
 
 const mapStateToProps = state => {
-  console.log(state.posts.goals);
   return {
     posts: state.posts.goals
   };

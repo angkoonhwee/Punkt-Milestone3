@@ -15,7 +15,6 @@ function PostNoteTodo({ dailys, fetchBuddy, buddyId }) {
 
   useEffect(() => {
     const temp = dailys.filter(d => d.status[0] === "completed").length;
-    console.log(temp);
     setCompleted(temp);
     setProgress(Math.round((completed / total) * 100));
   }, [currProgress, completed, dailys]);

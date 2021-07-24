@@ -12,20 +12,20 @@ import {
 import { mapValues } from 'lodash';
 
 const initialState = {
-    main: [],
-    explore: [],
-    user: [],
-    speculate: [],
-    goals: []
+    main: null,
+    explore: null,
+    user: null,
+    speculate: null,
+    goals: null
 };
 
 const posts = (state = initialState, action) => {
     const { type, payload } = action;
-    switch(type) {
+    switch (type) {
         case LOAD_ALL_POSTS:
             return {
                 ...state,
-               explore: payload
+                explore: payload
             }
         case LOAD_MY_POSTS:
             return {
@@ -64,7 +64,7 @@ const posts = (state = initialState, action) => {
                 goals: newGoals
             }
         case DELETE_POSTS:
-            const allPosts = {...state};
+            const allPosts = { ...state };
             const finalPosts = mapValues(allPosts, (posts) => {
                 let temp = posts.filter(p => {
                     return p._id !== payload
@@ -80,7 +80,7 @@ const posts = (state = initialState, action) => {
             //console.log(finalPosts === state);
             return finalPosts;
         case LIKE_POST:
-            return {...state};
+            return { ...state };
         case POSTS_ERROR:
         default:
             return state;

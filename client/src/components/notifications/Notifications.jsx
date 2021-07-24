@@ -39,21 +39,17 @@ function Notifications({
     }
   }, [fetchReqNotif, user._id]);
 
-  console.log(user.request);
   useEffect(() => {
     if (user.request !== null) {
-      console.log(user.request);
       fetchRequest(user.request);
     }
   }, [user.request]);
 
   function onAccept(requestId) {
-    console.log("accept");
     acceptRequest(requestId)
   }
 
   function onReject(requestId) {
-    console.log(requestId);
     rejectRequest(requestId)
   }
 

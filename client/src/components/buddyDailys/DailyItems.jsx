@@ -1,63 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./dailyItems.css";
 
 import { connect } from "react-redux";
 import { toggleDailys } from "../../redux/actions/buddy";
 
 function DailyItems({ item, toggleDailys, buddy }) {
-  const [isDone, setDone] = useState(false);
-  const [isLate, setLate] = useState(false)
-
-  useEffect(() => {
-    if (item.status[0] === "completed") {
-      setDone(true);
-    } else {
-      setDone(false);
-    }
-  }, [isDone, item.status[0]]);
-
-  useEffect(() => {
-    if (item.status[1] === "late") {
-      setLate(true);
-    } else {
-      setLate(false);
-    }
-  }, [isLate, item.status[1]]);
+  const [isDone, setDone] = useState(item.status[0] === "completed");
+  const [isLate, setLate] = useState(item.status[1] === "late")
 
   function handleCheck() {
     toggleDailys(item);
-    // if (isDone === "incomplete") {
-    //   setDone("completed");
-    // } else {
-    //   setDone("incomplete");
-    // }
     setDone(!isDone);
+  }
+
+  function checkDailyStatus() {
+    if (isLate) {
+      if (isDone) {
+        return "input-title daily-item red todo-done";
+      } else {
+        return "input-title daily-item red";
+      }
+    } else {
+      if (isDone) {
+        return "input-title daily-item todo-done";
+      } else {
+        return "input-title daily-item"
+      }
+    }
   }
 
   return (
     <form className="delete-todo daily-item">
       <div className="checkbox-container daily-item">
         {!buddy && (
-        <label className="checkbox-label daily-item">
-            <input 
-              type={"checkbox"} 
-              onChange={handleCheck} 
-              disabled={buddy} 
+          <label className={isLate ? "checkbox-label daily-item red" : "checkbox-label daily-item"}>
+            <input
+              type={"checkbox"}
+              onChange={handleCheck}
+              disabled={buddy}
               defaultChecked={isDone}
             />
-            <span className="checkbox-custom daily-item"></span>
+            <span className={isLate ? "checkbox-custom daily-item red" : "checkbox-custom daily-item"}></span>
           </label>
         )}
 
-        {buddy && <i className="fas fa-map-pin" />}
+        {buddy && <i className={isLate ? "fas fa-map-pin red" : "fas fa-map-pin"} />}
         <div
-          className={
-            isDone
-              ? "input-title daily-item todo-done"
-              : isLate
-                ? "input-title daily-item red"
-                : "input-title daily-item"
-          }
+          className={checkDailyStatus()}
         >
           {item.task}
         </div>
@@ -65,5 +54,6 @@ function DailyItems({ item, toggleDailys, buddy }) {
     </form>
   );
 };
+
 
 export default connect(null, { toggleDailys })(DailyItems);
