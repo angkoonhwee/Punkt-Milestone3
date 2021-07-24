@@ -66,10 +66,10 @@ const posts = (state = initialState, action) => {
         case DELETE_POSTS:
             const allPosts = { ...state };
             const finalPosts = mapValues(allPosts, (posts) => {
-                let temp = posts.filter(p => {
+                let temp = posts && posts.filter(p => {
                     return p._id !== payload
                 });
-                temp = temp.map(e => {
+                temp = temp && temp.map(e => {
                     const x = e.goal.postIds.filter(p => p !== payload);
                     //console.log(x);
                     e.goal.postIds = x;

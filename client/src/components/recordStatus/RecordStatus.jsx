@@ -14,7 +14,7 @@ function RecordStatus({
   user,
   goal,
   atonement,
-  loadMe,
+  postIds,
   createPost,
   status
 }) {
@@ -24,10 +24,7 @@ function RecordStatus({
   const [imgURLs, setImgURLs] = useState([]);
   const [error, setError] = useState(null);
 
-  const [isCompleted, setCompleted] = useState(
-    status !== "In Progress" ||
-    (goal.postIds ? goal.postIds.length === goal.numDays : false)
-  );
+  const [isCompleted, setCompleted] = useState(status === "Success");
 
   useEffect(() => {
     if (status !== "In Progress") {
@@ -51,14 +48,14 @@ function RecordStatus({
   const dayDiff = dateDiffInDays(new Date(goal.createdAt), new Date());
 
   useEffect(() => {
-    if (goal && goal.postIds && goal.status === "In Progress") {
-      setCompleted(goal.postIds.length === goal.numDays);
-      setDisabled(dayDiff < goal.postIds.length);
+    if (postIds && goal.status === "In Progress") {
+      setCompleted(postIds.length === goal.numDays);
+      setDisabled(dayDiff < postIds.length);
 
     } else if (goal.status === "Success") {
       setCompleted(true);
     }
-  }, [dayDiff, goal, user._id, loadMe]);
+  }, [dayDiff, postIds, goal.status, goal.numDays]);
 
   function submitRecord(event) {
     event.preventDefault();
@@ -82,6 +79,12 @@ function RecordStatus({
     if (atonement) {
       window.location.reload();
     }
+
+    // if (dayDiff < goal.postIds.length) {
+    //   setDisabled(dayDiff < goal.postIds.length);
+    // } else if (goal.status === "Success") {
+    //   setCompleted(true);
+    // }
   }
 
   function handleUpload(event) {
@@ -219,7 +222,9 @@ const mapStateToProps = state => {
     user: state.auth.user,
     post: state.posts.goals,
     goal: state.goals.goals,
-    status: state.goals.goals.status
+    status: state.goals.goals.status,
+    postIds: state.goals.goals.postIds,
+
   };
 };
 

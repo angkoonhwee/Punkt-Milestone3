@@ -1,9 +1,8 @@
 .container-progress {
   display: flex;
   flex-direction: column;
-
   width: 100%;
   background-color: rgba(239, 253, 255, 0.87);
-  min-height: 85vh;
+  min-height: 95vh;
   padding-top: 50px;
 }
