@@ -15,3 +15,66 @@
   overflow-y: scroll;
   padding-right: 10px;
 }
+
+.chat-input-form {
+  display: flex;
+  padding: 0;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #268899;
+  border-radius: 10px;
+  margin: 15px 0 0;
+}
+
+.chat-input {
+  min-width: 82%;
+  background-color: white;
+  border: none;
+  height: auto;
+  padding: 15px;
+  margin: 0;
+  border-radius: 0;
+  line-height: 1.25;
+  display: inline-block;
+}
+
+.chat-input:focus {
+  outline: none;
+}
+
+.chat-send-btn {
+  width: 100%;
+  line-height: 2;
+  display: inline-block;
+  border: none;
+  text-transform: uppercase;
+  color: white;
+  background-color: transparent;
+}
+
+@media (max-width: 580px) {
+  .chat-input-form {
+    margin-top: 10px;
+  }
+
+  .chat-input-form textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .chat-send-btn {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .chat-input-form textarea {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .chat-send-btn {
+    font-size: 12px;
+  }
+}

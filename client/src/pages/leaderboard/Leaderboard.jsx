@@ -10,28 +10,33 @@ import LeaderboardOthers from "../../components/leaderboardItems/LeaderboardOthe
 import axios from "axios";
 import { url } from "../../utils/constants";
 
-export default function Leaderboard() {
-  const [userData, setUserData] = useState(null);
+import { connect } from "react-redux";
+import { fetchAllUser } from "../../redux/actions/user";
+
+function Leaderboard({ fetchAllUser, userData }) {
   const [first, setFirst] = useState(null);
   const [second, setSecond] = useState(null);
   const [third, setThird] = useState(null);
+  const [rest, setRest] = useState([]);
 
   useEffect(() => {
-    if (!userData) {
-      const fetchUsersData = async () => {
-        const res = await axios.get(url + "/user/all");
-        const sorted = res.data.sort(
-          (u1, u2) => u2.productivityPoints - u1.productivityPoints
-        );
+    console.log("fetching ran");
+    fetchAllUser();
+  }, [fetchAllUser]);
 
-        setUserData(sorted.slice(3, 50));
-        setFirst(sorted[0]);
-        setSecond(sorted[1]);
-        setThird(sorted[2]);
-      };
-      fetchUsersData();
+  useEffect(() => {
+    console.log("sorting ran");
+    if (userData.length !== 0) {
+      userData
+        .sort((u1, u2) => u2.productivityPoints - u1.productivityPoints)
+      setFirst(userData[0]);
+      setSecond(userData[1]);
+      setThird(userData[2]);
+      
+      setRest(userData.slice(3, 50));
     }
-  }, [userData]);
+  }, []);
+
 
   return (
     <>
@@ -51,7 +56,7 @@ export default function Leaderboard() {
           {third && <LeaderboardThird user={third} />}
         </div>
         <div className="container-leaderboard-others">
-          {userData?.map((u, index) => (
+          {rest?.map((u, index) => (
             <LeaderboardOthers user={u} key={u.username} index={index} />
           ))}
         </div>
@@ -59,5 +64,13 @@ export default function Leaderboard() {
       <ScrollTop />
       <Footer />
     </>
-  );
+    );
 }
+
+const mapStateToProps = state => {
+  return {
+    userData: state.user.searchedUser
+  };
+}
+
+export default connect(mapStateToProps, { fetchAllUser })(Leaderboard);

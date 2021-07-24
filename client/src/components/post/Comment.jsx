@@ -1,25 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./post.css";
 import axios from "axios";
-import { UserContext } from "../../context/UserContext";
 import { format } from "timeago.js";
 import { url } from "../../utils/constants";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { motion } from "framer-motion";
 
-export default function Comment({ comm }) {
+//redux
+import { connect } from "react-redux";
+
+function Comment({ comm, currUser }) {
   const [user, setUser] = useState({});
-  const { user: currUser } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(comm.likes.length);
 
+  //console.log(comm);
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await axios.get(url + `/user?userId=${comm.userId}`);
-      setUser(res.data);
-    };
-    fetchUser();
-  }, [comm.userId]);
+    //console.log("COMMENT USEEFFECT");
+    setUser(comm.user);
+    //console.log(user);
+  }, [comm.user]);
 
   useEffect(() => {
     setIsLiked(comm.likes.includes(currUser._id));
@@ -72,4 +72,12 @@ export default function Comment({ comm }) {
       </div>
     </div>
   );
-}
+};
+
+const mapStateToProps = state => {
+  return {
+    currUser: state.auth.user
+  };
+};
+
+export default connect(mapStateToProps)(Comment);

@@ -21,6 +21,15 @@
   line-height: 1.2;
 }
 
+.input-title.red.daily-item {
+  clear: both;
+  padding: 0;
+  font-size: 18px;
+  color: rgb(231, 84, 74);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
 /* Styling Checkbox Starts */
 .checkbox-label {
   display: block;
@@ -145,6 +154,11 @@
   -moz-transition: all 0.3s ease-out;
   -ms-transition: all 0.3s ease-out;
   -o-transition: all 0.3s ease-out;
+}
+
+.fa-map-pin {
+  margin-right: 15px;
+  color: #338ea5;
 }
 
 @media (max-width: 770px) {

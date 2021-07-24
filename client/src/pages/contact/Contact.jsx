@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./contact.css";
 import Footer from "../../components/footer/Footer";
 import NavbarMain from "../../components/navbarMain/NavbarMain";
+import NavbarHome from "../../components/navbarHome/NavbarHome";
 import ScrollTop from "../../components/scrollTop/ScrollTop";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
@@ -11,7 +12,9 @@ import axios from "axios";
 import { url } from "../../utils/constants";
 import Alert from "@material-ui/lab/Alert";
 
-export default function Contact() {
+import { connect } from "react-redux";
+
+function Contact({ user }) {
   const [enquiry, setEnquiry] = useState({
     name: "",
     email: "",
@@ -45,7 +48,7 @@ export default function Contact() {
 
   return (
     <div>
-      <NavbarMain />
+      {user ? <NavbarMain /> : <NavbarHome />}
       <div className="container-contact">
         <div className="contact-wrapper">
           <div className="container-contact-pic">
@@ -111,4 +114,12 @@ export default function Contact() {
       <Footer />
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user
+  };
 }
+
+export default connect(mapStateToProps)(Contact);

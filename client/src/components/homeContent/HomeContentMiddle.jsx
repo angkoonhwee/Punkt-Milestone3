@@ -12,8 +12,8 @@ function HomeContentMiddle() {
           <h2>Bet with Your Friends!</h2>
           <p>Studying feels bland and pointless?</p>
           <p>
-            If you complete your goals, you take all the money! Else, your
-            friends get to split the amount you bet!
+            If you complete your goals, well done! Else, 
+            you need to atone and do your forfeit!
           </p>
         </div>
         <img src={betImg} alt="betting-system" />
@@ -27,7 +27,7 @@ function HomeContentMiddle() {
           <h2>Get Yourself a Buddy!</h2>
           <p>Lack the self-discipline to study on your own?</p>
           <p>
-            Get paired with a buddy with a common background to study with and
+            Find yourself a buddy with a common background to study with and
             improve together!
           </p>
         </div>

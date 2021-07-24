@@ -1,24 +1,41 @@
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
-import { url } from "../../utils/constants";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
-export default function Searchbar() {
-  const [userData, setUserData] = useState(false);
+//redux
+import { connect } from "react-redux";
+import { fetchAllUser } from "../../redux/actions/user";
+
+function Searchbar({ fetchAllUser, userData }) {
   const [filteredData, setFilteredData] = useState([]);
   const [usernameEntered, setUsernameEntered] = useState("");
 
+  //reduxxxx
   useEffect(() => {
-    if (!userData) {
-      const fetchUsersData = async () => {
-        const res = await axios.get(url + "/user/all");
-        setUserData(res.data);
-      };
-      fetchUsersData();
+    if (userData.length === 0) {
+      fetchAllUser();
+    };
+  }, [fetchAllUser]);
+
+  function handleFilter(event) {
+    const searchUsername = event.target.value.toLowerCase();
+    setUsernameEntered(searchUsername);
+    const filteredUsers = userData.filter((u) => {
+      return u.username.toLowerCase().includes(searchUsername);
+    });
+
+    if (event.target.value === "") {
+      setFilteredData([]);
+    } else {
+      setFilteredData(filteredUsers);
     }
-  }, [userData]);
+  }
+
+  function handleClear() {
+    setUsernameEntered("");
+    setFilteredData([]);
+  }
 
   function handleFilter(event) {
     const searchUsername = event.target.value.toLowerCase();
@@ -88,3 +105,11 @@ export default function Searchbar() {
     </div>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    userData: state.user.searchedUser
+  }
+}
+
+export default connect(mapStateToProps, { fetchAllUser })(Searchbar);

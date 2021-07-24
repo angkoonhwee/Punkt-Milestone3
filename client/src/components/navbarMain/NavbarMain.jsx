@@ -1,25 +1,23 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./navbarMain.css";
 import MessageIcon from "@material-ui/icons/Message";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import PeopleIcon from "@material-ui/icons/People";
-import SearchIcon from "@material-ui/icons/Search";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ExploreIcon from "@material-ui/icons/Explore";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PublicIcon from "@material-ui/icons/Public";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { Link, Redirect } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
+import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
 import { logoutCall } from "../../apiCalls";
 import Notifications from "../notifications/Notifications";
 
-function NavbarMain() {
-  const { user, dispatch } = useContext(UserContext);
+//redux
+import { connect } from "react-redux";
+import { logout } from "../../redux/actions/auth";
 
+function NavbarMain({ user, logout }) {
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
+    logout();
   };
 
   return (
@@ -86,7 +84,7 @@ function NavbarMain() {
             </li>
 
             <li className="nav-item">
-              <Notifications user={user} />
+              <Notifications />
             </li>
 
             <li className="nav-item">
@@ -140,4 +138,8 @@ function NavbarMain() {
   );
 }
 
-export default NavbarMain;
+const mapStateToProps = state => {
+  return { user: state.auth.user };
+}
+
+export default connect(mapStateToProps, { logout })(NavbarMain);

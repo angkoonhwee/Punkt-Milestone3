@@ -1,10 +1,18 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./setBet.css";
-import { UserContext } from "../../context/UserContext";
-import axios from "axios";
-import { url } from "../../utils/constants";
 
-export default function SetBet({ user, goal }) {
+//redux
+import { connect } from "react-redux";
+import { fetchBetAgainst, createBetAgainst } from "../../redux/actions/goals";
+
+function SetBet({ 
+  user, 
+  goal, 
+  currUser,
+  betAgainst,
+  fetchBetAgainst,
+  createBetAgainst
+}) {
   // user is the owner of the goal
   const [isBetAgainst, setIsBetAgainst] = useState(false);
 
@@ -15,39 +23,21 @@ export default function SetBet({ user, goal }) {
       : false
   );
 
-  const { user: currUser } = useContext(UserContext);
-
   useEffect(() => {
-    const fetchBetAgainst = async () => {
-      try {
-        if (goal.status) {
-          setisBetDisabled(goal.status !== "In Progress");
-        }
-        if (goal._id) {
-          const res = await axios.get(
-            url + "/goal/" + goal._id + "/bet-against/" + currUser._id
-          );
-          if (res.data) {
-            setisBetDisabled(true);
-          }
-        }
-      } catch (err) {
-        console.log(err);
+      if (goal.status) {
+        setisBetDisabled(goal.status !== "In Progress");
       }
-    };
-    fetchBetAgainst();
-  }, [goal, currUser._id]);
+      if (goal._id) {
+        fetchBetAgainst(goal._id, currUser._id);
+      }
+      //*****no purpose of sending back the list of users that bet against?
+      if (betAgainst) setisBetDisabled(true);
+  }, [goal, currUser, fetchBetAgainst, betAgainst]);
 
-  async function submitBetAgainst(event) {
+  function submitBetAgainst(event) {
     event.preventDefault();
-    try {
-      const res = await axios.put(url + "/goal/" + goal._id + "/bet-against", {
-        userId: currUser._id,
-      });
-      setisBetDisabled(true);
-    } catch (err) {
-      console.log(err);
-    }
+    createBetAgainst(goal._id, { userId: currUser._id });
+    setisBetDisabled(true);
   }
 
   return (
@@ -94,3 +84,12 @@ export default function SetBet({ user, goal }) {
     </div>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    currUser: state.auth.user,
+    betAgainst: state.goals.betAgainst
+  };
+}
+
+export default connect(mapStateToProps, { fetchBetAgainst, createBetAgainst })(SetBet);

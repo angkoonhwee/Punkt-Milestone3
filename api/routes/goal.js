@@ -17,6 +17,10 @@ router.post("/", async (req, res) => {
     });
 
     const savedGoal = await newGoal.save();
+    
+    // push goalId into goal history arr of user
+    await user.updateOne({ $push: { goalHistory: savedGoal._id } });
+    
     res.status(200).json(savedGoal);
   } catch (err) {
     res.status(500).json(err);
@@ -33,35 +37,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// GET USER GOAL
-// router.get("/profile/:username", async (req, res) => {
-//   // const currUser = User.findById(req.body.userId);
-//   try {
-//     // console.log(req.params.username);
-//     const currUser = await User.findOne({ username: req.params.username });
-//     const userGoal = await Goal.findOne({
-//       userId: currUser._id,
-//       status: "In Progress",
-//     });
-//     // console.log(userGoal);
-//     if (userGoal) {
-//       res.status(200).json(userGoal);
-//     } else {
-//       const sortGoalsByDate = await Goal.find({
-//         userId: currUser._id,
-//       }).sort({
-//         createdAt: "-1",
-//       });
-//       // console.log(sortGoalsByDate);
-//       res.status(200).json(sortGoalsByDate[0]);
-//     }
-
-//     // const allPosts = await Post.find();
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
 // GET THE LATEST USER GOAL BY USER ID
 router.get("/user/:userId", async (req, res) => {
   // const currUser = User.findById(req.body.userId);
@@ -72,6 +47,7 @@ router.get("/user/:userId", async (req, res) => {
     });
     // console.log(userGoal);
     if (userGoal) {
+      console.log(userGoal);
       res.status(200).json(userGoal);
     } else {
       const sortGoalsByDate = await Goal.find({
@@ -95,6 +71,7 @@ router.get("/:goalId/bet-against/:userId", async (req, res) => {
     const userGoal = await Goal.findById(req.params.goalId);
     // console.log(userGoal);
 
+    //*****why need to await?
     const currUserAgainst = await userGoal.usersBetAgainst.filter(
       (u) => u === req.params.userId
     )[0];
@@ -186,10 +163,6 @@ router.put("/:id/status", async (req, res) => {
     const user = await User.findById(req.body.userId);
 
     if (req.body.status === "Success") {
-      console.log("success status block");
-
-      // push goalId into goal history arr of user
-      await user.updateOne({ $push: { goalHistory: req.params.id } });
 
       // clear curr goal id of user
       await user.updateOne({ $set: { goalId: "" } });
@@ -243,9 +216,8 @@ router.put("/:id/status", async (req, res) => {
         })
       );
       // console.log(updateUsersBetAgainstData);
-      res.status(200).json(user);
+      res.status(200).json(goal);
     } else if (req.body.status === "Failed") {
-      console.log("failed status block");
       // failed goals dont need update productivity points & ranking
 
       // push goalId into goal history arr of user

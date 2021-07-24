@@ -162,6 +162,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     const currGoal = await Goal.findById(post.goalId);
+    const user = await User.findOne({ goalId: post.goalId });
 
     if (!post) {
       res.status(404).json("The post you are requesting does not exist.");

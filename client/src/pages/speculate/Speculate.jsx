@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Feed from "../../components/feed/Feed";
 import Footer from "../../components/footer/Footer";
 import NavbarMain from "../../components/navbarMain/NavbarMain";
 import Rightbar from "../../components/rightbar/Rightbar";
 import ScrollTop from "../../components/scrollTop/ScrollTop";
 
-export default function Speculate() {
+//redux
+import { connect } from "react-redux";
+import { fetchSpeculatingPosts } from "../../redux/actions/posts";
+
+function Speculate({ fetchSpeculatingPosts, posts }) {
+
+  useEffect(() => {
+    fetchSpeculatingPosts();
+  }, [fetchSpeculatingPosts])
+
   return (
     <>
       <NavbarMain />
       <div className="container-success">
-        <Feed page="speculate" />
+        <Feed posts={posts} />
         <Rightbar />
       </div>
       <ScrollTop />
@@ -18,3 +27,11 @@ export default function Speculate() {
     </>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    posts: state.posts.speculate
+  }
+}
+
+export default connect(mapStateToProps, { fetchSpeculatingPosts })(Speculate);

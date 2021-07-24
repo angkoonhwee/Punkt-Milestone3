@@ -1,38 +1,38 @@
 .backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 2;
-}
-
-.task-wrapper {
-  display: block;
-  width: 70%;
-  position: absolute;
-  top: 47.5%;
-  left: 15%;
-}
-
-.task-wrapper .record-status {
-  margin: 0;
-}
-
-.task-wrapper.reply {
-  top: 25%;
-  left: 15%;
-  width: auto;
-}
-
-@media (max-width: 450px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+  }
+  
   .task-wrapper {
-    width: 90%;
-    left: 5%;
+    display: block;
+    width: 70%;
+    position: absolute;
+    top: 47.5%;
+    left: 15%;
   }
-
+  
+  .task-wrapper .record-status {
+    margin: 0;
+  }
+  
   .task-wrapper.reply {
-    left: 5%;
+    top: 25%;
+    left: 15%;
+    width: auto;
   }
-}
+  
+  @media (max-width: 450px) {
+    .task-wrapper {
+      width: 90%;
+      left: 5%;
+    }
+  
+    .task-wrapper.reply {
+      left: 5%;
+    }
+  }

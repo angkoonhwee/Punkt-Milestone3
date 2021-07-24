@@ -39,34 +39,34 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:8000/auth/google/punkt",
-      // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-    },
-    function (accessToken, refreshToken, profile, cb) {
-      // console.log(profile);
-      // console.log(accessToken);
+// passport.use(
+//   new GoogleStrategy(
+//     {
+//       clientID: process.env.GOOGLE_CLIENT_ID,
+//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//       callbackURL: "http://localhost:8000/auth/google/punkt",
+//       // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+//     },
+//     function (accessToken, refreshToken, profile, cb) {
+//       // console.log(profile);
+//       // console.log(accessToken);
 
-      User.findOrCreate(
-        {
-          googleId: profile.id,
-          email: profile.emails[0].value,
-          // username: profile.name.familyName + profile.name.givenName,
-          username: profile.emails[0].value,
-          profilePicture: profile.photos[0].value,
-        },
-        function (err, user) {
-          // console.log(user);
-          return cb(err, user);
-        }
-      );
-    }
-  )
-);
+//       User.findOrCreate(
+//         {
+//           googleId: profile.id,
+//           email: profile.emails[0].value,
+//           // username: profile.name.familyName + profile.name.givenName,
+//           username: profile.emails[0].value,
+//           profilePicture: profile.photos[0].value,
+//         },
+//         function (err, user) {
+//           // console.log(user);
+//           return cb(err, user);
+//         }
+//       );
+//     }
+//   )
+// );
 
 router.get(
   "/google",
@@ -81,7 +81,7 @@ router.get(
     failureRedirect: "/google-login/failed",
   }),
   (req, res) => {
-    // console.log(req.user);
+    // console.log(reqs.user);
     // Successful authentication, redirect home.
     // console.log("successful authentication with google");
     res.status(200).json(req.user);

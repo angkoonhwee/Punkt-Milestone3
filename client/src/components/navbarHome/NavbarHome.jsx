@@ -1,6 +1,5 @@
 import React from "react";
 import "./navbarHome.css";
-import HelpIcon from "@material-ui/icons/Help";
 import { Link } from "react-router-dom";
 
 function NavbarHome() {

@@ -17,9 +17,11 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import "./betsTable.css";
 import { motion } from "framer-motion";
-import axios from "axios";
-import { url } from "../../utils/constants";
+
 import Modal from "../modal/Modal";
+
+import { connect } from "react-redux";
+import { fetchUserBets } from "../../redux/actions/goals";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -130,24 +132,16 @@ const columns = [
   },
 ];
 
-export default function BetsTable({ user }) {
+function BetsTable({ user, userBets, fetchUserBets }) {
   const classes = useStyles2();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [userBets, setUserBets] = useState([]);
   const [currBet, setCurrBet] = useState(null);
   const [isReplyingBet, setIsReplyingBet] = useState(false);
 
   useEffect(() => {
-    const fetchUserBets = async () => {
-      const res = await axios.get(url + `/goal/user/${user._id}/bet`);
-      const sortedBets = res.data.sort(
-        (g1, g2) => new Date(g2.createdAt) - new Date(g1.createdAt)
-      );
-      setUserBets(sortedBets);
-    };
     fetchUserBets();
-  }, [user]);
+  }, [user, fetchUserBets]);
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, userBets.length - page * rowsPerPage);
@@ -280,4 +274,12 @@ export default function BetsTable({ user }) {
       )}
     </motion.div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    userBets: state.goals.userBets
+  };
 }
+
+export default connect(mapStateToProps, { fetchUserBets })(BetsTable);

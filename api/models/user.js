@@ -64,22 +64,6 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 9999,
     },
-    // currAmt: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // totalAmtWon: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // totalAmtLost: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // betFor: {
-    //   type: [{ goalId: String, amt: Number }],
-    //   default: [],
-    // },
     betAgainst: {
       type: [String],
       default: [],
@@ -99,6 +83,19 @@ const userSchema = new mongoose.Schema(
     isAdmin: {
       type: Boolean,
       default: false,
+    },
+    //currentBuddy stores a buddy object that belongs to user
+    currentBuddy: {
+      type: String,
+      default: ""
+    },
+    request: {
+      type: mongoose.Types.ObjectId,
+      default: null
+    },
+    requestedBy: {
+      type: Array,
+      default: []
     },
 
     resetPasswordToken: String,

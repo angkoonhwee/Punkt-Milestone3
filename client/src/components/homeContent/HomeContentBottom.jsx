@@ -17,7 +17,7 @@ function HomeContentBottom() {
           external push to stop procrastinating.
         </p>
         <p>
-          Give yourself a head start academically and financially with Punkt!
+          Give yourself a head start academically with Punkt!
         </p>
         <Link to="/signup">
           <button className="bton" type="button" id="home-signup">

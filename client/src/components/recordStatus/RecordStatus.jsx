@@ -1,15 +1,23 @@
 import React from "react";
-import { useContext, useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./recordStatus.css";
 import { TextareaAutosize } from "@material-ui/core";
-import { LocalConvenienceStoreOutlined, PermMedia } from "@material-ui/icons";
-import { UserContext } from "../../context/UserContext";
-import axios from "axios";
+import { PermMedia } from "@material-ui/icons";
 import ImgPreview from "./ImgPreview";
-import { url } from "../../utils/constants";
 
-export default function RecordStatus({ goal, atonement }) {
-  const { user, dispatch } = useContext(UserContext);
+//redux
+import { connect } from "react-redux";
+import { loadMe } from "../../redux/actions/auth";
+import { createPost } from "../../redux/actions/posts";
+
+function RecordStatus({ 
+  user,
+  goal,
+  atonement,
+  loadMe,
+  createPost,
+  status
+}) {
   const desc = useRef("");
 
   const [files, setFiles] = useState([]);
@@ -17,9 +25,15 @@ export default function RecordStatus({ goal, atonement }) {
   const [error, setError] = useState(null);
 
   const [isCompleted, setCompleted] = useState(
-    goal.status !== "In Progress" ||
+    status !== "In Progress" ||
       (goal.postIds ? goal.postIds.length === goal.numDays : false)
   );
+
+  useEffect(() => {
+    if ( status !== "In Progress") {
+      setCompleted(true);
+    }
+  }, [status, isCompleted]);
 
   const [isDisabled, setDisabled] = useState(false);
   const [isAtonement, setIsAtonement] = useState(atonement);
@@ -32,8 +46,8 @@ export default function RecordStatus({ goal, atonement }) {
 
     const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-    return Math.round((utc2 - utc1) / (1000 * 60 * 60 * 24));
-    // return 99;
+    //return Math.round((utc2 - utc1) / (1000 * 60 * 60 * 24));
+    return 99;
   }
 
   const dayDiff = dateDiffInDays(new Date(goal.createdAt), new Date());
@@ -43,57 +57,37 @@ export default function RecordStatus({ goal, atonement }) {
       setCompleted(goal.postIds.length === goal.numDays);
       setDisabled(dayDiff < goal.postIds.length);
 
-      const updateStatus = async () => {
-        if (goal.postIds.length === goal.numDays) {
-          const res = await axios.put(url + "/goal/" + goal._id + "/status", {
-            userId: user._id,
-            status: "Success",
-          });
-
-          dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
-        }
-      };
-      updateStatus();
     } else if (goal.status === "Success") {
       setCompleted(true);
     }
-  }, [dayDiff, goal, user._id, dispatch]);
+  }, [dayDiff, goal, user._id, loadMe]);
 
-  async function submitRecord(event) {
-    // setRecordText("");
+  function submitRecord(event) {
     event.preventDefault();
-    const newPost = isAtonement
-      ? {
+    const newPost = {
           userId: user._id,
+          username: user.username,
           desc: desc.current.value,
           goalId: goal._id,
           img: [],
-          atonement: true,
+          atonement: isAtonement,
         }
-      : {
-          userId: user._id,
-          desc: desc.current.value,
-          goalId: goal._id,
-          img: [],
-          atonement: false,
-        };
 
     if (imgURLs.length > 0) {
       newPost.img = imgURLs;
     }
 
-    try {
-      await axios.post(url + "/post", newPost);
+    createPost(newPost);
+    desc.current.value = "";
+    if (atonement) {
       window.location.reload();
-    } catch (err) {
-      console.log(err);
     }
   }
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setRecordText(value);
-  }
+  // function handleChange(event) {
+  //   const { name, value } = event.target;
+  //   setRecordText(value);
+  // }
 
   function handleUpload(event) {
     let fileList = [];
@@ -134,16 +128,16 @@ export default function RecordStatus({ goal, atonement }) {
         <div className="record-container">
           <TextareaAutosize
             name="record-text"
-            value={recordText}
+            //value={recordText}
             ref={desc}
             className="record-area"
             placeholder={
               isAtonement
-                ? "Have you made your atonement?"
+                ? "Have you atoned?"
                 : "Have you completed your goals today? (You can only record once a day)"
             }
             disabled={isAtonement ? !isAtonement : isDisabled || isCompleted}
-            onChange={handleChange}
+            //onChange={handleChange}
             style={{
               cursor: (isAtonement ? !isAtonement : isDisabled || isCompleted)
                 ? "not-allowed"
@@ -223,4 +217,19 @@ export default function RecordStatus({ goal, atonement }) {
       </form>
     </div>
   );
-}
+};
+
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user,
+    post: state.posts.goals,
+    goal: state.goals.goals,
+    status: state.goals.goals.status
+  };
+};
+
+export default connect(
+  mapStateToProps, 
+  { loadMe,
+    createPost
+  })(RecordStatus);

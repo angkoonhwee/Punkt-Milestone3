@@ -14,12 +14,33 @@ const goalRoute = require("./routes/goal");
 const contactRoute = require("./routes/contact");
 const commentRoute = require("./routes/comment");
 const reportRoute = require("./routes/report");
+const buddyRoute = require("./routes/buddy");
+const messageRoute = require("./routes/messages");
+const chatRoute = require("./routes/chat");
+const requestRoute = require("./routes/request");
 const cors = require("cors");
-const cron = require("node-cron");
+//const { Server } = require("socket.io");
+const http = require("http");
+
+//for scheduling buddy todos
+const cron = require('node-cron');
+const Buddy = require('./models/buddy');
+//goal scheduling
 const User = require("./models/user");
 const Goal = require("./models/goal");
+//for socket io chat
+const Chat = require("./models/chat");
+const Message = require("./models/message");
 
 const app = express();
+const server = http.createServer(app);
+//const io = new Server(server);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 
 mongoose.set("useCreateIndex", true);
 
@@ -61,8 +82,93 @@ app.get("/", (req, res) => {
   res.send("Test Punkt Server");
 });
 
+/************************CHAT SOCKET IO********************************/
+
+io.on("connection", socket => {
+  console.log("SOCKET CONNECTED!!!");
+  //first join the correct room [chatId] is the room name
+  socket.on("Join Room", chatId => {
+    socket.join(chatId);
+    console.log("someone joined chat " + chatId);
+  });
+  //create new message, add message to corresponding chat document
+  const sendMessage = async (chatId, body) => {
+    try {
+      const chat = await Chat.findById(chatId);
+      const newMessage = new Message(body);
+      const savedMessage = await newMessage.save();
+      await chat.updateOne({ $push: { messages: savedMessage }});
+      return {
+        error: false,
+        message: savedMessage
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        error: true
+      };
+    }
+  };
+
+  socket.on("Send Message", async (chatId, body) => {
+    const message = await sendMessage(chatId, body);
+    io.to(chatId).emit("Receive Message", message);
+  });
+});
+
+cron.schedule('0 0 * * *', async () => {
+  try {
+    console.log("START UPDATES");
+    var allBuddies = await Buddy.find();
+    const promises = allBuddies.map(async buddy => {
+        
+        if (buddy.daysLeft >= 0) {
+          //update days left first
+          const end = buddy.daysLeft - 1;
+          //only update if buddy has not ended
+          await buddy.update({ $set: { daysLeft: end}});
+          if (end < 0) {
+            console.log(buddy.daysLeft);
+            //when end is less than 0 clear currentBuddy
+            const user = await User.findById(buddy.user);
+            await user.updateOne({
+              $set: { currentBuddy: "" }
+            });
+            const buddyUser = await User.findById(buddy.buddy);
+            await buddyUser.updateOne({
+              $set: { currentBuddy: "" }
+            });
+          }
+          if (buddy.dailys.length > 0) {
+              const cleared = buddy.dailys.filter(d => d.status[0] !== "completed");
+              console.log("filtered");
+              console.log(cleared);
+              cleared.map(daily => {
+                  if (daily.status[0] === "incomplete") {
+                      daily.status[1] = "late";
+                  }
+                  //console.log(daily);
+              });
+              console.log("after updating incomplete to late");
+              await buddy.updateOne({ $set: { dailys: cleared }});
+          }
+          const todos = buddy.todos;
+          await buddy.update({ $push: { dailys: todos }});
+          await buddy.update({ $set: { todos: [] }});
+        }
+    });
+    await Promise.all(promises);
+    allBuddies = await Buddy.find();
+    console.log("DATA UPDATED");
+    //res.status(200).json(allBuddies);
+  } catch (err) {
+      console.log(err);
+      return res.status(500).json('Server Error');
+  }
+});
+
 // CHECK AND UPDATE FAILED GOAL STATUS AT 00:00 EVERY DAY
-cron.schedule("04 16 * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   const dateDiffInDays = (a, b) => {
     // Discard the time and time-zone information.
     const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
@@ -81,9 +187,6 @@ cron.schedule("04 16 * * *", async () => {
         ) {
           // FAILED GOAL
           const user = await User.findById(goal.userId);
-
-          // push goalId into goal history arr of user
-          await user.updateOne({ $push: { goalHistory: goal.id } });
 
           // clear curr goal id of user
           await user.updateOne({ $set: { goalId: "" } });
@@ -136,13 +239,17 @@ app.use("/goal", goalRoute);
 app.use("/comment", commentRoute);
 app.use("/report", reportRoute);
 app.use("/contact", contactRoute);
+app.use("/buddy", buddyRoute);
+app.use("/message", messageRoute);
+app.use("/chat", chatRoute);
+app.use("/request", requestRoute);
 
 const PORT = process.env.PORT || 8000;
 
 mongoose
   .connect(
-    // "mongodb+srv://punkt:1236Punkt@punkt.x8rbr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "mongodb://localhost:27017/testDB",
+    "mongodb+srv://punkt:1236Punkt@punkt.x8rbr.mongodb.net/Punkt?retryWrites=true&w=majority",
+    //"mongodb://localhost:27017/testDB",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -150,7 +257,7 @@ mongoose
     }
   )
   .then(() =>
-    app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+    server.listen(PORT, () => console.log(`Server started on port ${PORT}`))
   )
   .catch((err) => console.log(`${err} did not connect`));
 

@@ -16,11 +16,14 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import "./goalsTable.css";
-import axios from "axios";
-import { url } from "../../utils/constants";
 import { motion } from "framer-motion";
 import Modal from "../modal/Modal";
 import { Link } from "react-router-dom";
+
+
+
+import { connect } from "react-redux";
+import { fetchUserGoals } from "../../redux/actions/goals";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -131,25 +134,17 @@ const columns = [
   },
 ];
 
-export default function GoalsTable({ user }) {
+function GoalsTable({ user, userGoals, fetchUserGoals }) {
   const classes = useStyles2();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [userGoals, setUserGoals] = useState([]);
   const [isCreatingAtonement, setIsCreatingAtonement] = useState(false);
   const [currGoal, setCurrGoal] = useState(null);
   const [isViewMsg, setIsViewMsg] = useState(false);
 
   useEffect(() => {
-    const fetchUserGoals = async () => {
-      const res = await axios.get(url + `/goal/user/${user._id}/all`);
-      const sortedGoals = res.data.sort(
-        (g1, g2) => new Date(g2.createdAt) - new Date(g1.createdAt)
-      );
-      setUserGoals(sortedGoals);
-    };
     fetchUserGoals();
-  }, [user]);
+  }, [user, fetchUserGoals]);
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, userGoals.length - page * rowsPerPage);
@@ -338,4 +333,12 @@ export default function GoalsTable({ user }) {
       )}
     </motion.div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    userGoals: state.goals.userGoals,
+  };
 }
+
+export default connect(mapStateToProps, { fetchUserGoals })(GoalsTable);

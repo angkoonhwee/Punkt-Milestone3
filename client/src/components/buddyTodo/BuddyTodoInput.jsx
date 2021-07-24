@@ -1,25 +1,37 @@
-import React from "react";
-import { TextareaAutosize, Fab } from "@material-ui/core";
+import React, { useState } from "react";
 import "./buddyTodoInput.css";
 import AddIcon from "@material-ui/icons/Add";
 
-export default function BuddyTodoInput() {
+//redux
+import { connect } from "react-redux";
+import { addTodos } from "../../redux/actions/buddy";
+
+function BuddyTodoInput({ addTodos }) {
+  const [task, setTask] = useState("");
+
+  function submitTodo(e) {
+    e.preventDefault();
+    addTodos(task);
+    setTask("");
+  };
+
   return (
     <div className="buddy-todo-input">
-      <form className="add-todo-form">
+      <form className="add-todo-form" onSubmit={submitTodo}>
         <input
           name="buddyTodo"
-          // value={comment}
+          value={task}
           autoComplete="off"
           placeholder="What do you want to do tomorrow?"
-          // onChange={handleChange}
-          // ref={comm}
+          onChange={e => setTask(e.target.value)}
         />
 
-        <button className="add-todo-btn">
+        <button type="submit" className="add-todo-btn">
           <AddIcon style={{ color: "white" }} />
         </button>
       </form>
     </div>
   );
-}
+};
+
+export default connect(null, { addTodos })(BuddyTodoInput);

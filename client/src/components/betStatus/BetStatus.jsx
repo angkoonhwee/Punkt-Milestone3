@@ -1,30 +1,25 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "react-circular-progressbar/dist/styles.css";
 import "./betStatus.css";
-import { url } from "../../utils/constants";
 
-export default function BetStatus({ user, goal, dispatch, currUser }) {
-  const currDays = goal.madeAtonement
-    ? goal.postIds?.length - 1
-    : goal.postIds?.length;
-  const totalDays = goal.numDays;
+//redux for goals
+import { connect } from "react-redux";
+
+function BetStatus({ user, goal, postIds }) {
+  const [currDays, setCurrDays] = useState(goal.postIds.length);
 
   useEffect(() => {
-    const updateStatus = async () => {
-      if (
-        goal.status === "Failed" &&
-        goal.userId === currUser._id &&
-        currUser.goalId === goal._id &&
-        currUser.goalId !== ""
-      ) {
-        // GET UPDATED CURR USER
-        const res = await axios.get(url + `/user?userId=${currUser._id}`);
-        dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
-      }
-    };
-    updateStatus();
-  }, [goal, dispatch, currUser]);
+    const temp = goal.madeAtonement
+    ? postIds.length - 1
+    : postIds.length;
+    console.log(temp);
+    setCurrDays(temp);
+   }, [postIds, currDays]);
+  // const currDays = goal.madeAtonement
+  // ? goal.postIds?.length - 1
+  // : goal.postIds?.length
+
+  const totalDays = goal.numDays;
 
   return (
     <div className="bet-status">
@@ -69,4 +64,14 @@ export default function BetStatus({ user, goal, dispatch, currUser }) {
       </div>
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  //console.log(state.goals.goals);
+  return {
+    goal: state.goals.goals,
+    postIds: state.goals.goals.postIds
+  }
 }
+
+export default connect(mapStateToProps)(BetStatus);

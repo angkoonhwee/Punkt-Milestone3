@@ -3,46 +3,62 @@ import "./postNoteBet.css";
 import Fab from "@material-ui/core/Fab";
 import EditIcon from "@material-ui/icons/Edit";
 import { TextareaAutosize } from "@material-ui/core";
-import { UserContext } from "../../context/UserContext";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import { url } from "../../utils/constants";
 
-export default function PostNoteBet() {
-  const { user, dispatch } = useContext(UserContext);
+import { connect } from "react-redux";
+import { fetchGoalById, submitGoals } from "../../redux/actions/goals";
+import { loadMe } from "../../redux/actions/auth";
 
-  const [currGoal, setCurrGoal] = useState({});
+function PostNoteBet({
+  user,
+  currGoal,
+  postIds,
+  fetchGoalById,
+  submitGoals,
+  loadMe
+}) {
+  //this goal is purely for form management
   const [goal, setGoal] = useState({
     title: "",
     atonement: "",
     days: "",
   });
+  const [currDays, setCurrDays] = useState(0);
 
   const [hasGoal, setHasGoal] = useState(false);
 
   useEffect(() => {
+    console.log("post note bet fetch goal");
     if (!hasGoal) {
-      const fetchGoal = async () => {
-        if (user.goalId !== "") {
-          const res = await axios.get(url + "/goal/" + user.goalId);
-          if (res.data && res.data.status === "In Progress") {
-            // console.log(res.data);
-            setCurrGoal(res.data);
-            setHasGoal(true);
-          } else if (res.data && res.data.status === "Failed") {
-            const response = await axios.get(url + `/user?userId=${user._id}`);
-            dispatch({ type: "UPDATE_SUCCESS", payload: response.data });
-          }
+      if (user.goalId !== "") {
+        fetchGoalById(user.goalId);
+        if (currGoal && currGoal.status === "In Progress") {
+          setHasGoal(true);
+        } else if (currGoal && currGoal.status === "Failed") {
+          loadMe();
         }
-      };
-      fetchGoal();
+      }
     }
-  }, [user, dispatch, hasGoal, currGoal]);
-  //user._id, hasGoal, user.goalId
+  }, [
+    user, 
+    loadMe,
+    fetchGoalById,
+  ]);
 
-  const currDays = currGoal?.madeAtonement
-    ? currGoal?.postIds?.length - 1
-    : currGoal?.postIds?.length;
+  useEffect(() => {
+    //to update user.goalId when new goal is created
+    loadMe();
+  }, [loadMe]);
+  
+  useEffect(() => {
+    const temp = 
+    currGoal?.madeAtonement
+    ? postIds?.length - 1
+    : postIds?.length;
+    setCurrDays(temp);
+  }, [postIds, currDays])
+  // console.log(currGoal);
+  // console.log(postIds);
 
   const totalDays = currGoal?.numDays;
   const currProgress = Math.round((currDays / totalDays) * 100);
@@ -58,9 +74,8 @@ export default function PostNoteBet() {
     });
   }
 
-  async function submitGoal(event) {
+  function submitGoal(event) {
     event.preventDefault();
-    dispatch({ type: "UPDATE_START" });
     const newGoal =
       goal.atonement === ""
         ? {
@@ -75,22 +90,7 @@ export default function PostNoteBet() {
             atonement: goal.atonement,
             numDays: goal.days,
           };
-
-    try {
-      const newGoalObj = await axios.post(url + "/goal", newGoal);
-
-      const updatedUser = {
-        userId: user._id,
-        goalId: newGoalObj._id,
-      };
-
-      const res = await axios.put(url + "/user/" + user._id, updatedUser);
-
-      dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
-    } catch (err) {
-      console.log(err);
-      dispatch({ type: "UPDATE_FAILURE" });
-    }
+    submitGoals(newGoal);
   }
 
   return (
@@ -180,4 +180,20 @@ export default function PostNoteBet() {
       )}
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  //console.log(state.goals.goals);
+  return {
+    user: state.auth.user,
+    currGoal: state.goals.goals,
+    postIds: state.goals.goals.postIds
+  }
 }
+
+export default connect(
+  mapStateToProps, { 
+    fetchGoalById, 
+    submitGoals, 
+    loadMe
+  })(PostNoteBet);

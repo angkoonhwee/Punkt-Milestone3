@@ -9,17 +9,18 @@ import {
   LinkedIn,
   GitHub,
 } from "@material-ui/icons";
-import axios from "axios";
-import { url } from "../../utils/constants";
 
-export default function EditProfile({ user, dispatch, setIsEditing }) {
+//redux
+import { connect } from "react-redux";
+import { updateProfile } from "../../redux/actions/auth";
+
+function EditProfile({ user, setIsEditing, updateProfile }) {
   const [userProfile, setUserProfile] = useState({
     userId: user._id,
     bio: user.bio || "",
     school: user.education?.school || "",
     major: user.education?.major || "",
     yearOfStudy: user.education?.yearOfStudy || "",
-    // currentModules: user.currentModules || [],
     instagram: user.social?.instagram || "",
     github: user.social?.github || "",
     linkedIn: user.social?.linkedIn || "",
@@ -59,40 +60,32 @@ export default function EditProfile({ user, dispatch, setIsEditing }) {
         [name]: value,
       };
     });
-    // console.log(userProfile);
   }
 
-  async function handleSubmit(e) {
+  //do not need to get back user again since when props change,
+  //component would rerender
+  function handleSubmit(e) {
     e.preventDefault();
-    dispatch({ type: "UPDATE_START" });
-
-    try {
-      const updatedProfile = {
-        userId: userProfile.userId,
-        bio: userProfile.bio,
-        education: {
-          school: userProfile.school,
-          major: userProfile.major,
-          yearOfStudy: userProfile.yearOfStudy,
-          currentModules: tags,
-        },
-        social: {
-          instagram: userProfile.instagram,
-          linkedIn: userProfile.linkedIn,
-          github: userProfile.github,
-        },
-        // ...userProfile,
-      };
-
-      const res = await axios.put(url + "/user/" + user._id, updatedProfile);
-
-      dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
-      setIsEditing(false);
-    } catch (err) {
-      console.log(err);
-      dispatch({ type: "UPDATE_FAILURE" });
-    }
+    const updatedProfile = {
+      userId: userProfile.userId,
+      bio: userProfile.bio,
+      education: {
+        school: userProfile.school,
+        major: userProfile.major,
+        yearOfStudy: userProfile.yearOfStudy,
+        currentModules: tags,
+      },
+      social: {
+        instagram: userProfile.instagram,
+        linkedIn: userProfile.linkedIn,
+        github: userProfile.github,
+      },
+    };
+    updateProfile(updatedProfile);
+    setIsEditing(false);
   }
+
+
   return (
     <div className="edit-profile-form-wrapper">
       <form className="edit-profile-form" onSubmit={handleSubmit}>
@@ -323,4 +316,6 @@ export default function EditProfile({ user, dispatch, setIsEditing }) {
       </form>
     </div>
   );
-}
+};
+
+export default connect(null, { updateProfile })(EditProfile);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Feed from "../../components/feed/Feed";
 import Footer from "../../components/footer/Footer";
 import NavbarMain from "../../components/navbarMain/NavbarMain";
@@ -7,36 +7,89 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Add, Remove, GroupAdd, EmojiPeople } from "@material-ui/icons";
 import "./profile.css";
-import { UserContext } from "../../context/UserContext";
 import { url } from "../../utils/constants";
-import { Instagram, LinkedIn, GitHub } from "@material-ui/icons";
-import { Link } from "react-router-dom";
 import UploadFile from "../../components/uploadFile/UploadFile";
 
-export default function Profile() {
-  const { user: currUser, dispatch } = useContext(UserContext);
-  const [user, setUser] = useState({});
+//redux
+import { connect } from "react-redux";
+import { fetchUser } from "../../redux/actions/user";
+import { fetchUserPosts } from "../../redux/actions/posts";
+import { fetchBuddy } from "../../redux/actions/buddy";
+import { loadMe } from "../../redux/actions/auth";
+import { makeRequest, fetchRequest, deleteRequest } from "../../redux/actions/request";
+import { isUndefined } from "lodash";
+
+function Profile({ 
+  currUser,
+  posts,
+  fetchUserPosts,
+  fetchUser,
+  fetchedUser,
+  loadMe,
+  buddyId,
+  fetchBuddy,
+  fetchRequest,
+  makeRequest,
+  deleteRequest,
+  request
+}) {
+  
+  //default is currUser's profile
+  const [user, setUser] = useState(currUser);
   const username = useParams().username;
   const [isFollowing, setFollowing] = useState(
     currUser?.followings.includes(user?.id)
   );
   const [isBuddy, setBuddy] = useState(false);
+  const [requested, setRequested] = useState(false);
   const [file, setFile] = useState(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (username) {
-        if (username === currUser.username) {
-          setUser(currUser);
-        } else {
-          const res = await axios.get(url + `/user?username=${username}`);
+  console.log("Profile running");
 
-          setUser(res.data);
-        }
+  //check if searched up profile belongs to currUser
+  //if yes then do nothing else fetchuser
+  useEffect(() => {
+    if (username !== currUser.username) {
+      console.log("not me, fetching user");
+      fetchUser(username);
+    }
+  }, [username, currUser, fetchUser]);
+
+  useEffect(() => {
+    if (fetchedUser && username !== currUser.username) {
+      setUser(fetchedUser);
+      if (!isUndefined(buddyId) && fetchedUser._id === buddyId) {
+        setBuddy(true);
       }
-    };
-    fetchUser();
-  }, [username, currUser]);
+    }
+  }, [fetchedUser, user])
+
+  useEffect(() => {
+    fetchUserPosts(username);
+  }, [fetchUserPosts, username]);
+
+  useEffect(() => {
+    if (isUndefined(buddyId) && currUser.currentBuddy) {
+      fetchBuddy(currUser.currentBuddy);
+    }
+  }, [fetchBuddy, currUser.currentBuddy]);
+
+  useEffect(() => {
+    console.log(currUser.request);
+    if (currUser.request !== null) {
+      console.log(currUser.request);
+      fetchRequest(currUser.request);
+    }
+  }, [currUser.request, fetchRequest]);
+
+  useEffect(() => {
+    if (request !== null && request.status === "Pending" && request.receiver._id === user._id) {
+      console.log("I have requested!");
+      setRequested(true);
+    }
+  }, [requested, request])
+  
+  console.log(requested);
 
   async function handleFollowing() {
     try {
@@ -46,12 +99,12 @@ export default function Profile() {
             userId: currUser._id,
           });
 
-          dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+          loadMe();
         } else {
           const res = await axios.put(url + `/user/${user._id}/follow`, {
             userId: currUser._id,
           });
-          dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+          loadMe();
         }
       }
 
@@ -61,8 +114,14 @@ export default function Profile() {
     }
   }
 
-  async function handleBuddy() {
-    setBuddy(!isBuddy);
+  function handleRequest(e) {
+    e.preventDefault();
+    if (requested) {
+      deleteRequest(request.requestId);
+    } else {
+      makeRequest(user._id)
+    }
+    setRequested(!requested);
   }
 
   return (
@@ -105,7 +164,6 @@ export default function Profile() {
               file={file}
               setFile={setFile}
               user={user}
-              dispatch={dispatch}
               pic={"coverPicture"}
             />
           )}
@@ -127,20 +185,46 @@ export default function Profile() {
             <h4>{username}</h4>
             {username !== currUser.username && (
               <div className="buttons-wrapper">
-                <button
-                  className="follow-btn"
-                  onClick={handleBuddy}
-                  style={{
-                    backgroundColor: isBuddy ? "#7f8fad" : "#4d6591",
-                  }}
-                >
-                  {isBuddy ? (
-                    <EmojiPeople style={{ marginRight: "3px" }} />
-                  ) : (
-                    <GroupAdd style={{ marginRight: "5px" }} />
-                  )}
-                  {isBuddy ? "My Buddy !" : "Request Buddy"}
-                </button>
+                { isBuddy
+                  ? <button
+                      className="follow-btn"
+                      onClick={null}
+                      style={{ backgroundColor: "#7f8fad" }}
+                    >
+                        <EmojiPeople style={{ marginRight: "3px" }} />
+                        "My Buddy !"
+                    </button>
+                    //show button if currentUser has not requested someone else, has no buddy and this user has no buddy
+                  : requested
+                    ? <button
+                        className="follow-btn"
+                        onClick={handleRequest}
+                        style={{
+                          backgroundColor: "#7f8fad",
+                        }}
+                      >
+                        <GroupAdd style={{ marginRight: "5px" }} />
+                        Requested
+                      </button>
+                    : (
+                        currUser.request !== null
+                        && request !== null && request.status === "Rejected"
+                        && currUser.currentBuddy === ""
+                        && user.currentBuddy === ""
+                      )
+                      || (currUser.request === null && !currUser.currentBuddy)
+                      ?  <button
+                          className="follow-btn"
+                          onClick={handleRequest}
+                          style={{
+                            backgroundColor: requested ? "#7f8fad" : "#4d6591",
+                          }}
+                        >
+                          <GroupAdd style={{ marginRight: "5px" }} />
+                          {requested ? "Requested" : "Request Buddy"}
+                        </button>
+                      : null
+                }
                 <button
                   className="follow-btn"
                   onClick={handleFollowing}
@@ -205,7 +289,7 @@ export default function Profile() {
           <div className="container-user-feed">
             <h2>Recent Activities</h2>
             <div className="container-profile-feed">
-              <Feed username={username} />
+              <Feed posts={posts} />
             </div>
           </div>
         </div>
@@ -215,3 +299,24 @@ export default function Profile() {
     </>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    currUser: state.auth.user,
+    posts: state.posts.user,
+    fetchedUser: state.user.user,
+    buddyId: state.buddy.object.buddy,
+    //this is the request made by currUser, if no request made should be {}
+    request: state.request.request
+  }
+}
+
+export default connect(mapStateToProps, { 
+  fetchUserPosts,
+  fetchUser,
+  loadMe,
+  fetchBuddy,
+  makeRequest,
+  deleteRequest,
+  fetchRequest
+})(Profile);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -17,6 +17,11 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import "./buddyTable.css";
 import { motion } from "framer-motion";
+
+//redux
+import { connect } from "react-redux";
+import { fetchBuddyHistory } from "../../redux/actions/buddy";
+
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -172,15 +177,10 @@ const columns = [
     id: "name",
     label: "Name",
     minWidth: 90,
-  },
-  {
-    id: "rank",
-    label: "Rank",
-    minWidth: 60,
-  },
+  }
 ];
 
-export default function BuddyTable() {
+function BuddyTable({ history, fetchBuddyHistory }) {
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -196,6 +196,12 @@ export default function BuddyTable() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  useEffect(() => {
+    if (history === null) {
+      fetchBuddyHistory();
+    }
+  }, [fetchBuddyHistory]);
 
   return (
     <motion.div
@@ -222,24 +228,28 @@ export default function BuddyTable() {
           </TableHead>
 
           <TableBody>
-            {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map((row, index) => (
-              <TableRow key={index}>
+            {history !== null && (rowsPerPage > 0
+              ? history.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : history
+            ).map((row) => (
+              <TableRow key={row._id}>
                 <TableCell align="center" component="th" scope="row">
-                  {row.start}
+                  {new Date(row.createdAt).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {row.end}
+                  {new Date(row.createdAt + 30*24*60*60*1000).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </TableCell>
 
                 <TableCell align="center" component="th" scope="row">
-                  {row.name}
-                </TableCell>
-
-                <TableCell style={{ width: 100 }} align="center">
-                  {row.rank}
+                  {row.username}
                 </TableCell>
               </TableRow>
             ))}
@@ -272,4 +282,12 @@ export default function BuddyTable() {
       </TableContainer>
     </motion.div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    history: state.buddy.history
+  }
 }
+
+export default connect(mapStateToProps, { fetchBuddyHistory })(BuddyTable);

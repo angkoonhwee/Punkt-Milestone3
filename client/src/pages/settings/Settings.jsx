@@ -1,25 +1,25 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./settings.css";
+
 import NavbarMain from "../../components/navbarMain/NavbarMain";
 import ScrollTop from "../../components/scrollTop/ScrollTop";
 import Footer from "../../components/footer/Footer";
 import BetsTable from "../../components/betsTable/BetsTable";
 import GoalsTable from "../../components/goalsTable/GoalsTable";
 import BuddyTable from "../../components/buddyTable/BuddyTable";
-import { UserContext } from "../../context/UserContext";
 import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
 import EditProfile from "../../components/editProfile/EditProfile";
 import UploadFile from "../../components/uploadFile/UploadFile";
 import SettingsInfo from "../../components/settingsInfo/SettingsInfo";
-import { motion } from "framer-motion";
 
-export default function Settings() {
-  const { user, dispatch } = useContext(UserContext);
+//redux
+import { connect } from "react-redux";
+
+function Settings({ user }) {
   const [isBetTableClicked, setBetTableClicked] = useState(false);
   const [isGoalTableClicked, setGoalTableClicked] = useState(false);
   const [isBuddyTableClicked, setBuddyTableClicked] = useState(false);
-  // const [isFinancesClicked, setFinancesClicked] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -61,7 +61,6 @@ export default function Settings() {
                     file={file}
                     setFile={setFile}
                     user={user}
-                    dispatch={dispatch}
                     pic={"profilePicture"}
                   />
                 )}
@@ -84,7 +83,6 @@ export default function Settings() {
           {isEditing ? (
             <EditProfile
               user={user}
-              dispatch={dispatch}
               setIsEditing={setIsEditing}
             />
           ) : (
@@ -143,4 +141,12 @@ export default function Settings() {
       <Footer />
     </>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user
+  };
 }
+
+export default connect(mapStateToProps)(Settings);
