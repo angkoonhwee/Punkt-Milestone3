@@ -40,7 +40,6 @@ export const signup = userCredential => async dispatch => {
 export const login = userCredential => async dispatch => {
     try {
         const res = await axios.post(url + "/auth/login", userCredential);
-        console.log(res);
         saveUser(res.data);
         dispatch({
             type: LOGIN_SUCCESS,

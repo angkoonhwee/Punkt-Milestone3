@@ -2,13 +2,17 @@ import {
     SEND_REQ,
     FETCH_REQ,
     DELETE_REQ,
-    REQ_ERROR
+    UPDATE_AFTER_DELETE_REQ,
+    UPDATE_AFTER_SEND_REQ,
+    REQ_ERROR,
 } from "./types";
 import { url } from "../../utils/constants";
 import axios from "axios";
 import { loadUser } from "../../utils/localStorage";
 
+
 const user = loadUser();
+console.log(user);
 
 export const fetchRequest = requestId => async dispatch => {
     try {
@@ -37,6 +41,10 @@ export const makeRequest = (receiver) => async dispatch => {
             type: SEND_REQ,
             payload: res.data
         });
+        dispatch({
+            type: UPDATE_AFTER_SEND_REQ,
+            payload: res.data._id
+        })
     } catch (err) {
         console.log(err);
         dispatch({
@@ -51,6 +59,10 @@ export const deleteRequest = (requestId) => async dispatch => {
         dispatch({
             type: DELETE_REQ,
         });
+        dispatch({
+            type: UPDATE_AFTER_DELETE_REQ,
+            payload: null
+        })
     } catch (err) {
         console.log(err);
         dispatch({

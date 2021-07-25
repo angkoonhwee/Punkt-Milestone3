@@ -76,7 +76,7 @@ export const toggleDailys = dailys => async dispatch => {
     }
     try {
         const res = await axios.put(url + `/buddy/${dailys._id}/dailys`, body);
-        console.log(res.data);
+        //console.log(res.data);
         dispatch({
             type: TOGGLE_DAILYS,
             payload: res.data
@@ -97,7 +97,7 @@ export const addTodos = task => async dispatch => {
             task: task
         };
         const res = await axios.post(url + "/buddy/todos/add", body);
-        console.log(res.data);
+        //console.log(res.data);
 
         dispatch({
             type: ADD_TODOS,
@@ -115,7 +115,7 @@ export const deleteTodos = todoId => async dispatch => {
     const user = loadUser();
     try {
         const body = {data: { userId: user._id }}
-        console.log(body);
+        //console.log(body);
         const res = await axios.delete(url + `/buddy/${todoId}/delete`, body);
             
         dispatch({
@@ -133,7 +133,7 @@ export const deleteTodos = todoId => async dispatch => {
 export const fetchChat = chatId => async dispatch => {
     try {
         const res = await axios.get(url + `/chat/${chatId}`);
-        console.log(res.data);
+        //console.log(res.data);
         dispatch({
             type: GET_CHAT,
             payload: res.data.messages

@@ -49,19 +49,21 @@ function Profile({
   //if yes then do nothing else fetchuser
   useEffect(() => {
     if (username !== currUser.username) {
-      console.log("not me, fetching user");
+      //console.log("not me, fetching user");
       fetchUser(username);
     }
   }, [username, currUser, fetchUser]);
 
   useEffect(() => {
-    if (fetchedUser && username !== currUser.username) {
+    if (username === currUser.username) {
+      setUser(currUser);
+    } else if (fetchedUser && username !== currUser.username) {
       setUser(fetchedUser);
       if (!isUndefined(buddyId) && fetchedUser._id === buddyId) {
         setBuddy(true);
       }
-    }
-  }, [fetchedUser, user])
+    } 
+  }, [fetchedUser, user, username]);
 
   useEffect(() => {
     fetchUserPosts(username);
@@ -75,17 +77,23 @@ function Profile({
 
   useEffect(() => {
     if (currUser.request !== null) {
-      console.log(currUser.request);
       fetchRequest(currUser.request);
     }
   }, [currUser.request, fetchRequest]);
 
   useEffect(() => {
     if (request !== null && request.status === "Pending" && request.receiver._id === user._id) {
-      console.log("I have requested!");
+      //console.log("I have requested!");
       setRequested(true);
     }
-  }, [requested, request])
+    if (request === null) {
+      setRequested(false);
+    }
+  }, [requested, request, setRequested])
+  console.log("my most recent request");
+  console.log(request);
+  console.log("requested?");
+  console.log(requested);
 
   async function handleFollowing() {
     try {
@@ -113,10 +121,12 @@ function Profile({
   function handleRequest(e) {
     e.preventDefault();
     if (requested) {
-      deleteRequest(request.requestId);
+      deleteRequest(request._id);
     } else {
       makeRequest(user._id)
     }
+    console.log("after handling request!");
+    console.log(!requested);
     setRequested(!requested);
   }
 
@@ -270,6 +280,7 @@ function Profile({
             <ul className="user-info-list">
               <li>Rank: #{user.rank}</li>
               <li>Productivity Points: {user.productivityPoints}</li>
+              {user?.bio && <li>{user?.bio}</li>}
               {user.education?.school && <li>{user.education?.school}</li>}
               {user.education?.major && <li>{user.education?.major}</li>}
               {user.education?.yearOfStudy && (

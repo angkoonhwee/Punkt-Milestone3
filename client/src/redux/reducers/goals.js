@@ -1,4 +1,3 @@
-import { isUndefined } from "lodash";
 import {
     LOAD_GOALS,
     GOALS_ERROR,

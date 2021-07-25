@@ -20,12 +20,12 @@ function Leaderboard({ fetchAllUser, userData }) {
   const [rest, setRest] = useState([]);
 
   useEffect(() => {
-    console.log("fetching ran");
+    //console.log("fetching ran");
     fetchAllUser();
   }, [fetchAllUser]);
 
   useEffect(() => {
-    console.log("sorting ran");
+    //console.log("sorting ran");
     if (userData.length !== 0) {
       userData
         .sort((u1, u2) => u2.productivityPoints - u1.productivityPoints)

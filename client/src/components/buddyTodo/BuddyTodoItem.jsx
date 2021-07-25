@@ -9,7 +9,6 @@ import { deleteTodos } from "../../redux/actions/buddy";
 function BuddyTodoItem({ item, deleteTodos }) {
 
   function onDelete() {
-    console.log(item._id);
     deleteTodos(item._id);
   };
 

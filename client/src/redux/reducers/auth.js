@@ -9,7 +9,9 @@ import {
     SIGNUP_FAILURE,
     AUTH_ERROR,
     UPDATE_PROFILE,
-    UPDATE_AFTER_GOAL_SUBMIT
+    UPDATE_AFTER_GOAL_SUBMIT,
+    UPDATE_AFTER_DELETE_REQ,
+    UPDATE_AFTER_SEND_REQ
 } from "../actions/types";
 import { loadUser } from "../../utils/localStorage";
 
@@ -101,7 +103,16 @@ const auth = (state = initialState, action) => {
                 ...state,
                 user: updatedUser
             }
-
+        case UPDATE_AFTER_DELETE_REQ:
+        case UPDATE_AFTER_SEND_REQ:
+            const updatedReq = {
+                ...state.user,
+                request: payload
+            }
+            return {
+                ...state,
+                user: updatedReq
+            }
         default:
             return state;
     }

@@ -32,7 +32,8 @@ const Goal = require("./models/goal");
 const Chat = require("./models/chat");
 const Message = require("./models/message");
 
-const CLIENT_URL = "https://punkt-orbital.netlify.app";
+//const CLIENT_URL = "https://punkt-orbital.netlify.app";
+const CLIENT_URL = "http://localhost:3000";
 
 const app = express();
 const server = http.createServer(app);
