@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import "./report.css";
 import ReportIcon from "@material-ui/icons/Report";
 import { TextareaAutosize } from "@material-ui/core";

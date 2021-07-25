@@ -9,8 +9,8 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const nodemailerSendgrid = require('nodemailer-sendgrid');
 
-//const CLIENT_URL = "https://punkt-orbital.netlify.app";
-const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "https://punkt-orbital.netlify.app";
+//const CLIENT_URL = "http://localhost:3000";
 
 schema
   .is()
