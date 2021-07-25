@@ -36,42 +36,6 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
-router.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
-
-router.get(
-  "/google/punkt",
-  passport.authenticate("google", {
-    failureRedirect: "/google-login/failed",
-  }),
-  (req, res) => {
-    // console.log(reqs.user);
-    // Successful authentication, redirect home.
-    // console.log("successful authentication with google");
-    res.status(200).json(req.user);
-    // res.redirect(CLIENT_URL);
-  }
-);
-
-router.get("/google-login/failed", (req, res) => {
-  res.status(401).json({ message: "Google authentication failed." });
-});
-
-router.get("/google-login/success", (req, res) => {
-  if (req.user) {
-    res.status(200).json({
-      success: true,
-      message: "user has successfully authenticated",
-      user: req.user,
-      cookies: req.cookies,
-    });
-  }
-});
-
 router.get("/logout", (req, res) => {
   console.log("logout");
   req.logout();

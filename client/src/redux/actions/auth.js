@@ -7,7 +7,8 @@ import {
     SIGNUP_FAILURE,
     LOGOUT,
     UPDATE_PROFILE,
-    AUTH_ERROR
+    AUTH_ERROR,
+    UPDATE_AFTER_GOAL_SUBMIT
 } from "./types";
 import axios from "axios";
 import { url } from "../../utils/constants";
@@ -104,5 +105,12 @@ export const logout = () => {
     localStorage.clear();
     return {
         type: LOGOUT
+    }
+}
+
+export const updateAfterGoalSubmit = (goalId) => {
+    return {
+        type: UPDATE_AFTER_GOAL_SUBMIT,
+        payload: goalId,
     }
 }

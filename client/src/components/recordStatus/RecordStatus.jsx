@@ -10,13 +10,14 @@ import { connect } from "react-redux";
 import { loadMe } from "../../redux/actions/auth";
 import { createPost } from "../../redux/actions/posts";
 
-function RecordStatus({ 
+function RecordStatus({
   user,
   goal,
   atonement,
-  loadMe,
+  postIds,
   createPost,
-  status
+  status,
+  currGoal
 }) {
   const desc = useRef("");
 
@@ -24,13 +25,10 @@ function RecordStatus({
   const [imgURLs, setImgURLs] = useState([]);
   const [error, setError] = useState(null);
 
-  const [isCompleted, setCompleted] = useState(
-    status !== "In Progress" ||
-      (goal.postIds ? goal.postIds.length === goal.numDays : false)
-  );
+  const [isCompleted, setCompleted] = useState(status === "Success");
 
   useEffect(() => {
-    if ( status !== "In Progress") {
+    if (status !== "In Progress") {
       setCompleted(true);
     }
   }, [status, isCompleted]);
@@ -38,40 +36,43 @@ function RecordStatus({
   const [isDisabled, setDisabled] = useState(false);
   const [isAtonement, setIsAtonement] = useState(atonement);
 
-  const [recordText, setRecordText] = useState("");
-
   function dateDiffInDays(a, b) {
     // Discard the time and time-zone information.
     const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
 
     const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-    //return Math.round((utc2 - utc1) / (1000 * 60 * 60 * 24));
-    return 99;
+    return Math.round((utc2 - utc1) / (1000 * 60 * 60 * 24));
+    // return 99;
   }
 
   const dayDiff = dateDiffInDays(new Date(goal.createdAt), new Date());
 
   useEffect(() => {
-    if (goal && goal.postIds && goal.status === "In Progress") {
-      setCompleted(goal.postIds.length === goal.numDays);
-      setDisabled(dayDiff < goal.postIds.length);
+    if (postIds && goal.status === "In Progress") {
+      setCompleted(postIds.length === goal.numDays);
+      setDisabled(dayDiff < postIds.length);
 
     } else if (goal.status === "Success") {
       setCompleted(true);
     }
-  }, [dayDiff, goal, user._id, loadMe]);
+  }, [dayDiff, postIds, goal.status, goal.numDays]);
+
+  
 
   function submitRecord(event) {
     event.preventDefault();
+
+    
     const newPost = {
-          userId: user._id,
-          username: user.username,
-          desc: desc.current.value,
-          goalId: goal._id,
-          img: [],
-          atonement: isAtonement,
-        }
+      userId: user._id,
+      username: user.username,
+      desc: desc.current.value,
+      goalId: atonement ? currGoal._id : goal._id,
+      img: [],
+      atonement: isAtonement,
+    }
+
 
     if (imgURLs.length > 0) {
       newPost.img = imgURLs;
@@ -79,15 +80,12 @@ function RecordStatus({
 
     createPost(newPost);
     desc.current.value = "";
+    setFiles([]);
+
     if (atonement) {
       window.location.reload();
     }
   }
-
-  // function handleChange(event) {
-  //   const { name, value } = event.target;
-  //   setRecordText(value);
-  // }
 
   function handleUpload(event) {
     let fileList = [];
@@ -224,12 +222,15 @@ const mapStateToProps = state => {
     user: state.auth.user,
     post: state.posts.goals,
     goal: state.goals.goals,
-    status: state.goals.goals.status
+    status: state.goals.goals.status,
+    postIds: state.goals.goals.postIds,
+
   };
 };
 
 export default connect(
-  mapStateToProps, 
-  { loadMe,
+  mapStateToProps,
+  {
+    loadMe,
     createPost
   })(RecordStatus);

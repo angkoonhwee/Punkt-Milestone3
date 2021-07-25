@@ -8,7 +8,8 @@ import {
     SIGNUP_SUCCESS,
     SIGNUP_FAILURE,
     AUTH_ERROR,
-    UPDATE_PROFILE
+    UPDATE_PROFILE,
+    UPDATE_AFTER_GOAL_SUBMIT
 } from "../actions/types";
 import { loadUser } from "../../utils/localStorage";
 
@@ -24,7 +25,7 @@ const initialState = {
 const auth = (state = initialState, action) => {
     const { type, payload } = action;
 
-    switch(type) {
+    switch (type) {
         case LOGIN_START:
         case SIGNUP_START:
             return {
@@ -89,6 +90,18 @@ const auth = (state = initialState, action) => {
                 errorLogin: false,
                 errorSignup: false
             }
+
+        case UPDATE_AFTER_GOAL_SUBMIT:
+            const updatedUser = {
+                ...state.user,
+                goalId: payload
+            }
+
+            return {
+                ...state,
+                user: updatedUser
+            }
+
         default:
             return state;
     }

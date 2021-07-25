@@ -9,17 +9,16 @@ import SetBet from "../../components/setBet/SetBet";
 import "./progress.css";
 import { useParams } from "react-router-dom";
 import { isEmpty } from "lodash";
-
 import Loading from "../loading/Loading";
 
 //redux
 import { connect } from "react-redux";
-import { 
+import {
   fetchGoalById,
   fetchGoal,
   updateStatus
- } from "../../redux/actions/goals";
- import { fetchUserById } from "../../redux/actions/user";
+} from "../../redux/actions/goals";
+import { fetchUserById } from "../../redux/actions/user";
 
 
 function Progress({
@@ -39,7 +38,6 @@ function Progress({
   const [user, setUser] = useState({}); // owner of the goal
 
   useEffect(() => {
-    console.log("GOAL USEEFFECT");
     if (goalId) {
       fetchGoalById(goalId);
     } else {
@@ -49,15 +47,10 @@ function Progress({
     currUser._id,
     fetchGoal,
     fetchGoalById,
-    //goal.postIds.length
   ]);
 
-  console.log(goal);
-
   useEffect(() => {
-    // console.log(goal);
-    console.log(!isEmpty(goal));
-    if(!isEmpty(goal)) {  
+    if (!isEmpty(goal)) {
       if (goal.userId === currUser._id) {
         console.log("GOAL BELONGS TO ME");
         setUser(currUser);
@@ -75,7 +68,7 @@ function Progress({
   }, [storeUser, user])
 
   useEffect(() => {
-    if (!isEmpty(goal) && goal.status === "In Progress") {
+    if (!isEmpty(goal) && goal.status === "Success") {
       if (goal.postIds.length === goal.numDays) {
         updateStatus(goal._id);
       }
@@ -97,9 +90,9 @@ function Progress({
           )}
 
           <ProgressTimeline goalId={
-            goalId 
-            ? goalId
-            : goal._id} />
+            goalId
+              ? goalId
+              : goal._id} />
         </div>
         <ScrollTop />
         <Footer />
@@ -121,8 +114,9 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-  mapStateToProps, 
-  { fetchGoal,
+  mapStateToProps,
+  {
+    fetchGoal,
     fetchGoalById,
     fetchUserById,
     updateStatus

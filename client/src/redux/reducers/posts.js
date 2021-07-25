@@ -21,11 +21,11 @@ const initialState = {
 
 const posts = (state = initialState, action) => {
     const { type, payload } = action;
-    switch(type) {
+    switch (type) {
         case LOAD_ALL_POSTS:
             return {
                 ...state,
-               explore: payload
+                explore: payload
             }
         case LOAD_MY_POSTS:
             return {
@@ -49,27 +49,31 @@ const posts = (state = initialState, action) => {
 
             }
         case CREATE_POST:
-            const newGoals = [...state.goals, payload];
+            const newGoals = state.goals ? [...state.goals, payload] : [payload];
+
             newGoals.sort(
                 (p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt)
             );
+
             newGoals.map(g => {
                 g.goal.postIds = payload.goal.postIds;
+                
                 if (g.goal.postIds.length === g.goal.numDays) {
                     g.goal.status = "Success"
                 }
             });
+
             return {
                 ...state,
                 goals: newGoals
             }
         case DELETE_POSTS:
-            const allPosts = {...state};
+            const allPosts = { ...state };
             const finalPosts = mapValues(allPosts, (posts) => {
-                let temp = posts.filter(p => {
+                let temp = posts && posts.filter(p => {
                     return p._id !== payload
                 });
-                temp = temp.map(e => {
+                temp = temp && temp.map(e => {
                     const x = e.goal.postIds.filter(p => p !== payload);
                     //console.log(x);
                     e.goal.postIds = x;
@@ -80,7 +84,7 @@ const posts = (state = initialState, action) => {
             //console.log(finalPosts === state);
             return finalPosts;
         case LIKE_POST:
-            return {...state};
+            return { ...state };
         case POSTS_ERROR:
         default:
             return state;

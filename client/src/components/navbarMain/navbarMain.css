@@ -96,13 +96,13 @@
 }
 
 .navbar-icon-badge {
-  width: 10px;
-  height: 10px;
-  background-color: #fdbf39;
+  width: 11px;
+  height: 11px;
+  background-color: #FFA62B;
   border-radius: 50%;
   position: absolute;
-  top: 7px;
-  right: 5px;
+  top: 6px;
+  right: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,8 +121,10 @@
 }
 
 .profilePic {
-  width: 38px;
-  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  max-height: 39px;
+  max-width: 39px;
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
@@ -228,6 +230,10 @@
 
   .data-result {
     width: 97%;
+  }
+
+  .fas.fa-trophy,.fas.fa-user-friends {
+    margin-left: 11px;
   }
 }
 

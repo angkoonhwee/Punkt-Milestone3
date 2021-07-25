@@ -1,14 +1,11 @@
 import React from "react";
 import "./navbarMain.css";
-import MessageIcon from "@material-ui/icons/Message";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ExploreIcon from "@material-ui/icons/Explore";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import PublicIcon from "@material-ui/icons/Public";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
-import { logoutCall } from "../../apiCalls";
 import Notifications from "../notifications/Notifications";
 
 //redux
@@ -47,7 +44,6 @@ function NavbarMain({ user, logout }) {
               <Link style={{ textDecoration: "none" }} to="/explore">
                 <div className="nav-link navbar-link-item" title="Explore">
                   <ExploreIcon className="searchIcon navbar-icon" />
-                  {/* <span className="navbar-icon-badge"></span> */}
                   <p className="nav-name">Explore</p>
                 </div>
               </Link>
@@ -55,10 +51,9 @@ function NavbarMain({ user, logout }) {
 
             <li className="nav-item">
               <Link style={{ textDecoration: "none" }} to="/speculate">
-                <div className="nav-link navbar-link-item" title="Speculating">
+                <div className="nav-link navbar-link-item" title="Speculate">
                   <MonetizationOnIcon className="searchIcon navbar-icon" />
-                  {/* <span className="navbar-icon-badge"></span> */}
-                  <p className="nav-name">Speculating</p>
+                  <p className="nav-name">Speculate</p>
                 </div>
               </Link>
             </li>
@@ -66,8 +61,7 @@ function NavbarMain({ user, logout }) {
             <li className="nav-item">
               <Link style={{ textDecoration: "none" }} to="/leaderboard">
                 <div className="nav-link navbar-link-item" title="Leaderboard">
-                  <PublicIcon className="searchIcon navbar-icon" />
-                  {/* <span className="navbar-icon-badge"></span> */}
+                  <i className="fas fa-trophy searchIcon navbar-icon" />
                   <p className="nav-name">Leaderboard</p>
                 </div>
               </Link>
@@ -75,15 +69,14 @@ function NavbarMain({ user, logout }) {
 
             <li className="nav-item">
               <Link style={{ textDecoration: "none" }} to="/buddy">
-                <div className="nav-link navbar-link-item" title="Messages">
-                  <MessageIcon className="searchIcon navbar-icon" />
-                  {/* <span className="navbar-icon-badge"></span> */}
-                  <p className="nav-name">Messages</p>
+                <div className="nav-link navbar-link-item" title="Buddy">
+                  <i className="fas fa-user-friends searchIcon navbar-icon" />
+                  <p className="nav-name">Buddy</p>
                 </div>
               </Link>
             </li>
 
-            <li className="nav-item">
+            <li className="nav-item" title="Notifications">
               <Notifications />
             </li>
 
@@ -113,7 +106,6 @@ function NavbarMain({ user, logout }) {
                 to={`/profile/${user.username}`}
               >
                 <div className="nav-link navbar-link-item" id="profileDiv">
-                  {/* <p>🦄</p> */}
                   <img
                     className="profilePic"
                     src={
@@ -123,7 +115,6 @@ function NavbarMain({ user, logout }) {
                     }
                     alt="Profile-Pic"
                   />
-                  {/* {console.log(PublicImg + user.profilePicture)} */}
                   <p className="nav-name">
                     <strong>{user.username}</strong>
                   </p>
@@ -133,7 +124,6 @@ function NavbarMain({ user, logout }) {
           </ul>
         </div>
       </nav>
-      {/* <img src="/assets/img/buddy.svg" /> */}
     </div>
   );
 }

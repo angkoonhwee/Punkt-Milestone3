@@ -12,6 +12,8 @@ import {
     UPDATE_GOAL_AFTER_CREATE
 } from "../actions/types";
 
+import { isUndefined } from "lodash";
+
 const initialState = {
     goals: {},
     betAgainst: [],
@@ -66,6 +68,7 @@ const goals = (state = initialState, action) => {
                     updatedCreate.goals.status = "Success"
                 }
             }
+
             return updatedCreate;
         default:
             return {...state};

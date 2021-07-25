@@ -5,9 +5,7 @@
 .rightbarWrapper {
   padding: 10%;
   padding-right: 15%;
-  /* overflow: scroll; */
   overflow-y: scroll;
-  /* height: 100vh; */
 }
 
 ::-webkit-scrollbar {

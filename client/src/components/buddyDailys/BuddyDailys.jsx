@@ -8,8 +8,8 @@ import { fetchDailys } from "../../redux/actions/buddy";
 import { isEmpty, isUndefined } from "lodash";
 
 function BuddyDailys({ userDailys, buddyDailys, fetchDailys }) {
-  const currDays = 21;
-  const totalDays = 30;
+  // const currDays = 21;
+  // const totalDays = 30;
   //const currProgress = Math.round((currDays / totalDays) * 100);
   const [user, setUser] = useState([]);
   const [buddy, setBuddy] = useState([]);
@@ -39,7 +39,7 @@ function BuddyDailys({ userDailys, buddyDailys, fetchDailys }) {
         <h2>Buddy Todo</h2>
         <hr />
         {buddy.map((t) => (
-          <DailyItems key={t._id} item={t} buddy={true}/>
+          <DailyItems key={t._id} item={t} buddy={true} />
         ))}
       </div>
     </div>

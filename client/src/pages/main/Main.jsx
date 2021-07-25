@@ -5,6 +5,7 @@ import NavbarMain from "../../components/navbarMain/NavbarMain";
 import Rightbar from "../../components/rightbar/Rightbar";
 import "./main.css";
 import ScrollTop from "../../components/scrollTop/ScrollTop";
+import Loading from "../loading/Loading";
 
 //redux
 import { connect } from "react-redux";
@@ -20,8 +21,8 @@ function Main({ posts, fetchMyPosts }) {
     <>
       <NavbarMain />
       <div className="container-success">
-        {posts === null ? <p>Loading...</p> : <Feed posts={posts} />}
-        <Rightbar />
+        {posts ? <Feed posts={posts} /> : <Loading />}
+        {posts && <Rightbar />}
       </div>
       <ScrollTop />
       <Footer />
@@ -30,7 +31,7 @@ function Main({ posts, fetchMyPosts }) {
 }
 
 const mapStateToProps = state => {
-  return { 
+  return {
     posts: state.posts.main
   }
 }

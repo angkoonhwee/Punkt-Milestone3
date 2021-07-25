@@ -3,15 +3,17 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const LOAD_USER = "LOAD_USER";
 export const AUTH_ERROR = "AUTH_ERROR";
-export const LOGOUT =  "LOGOUT";
+export const LOGOUT = "LOGOUT";
+export const UPDATE_AFTER_GOAL_SUBMIT = "UPDATE_AFTER_GOAL_SUBMIT";
 
-export const SIGNUP_START =  "SIGNUP_START";
-export const SIGNUP_SUCCESS =  "SIGNUP_SUCCESS";
-export const SIGNUP_FAILURE =  "SIGNUP_FAILURE";
 
-export const GET_USER =  "GET_USER";
+export const SIGNUP_START = "SIGNUP_START";
+export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
+export const SIGNUP_FAILURE = "SIGNUP_FAILURE";
+
+export const GET_USER = "GET_USER";
 export const UPDATE_PROFILE = "UPDATE_PROFILE";
-export const LOAD_ERROR =  "LOAD_ERROR";
+export const LOAD_ERROR = "LOAD_ERROR";
 export const GET_ALL_USER = "GET_ALL_USER";
 
 export const LOAD_ALL_POSTS = 'LOAD_ALL_POSTS';

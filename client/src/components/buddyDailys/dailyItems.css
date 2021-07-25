@@ -21,15 +21,6 @@
   line-height: 1.2;
 }
 
-.input-title.red.daily-item {
-  clear: both;
-  padding: 0;
-  font-size: 18px;
-  color: rgb(231, 84, 74);
-  font-weight: 400;
-  line-height: 1.2;
-}
-
 /* Styling Checkbox Starts */
 .checkbox-label {
   display: block;
@@ -179,4 +170,48 @@
   .delete-todo.daily-item {
     height: 40px;
   }
+}
+
+.red {
+  color: rgb(231, 84, 74);
+}
+
+.input-title.daily-item.red {
+  color: rgb(231, 84, 74);
+}
+
+.checkbox-label.daily-item .checkbox-custom.daily-item.red {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 20px;
+  width: 20px;
+  background-color: transparent;
+  border-radius: 5px;
+  transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  border: 1px solid rgb(231, 84, 74);
+}
+
+.input-title.daily-item.red.todo-done {
+  color: rgb(231, 84, 74);
+  text-decoration-color: rgb(236, 110, 101);
+}
+
+.checkbox-label.daily-item.red input:checked ~ .checkbox-custom.daily-item::after {
+  -webkit-transform: rotate(45deg) scale(1);
+  -ms-transform: rotate(45deg) scale(1);
+  transform: rotate(45deg) scale(1);
+  opacity: 1;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 12px;
+  border: solid rgb(231, 84, 74);
+  border-width: 0 2px 2px 0;
+  background-color: transparent;
+  border-radius: 0;
 }

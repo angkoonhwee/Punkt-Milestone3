@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { format } from "timeago.js";
 
 import { connect } from "react-redux";
-import { 
+import {
   fetchCommentNotif,
   fetchReqNotif,
   acceptRequest,
@@ -39,23 +39,24 @@ function Notifications({
     }
   }, [fetchReqNotif, user._id]);
 
-  console.log(user.request);
   useEffect(() => {
     if (user.request !== null) {
-      console.log(user.request);
       fetchRequest(user.request);
     }
   }, [user.request]);
 
   function onAccept(requestId) {
-    console.log("accept");
     acceptRequest(requestId)
   }
 
   function onReject(requestId) {
-    console.log(requestId);
     rejectRequest(requestId)
   }
+  // console.log("user.request: " + user.request);
+  // console.log(user.request !== null);
+  // console.log("requested: " + requested);
+  // console.log(!requested);
+  
 
   return (
     <div
@@ -65,13 +66,12 @@ function Notifications({
       <NotificationsIcon
         className="searchIcon navbar-icon"
         title="Notifications"
-        style={{ 
-          color: 
-          requests !== null && requests.length > 0
-          ? "#ff477e"
-          : "#16697a"
-        }}
       />
+      <span className="navbar-icon-badge" style={{
+        display: requests !== null && requests.length > 0
+          ? "block"
+          : "none"
+      }} />
       <p className="nav-name">Notifications</p>
       {isClicked && (
         <div className="notifications-wrapper">
@@ -81,43 +81,35 @@ function Notifications({
               return (
                 <div className="data-item notif" key={r.requestId} >
                   <p className="notif-username">{r.username}</p> wants to be your buddy!
-                  <button
-                    className="bet-button"
-                    onClick={() => onAccept(r.requestId)}
-                    style={{ backgroundColor: "green" }}
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className="bet-button bet-against"
-                    onClick={() => onReject(r.requestId)}
-                  >
-                    Reject
-                  </button>
+                  <br />
+                  <button className="buddy-request accept" onClick={() => onAccept(r.requestId)}>Accept</button>
+                  <button className="buddy-request reject" onClick={() => onReject(r.requestId)}>Reject</button>
                 </div>
               )
             })
           }
-          {user.request !== null 
-          //&& !isEmpty(requested)
-          && requested !== null
-          && requested.status === "Rejected"
+          
+          {user.request !== null
+            && requested
+            && requested.status === "Rejected"
             ? <div className="data-item notif">
-                    <p className="notif-username" style={{ color: "hsl(0, 52%, 61%)" }}>{requested.receiver.username + " "}
-                       has rejected your Buddy Request!
-                    </p>
+              <p className="notif-username">{requested.receiver.username + " "}</p>
+              <p className="notif-username" style={{ color: "hsl(0, 52%, 61%)" }}>
+                has rejected your Buddy Request!
+              </p>
+            </div>
+            : (user.request !== null && requested && requested.status === "Accepted")
+              ? <div className="data-item notif">
+                <p className="notif-username">{requested.receiver.username + " "}</p>
+                <p className="notif-username" style={{ color: "#53B8BB" }}>
+                  has accepted your Buddy Request!
+                </p>
               </div>
-            : (user.request !== null && requested.status === "Accepted" && !isEmpty(requested))
-            ? <div className="data-item notif">
-                  <p className="notif-username" style={{ color: "#53B8BB" }}>{requested.receiver.username + " "}
-                     has accepted your Buddy Request!
-                  </p>
-              </div>
-            : null 
+              : null
           }
-          {comments === null 
-          ? <p>Loading...</p>
-          : comments.length > 0 &&
+          {comments === null
+            ? <p>Loading...</p>
+            : comments.length > 0 &&
             comments.map((n) => {
               return (
                 <Link
@@ -150,7 +142,7 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { 
+export default connect(mapStateToProps, {
   fetchCommentNotif,
   fetchReqNotif,
   fetchRequest,

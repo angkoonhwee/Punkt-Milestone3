@@ -25,7 +25,7 @@ const initialState = {
 const buddy = (state = initialState, action) => {
     const { type, payload } = action;
 
-    switch(type) {
+    switch (type) {
         case GET_BUDDY:
             const tempDailys = state.dailys;
             return {
@@ -42,16 +42,16 @@ const buddy = (state = initialState, action) => {
                 buddy: payload
             }
         case GET_DAILYS:
-            const result = {...state};
+            const result = { ...state };
             result.dailys = payload;
             return result;
         case TOGGLE_DAILYS:
-            const toggle = {...state};
+            const toggle = { ...state };
             toggle.dailys.user = payload;
             return toggle;
         case ADD_TODOS:
         case DELETE_TODOS:
-            const todosA = {...state};
+            const todosA = { ...state };
             todosA.object.todos = [...payload];
             return todosA;
         case GET_CHAT:
@@ -62,7 +62,6 @@ const buddy = (state = initialState, action) => {
         case MESSAGE_SENT:
             const newChat = [...state.chat];
             newChat.push(payload);
-            console.log(newChat);
             return {
                 ...state,
                 chat: newChat

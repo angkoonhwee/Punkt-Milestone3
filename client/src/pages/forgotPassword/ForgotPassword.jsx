@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-//import "./forgotPassword.css";
+import React, { useState } from "react";
 import NavbarHome from "../../components/navbarHome/NavbarHome";
 import Footer from "../../components/footer/Footer";
 import axios from "axios";
@@ -7,7 +6,6 @@ import Alert from "@material-ui/lab/Alert";
 import { url } from "../../utils/constants";
 
 export default function ForgotPassword() {
-  console.log("FORGET PASSWORD PAGE");
   const [userEmail, setUserEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
@@ -22,9 +20,10 @@ export default function ForgotPassword() {
       const res = await axios.post(url + "/auth/forgot-password", {
         email: userEmail,
       });
-
+      // console.log(res.data.message);
       setSuccess(res.data.message);
     } catch (err) {
+      console.log(err);
       setFailure(err.response.data.message);
     }
   }
