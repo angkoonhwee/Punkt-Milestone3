@@ -28,15 +28,9 @@ function PostNoteBet({
   const [hasGoal, setHasGoal] = useState(false);
 
   useEffect(() => {
-
     if (!hasGoal) {
       if (user.goalId !== "") {
         fetchGoalById(user.goalId);
-        if (currGoal && currGoal.status === "In Progress") {
-          setHasGoal(true);
-        } else if (currGoal && currGoal.status === "Failed") {
-          loadMe();
-        }
       }
     }
   }, [
@@ -44,6 +38,14 @@ function PostNoteBet({
     loadMe,
     fetchGoalById,
   ]);
+
+  useEffect(() => {
+    if (currGoal && currGoal.status === "In Progress") {
+      setHasGoal(true);
+    } else if (currGoal && currGoal.status === "Failed") {
+      loadMe();
+    }
+  }, [currGoal, hasGoal]);
 
   useEffect(() => {
     //to update user.goalId when new goal is created

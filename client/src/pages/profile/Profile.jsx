@@ -22,6 +22,7 @@ import { isUndefined } from "lodash";
 
 function Profile({
   currUser,
+  coverPicture,
   posts,
   fetchUserPosts,
   fetchUser,
@@ -90,10 +91,10 @@ function Profile({
       setRequested(false);
     }
   }, [requested, request, setRequested])
-  console.log("my most recent request");
-  console.log(request);
-  console.log("requested?");
-  console.log(requested);
+  // console.log("my most recent request");
+  // console.log(request);
+  // console.log("requested?");
+  // console.log(requested);
 
   async function handleFollowing() {
     try {
@@ -148,8 +149,8 @@ function Profile({
                 className="profile-page-cover"
                 alt="user-cover-background"
                 src={
-                  user.coverPicture
-                    ? user.coverPicture
+                  coverPicture
+                    ? coverPicture
                     : "/assets/img/defaultBG.svg"
                 }
               ></img>
@@ -310,6 +311,7 @@ function Profile({
 const mapStateToProps = state => {
   return {
     currUser: state.auth.user,
+    coverPicture: state.auth.user.coverPicture,
     posts: state.posts.user,
     fetchedUser: state.user.user,
     buddyId: state.buddy.object.buddy,

@@ -81,6 +81,7 @@ export const updateProfile = body => async dispatch => {
     try {
         const currUser = loadUser();
         const res = await axios.put(url + "/user/" + currUser._id, body);
+        saveUser(res.data);
         dispatch({
             type: UPDATE_PROFILE,
             payload: res.data

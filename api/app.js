@@ -251,7 +251,7 @@ const PORT = process.env.PORT || 8000;
 
 mongoose
   .connect(
-    "mongodb+srv://punkt:1236Punkt@punkt.x8rbr.mongodb.net/Punkt?retryWrites=true&w=majority",
+    process.env.MONGO_URI,
     //"mongodb://localhost:27017/testDB",
     {
       useNewUrlParser: true,

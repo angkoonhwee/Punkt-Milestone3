@@ -129,6 +129,7 @@ function RecordStatus({
             //value={recordText}
             ref={desc}
             className="record-area"
+            required
             placeholder={
               isAtonement
                 ? "Have you atoned?"
