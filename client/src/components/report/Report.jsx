@@ -2,13 +2,14 @@ import React, { useState, useContext } from "react";
 import "./report.css";
 import ReportIcon from "@material-ui/icons/Report";
 import { TextareaAutosize } from "@material-ui/core";
-import { UserContext } from "../../context/UserContext";
 import axios from "axios";
 import { url } from "../../utils/constants";
 import Alert from "@material-ui/lab/Alert";
 
-export default function Report({ post }) {
-  const { user: currUser } = useContext(UserContext);
+//redux
+import { connect } from "react-redux";
+
+function Report({ post, currUser }) {
   const [isReport, setIsReport] = useState(false);
   const [isReportSuccess, setIsReportSuccess] = useState(false);
   const [isReportFailure, setIsReportFailure] = useState(false);
@@ -89,4 +90,12 @@ export default function Report({ post }) {
       )}
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    currUser: state.auth.user
+  }
 }
+
+export default connect(mapStateToProps)(Report);

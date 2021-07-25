@@ -1,3 +1,4 @@
+import { isUndefined } from "lodash";
 import {
     LOAD_GOALS,
     GOALS_ERROR,
@@ -58,10 +59,12 @@ const goals = (state = initialState, action) => {
             return updatedDelete;
         case UPDATE_GOAL_AFTER_CREATE:
             const updatedCreate = {...state};
-            updatedCreate.goals.postIds.push(payload);
-            updatedCreate.goals.postIds = [...updatedCreate.goals.postIds];
-            if (updatedCreate.goals.postIds.length === updatedCreate.goals.numDays) {
-                updatedCreate.goals.status = "Success"
+            if (!isUndefined(updatedCreate.goals.postIds)) {
+                updatedCreate.goals.postIds.push(payload);
+                updatedCreate.goals.postIds = [...updatedCreate.goals.postIds];
+                if (updatedCreate.goals.postIds.length === updatedCreate.goals.numDays) {
+                    updatedCreate.goals.status = "Success"
+                }
             }
             return updatedCreate;
         default:

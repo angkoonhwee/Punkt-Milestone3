@@ -289,7 +289,7 @@ function Profile({
           <div className="container-user-feed">
             <h2>Recent Activities</h2>
             <div className="container-profile-feed">
-              <Feed posts={posts} />
+              {posts === null ? <p>Loading...</p> : <Feed posts={posts} />}
             </div>
           </div>
         </div>

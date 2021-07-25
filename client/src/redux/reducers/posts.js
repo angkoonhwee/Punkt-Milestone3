@@ -12,11 +12,11 @@ import {
 import { mapValues } from 'lodash';
 
 const initialState = {
-    main: [],
-    explore: [],
-    user: [],
-    speculate: [],
-    goals: []
+    main: null,
+    explore: null,
+    user: null,
+    speculate: null,
+    goals: null
 };
 
 const posts = (state = initialState, action) => {

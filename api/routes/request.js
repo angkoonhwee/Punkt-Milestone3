@@ -15,13 +15,13 @@ router.post('/', async (req, res) => {
         const user = await User.findById(sender);
         const to = await User.findById(receiver);
         if (to.currentBuddy !== "") {
-            return res.status(200).json("User already has a buddy!")
+            return res.status(500).json("User already has a buddy!")
         }
         const newReq = new Request({
             sender: user,
             receiver: to
         });
-        const savedReq = await newReq.save();
+        let savedReq = await newReq.save();
         
         await user.updateOne({
             $set: { request: savedReq }
@@ -30,7 +30,9 @@ router.post('/', async (req, res) => {
         await to.updateOne({
             $push: { requestedBy: savedReq }
         });
-
+        savedReq = await Request.findById(savedReq._id)
+                                .populate("sender", "username")
+                                .populate("receiver", "username");
         res.status(200).json(savedReq);
     } catch (err) {
         console.log(err);
@@ -92,12 +94,18 @@ router.post("/:requestId/accept", async (req, res) => {
     const { requestId } = req.params;
 
     try {
-        const request = await Request.findById(requestId);
+        let request = await Request.findById(requestId);
         await request.updateOne({
             $set: { status: "Accepted" }
         });
+        // console.log("update request status to accept");
+        // console.log(request);
         const userOne = await User.findById(request.sender);
+        // console.log("sender");
+        // console.log(userOne);
         const userTwo = await User.findById(request.receiver);
+        // console.log("receiver");
+        // console.log(userTwo);
 
         //create chat object first
         const newChat = new Chat({
@@ -138,11 +146,15 @@ router.post("/:requestId/accept", async (req, res) => {
         async function rejectAll(array) {
             for (let i = 0; i < array.length; i++) {
                 const reject = array[i];
-                if (reject !== requestId) {
+                // console.log(reject._id);
+                // console.log(reject._id.toString());
+                // console.log(requestId);
+                if (reject._id.toString() !== requestId) {
                     const temp = await Request.findById(reject);
                     await temp.updateOne({
                         $set: { status: "Rejected" }
                     });
+                    console.log(temp);
                 }
             }
         }
@@ -154,7 +166,10 @@ router.post("/:requestId/accept", async (req, res) => {
         await userTwo.updateOne({
             $set: { requestedBy: [] }
         });
-        await request.populate("sender", "username").populate("receiver", "username");
+        request = await Request.findById(requestId)
+                               .populate("sender", "username")
+                               .populate("receiver", "username");
+        //console.log(request);
         res.status(200).json(request);
     } catch (err) {
         console.log(err);
@@ -169,7 +184,7 @@ router.put("/:requestId/reject", async (req, res) => {
     const { requestId } = req.params;
 
     try {
-        const request = await Request.findById(requestId);
+        let request = await Request.findById(requestId);
         await request.updateOne({
             $set: { status: "Rejected" }
         });
@@ -179,7 +194,9 @@ router.put("/:requestId/reject", async (req, res) => {
             $set: { requestedBy: updated }
         });
 
-        await request.populate("sender", "username").populate("receiver", "username");
+        request = await Request.findById(requestId)
+                               .populate("sender", "username")
+                               .populate("receiver", "username");
         
         res.status(200).json(request);
     } catch (err) {

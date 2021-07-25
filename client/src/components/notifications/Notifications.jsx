@@ -99,14 +99,15 @@ function Notifications({
             })
           }
           {user.request !== null 
-          && !isEmpty(requested)
+          //&& !isEmpty(requested)
+          && requested !== null
           && requested.status === "Rejected"
             ? <div className="data-item notif">
                     <p className="notif-username" style={{ color: "hsl(0, 52%, 61%)" }}>{requested.receiver.username + " "}
                        has rejected your Buddy Request!
                     </p>
               </div>
-            : (user.request !== null && user.request.status === "Accepted" && !isEmpty(requested))
+            : (user.request !== null && requested.status === "Accepted" && !isEmpty(requested))
             ? <div className="data-item notif">
                   <p className="notif-username" style={{ color: "#53B8BB" }}>{requested.receiver.username + " "}
                      has accepted your Buddy Request!

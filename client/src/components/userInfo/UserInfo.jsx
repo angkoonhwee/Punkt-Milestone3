@@ -1,5 +1,4 @@
-import React, { useContext, useState } from "react";
-import { UserContext } from "../../context/UserContext";
+import React, { useState } from "react";
 import "./userInfo.css";
 
 export default function UserInfo({ field, data }) {

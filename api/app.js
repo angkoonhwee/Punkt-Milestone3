@@ -32,12 +32,14 @@ const Goal = require("./models/goal");
 const Chat = require("./models/chat");
 const Message = require("./models/message");
 
+const CLIENT_URL = "https://punkt-orbital.netlify.app";
+
 const app = express();
 const server = http.createServer(app);
 //const io = new Server(server);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: CLIENT_URL,
     methods: ["GET", "POST"]
   }
 });
@@ -71,7 +73,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: CLIENT_URL,
     // origin: "https://punkt-milestone2.netlify.app", // allow to server to accept request from different origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // allow session cookie from browser to pass through
@@ -116,7 +118,9 @@ io.on("connection", socket => {
   });
 });
 
-cron.schedule('0 0 * * *', async () => {
+// CHECK AND UPDATE FAILED GOAL STATUS AT 00:00 EVERY DAY
+cron.schedule("0 0 * * *", async () => {
+  //update buddy
   try {
     console.log("START UPDATES");
     var allBuddies = await Buddy.find();
@@ -165,10 +169,8 @@ cron.schedule('0 0 * * *', async () => {
       console.log(err);
       return res.status(500).json('Server Error');
   }
-});
-
-// CHECK AND UPDATE FAILED GOAL STATUS AT 00:00 EVERY DAY
-cron.schedule("0 0 * * *", async () => {
+  
+  //update goals
   const dateDiffInDays = (a, b) => {
     // Discard the time and time-zone information.
     const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());

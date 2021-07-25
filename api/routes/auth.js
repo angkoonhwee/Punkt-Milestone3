@@ -1,19 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const session = require("express-session");
 const passport = require("passport");
-const passportLocalMongoose = require("passport-local-mongoose");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const findOrCreate = require("mongoose-findorcreate");
 const passwordValidator = require("password-validator");
 const schema = new passwordValidator();
 const User = require("../models/user");
-const flash = require("express-flash");
 const async = require("async");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const nodemailerSendgrid = require('nodemailer-sendgrid');
 
-const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "https://punkt-orbital.netlify.app";
+//http://localhost:3000
 
 schema
   .is()
@@ -38,35 +35,6 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
-
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "http://localhost:8000/auth/google/punkt",
-//       // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-//     },
-//     function (accessToken, refreshToken, profile, cb) {
-//       // console.log(profile);
-//       // console.log(accessToken);
-
-//       User.findOrCreate(
-//         {
-//           googleId: profile.id,
-//           email: profile.emails[0].value,
-//           // username: profile.name.familyName + profile.name.givenName,
-//           username: profile.emails[0].value,
-//           profilePicture: profile.photos[0].value,
-//         },
-//         function (err, user) {
-//           // console.log(user);
-//           return cb(err, user);
-//         }
-//       );
-//     }
-//   )
-// );
 
 router.get(
   "/google",
@@ -234,17 +202,16 @@ router.post("/forgot-password", function (req, res, next) {
         );
       },
       (token, user, done) => {
-        let transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: "punkt.orbital@gmail.com",
-            pass: process.env.GMAILPW,
-          },
-        });
+        const transport = nodemailer.createTransport(
+          nodemailerSendgrid({
+            apiKey: process.env.SENDGRID_API_KEY
+          })
+        );
+
         const mailOptions = {
           from: "punkt.orbital@gmail.com",
           to: user.email,
-          subject: "Punkt Password Reset",
+          subject: "Punkt - Password Reset",
           text:
             "Dear " +
             user.username +
@@ -258,12 +225,18 @@ router.post("/forgot-password", function (req, res, next) {
             "If you did not request for password reset, please ignore this email and your password will remain unchanged.\n\n" +
             "Punkt Developer Team",
         };
-        transporter.sendMail(mailOptions, function (err) {
-          res.status(200).json({
-            message: "Please check your email for further instructions.",
+
+        transport.sendMail(mailOptions)
+          .then((response) => {
+            console.log("email sent");
+            return res
+              .status(200)
+              .json({ message: "Please check your email (incl. spam mail) for further instructions." });
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(500).json(err);
           });
-          done(err, "done");
-        });
       },
     ],
     (err) => {
@@ -347,18 +320,16 @@ router.post("/reset/:token", (req, res) => {
         );
       },
       (user, done) => {
-        let transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: "punkt.orbital@gmail.com",
-            pass: process.env.GMAILPW,
-          },
-        });
+        const transport = nodemailer.createTransport(
+          nodemailerSendgrid({
+            apiKey: process.env.SENDGRID_API_KEY
+          })
+        );
 
         const mailOptions = {
           to: user.email,
           from: "punkt.orbital@gmail.com",
-          subject: "Your password has been changed",
+          subject: "Punkt - Your password has been reset",
           text:
             "Dear " +
             user.username +
@@ -368,19 +339,19 @@ router.post("/reset/:token", (req, res) => {
             " has just been changed.\n\n" +
             "Punkt Developer Team",
         };
-        transporter.sendMail(mailOptions, function (err) {
-          if (err) {
-            console.log(err);
-            return res.status(500).json({ message: "Server error." });
-          } else {
-            res.status(200).json({
-              message: "Yay! Your password has been changed successfully.",
-            });
-            done(err);
-          }
+        transport.sendMail(mailOptions)
+        .then((response) => {
+          console.log("email sent");
+          return res
+            .status(200)
+            .json({ message: "Yay! Your password has been changed successfully." });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).json(err);
         });
-      },
-    ],
+    },
+  ],
     (err) => {
       if (err) {
         console.log(err);

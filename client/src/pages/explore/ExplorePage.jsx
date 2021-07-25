@@ -20,7 +20,7 @@ function ExplorePage({ posts, fetchAllPosts }) {
     <>
       <NavbarMain />
       <div className="container-success">
-        <Feed posts={posts} />
+        {posts === null ? <p>Loading...</p> : <Feed posts={posts} />}
         <Rightbar />
       </div>
       <ScrollTop />
