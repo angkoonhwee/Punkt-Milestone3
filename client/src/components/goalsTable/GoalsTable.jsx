@@ -325,7 +325,7 @@ function GoalsTable({ user, userGoals, fetchUserGoals }) {
         <Modal
           setIsClicked={setIsCreatingAtonement}
           task={"Create"}
-          goal={currGoal}
+          currGoal={currGoal}
         />
       )}
       {isViewMsg && currGoal && (

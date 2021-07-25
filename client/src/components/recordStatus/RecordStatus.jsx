@@ -16,7 +16,8 @@ function RecordStatus({
   atonement,
   postIds,
   createPost,
-  status
+  status,
+  currGoal
 }) {
   const desc = useRef("");
 
@@ -57,16 +58,21 @@ function RecordStatus({
     }
   }, [dayDiff, postIds, goal.status, goal.numDays]);
 
+  
+
   function submitRecord(event) {
     event.preventDefault();
+
+    
     const newPost = {
       userId: user._id,
       username: user.username,
       desc: desc.current.value,
-      goalId: goal._id,
+      goalId: atonement ? currGoal._id : goal._id,
       img: [],
       atonement: isAtonement,
     }
+
 
     if (imgURLs.length > 0) {
       newPost.img = imgURLs;
@@ -79,12 +85,6 @@ function RecordStatus({
     if (atonement) {
       window.location.reload();
     }
-
-    // if (dayDiff < goal.postIds.length) {
-    //   setDisabled(dayDiff < goal.postIds.length);
-    // } else if (goal.status === "Success") {
-    //   setCompleted(true);
-    // }
   }
 
   function handleUpload(event) {

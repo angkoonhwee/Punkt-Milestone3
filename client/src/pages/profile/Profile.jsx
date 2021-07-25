@@ -45,8 +45,6 @@ function Profile({
   const [requested, setRequested] = useState(false);
   const [file, setFile] = useState(null);
 
-  console.log("Profile running");
-
   //check if searched up profile belongs to currUser
   //if yes then do nothing else fetchuser
   useEffect(() => {
@@ -76,7 +74,6 @@ function Profile({
   }, [fetchBuddy, currUser.currentBuddy]);
 
   useEffect(() => {
-    console.log(currUser.request);
     if (currUser.request !== null) {
       console.log(currUser.request);
       fetchRequest(currUser.request);
@@ -89,8 +86,6 @@ function Profile({
       setRequested(true);
     }
   }, [requested, request])
-
-  console.log(requested);
 
   async function handleFollowing() {
     try {
@@ -213,7 +208,7 @@ function Profile({
                       && currUser.currentBuddy === ""
                       && user.currentBuddy === ""
                     )
-                      || (currUser.request === null && !currUser.currentBuddy)
+                    || (currUser.request === null && !currUser.currentBuddy && user.currentBuddy === "")
                       ? <button
                         className="follow-btn"
                         onClick={handleRequest}

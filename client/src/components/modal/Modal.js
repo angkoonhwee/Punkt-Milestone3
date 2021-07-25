@@ -5,7 +5,7 @@ import RecordStatus from "../recordStatus/RecordStatus";
 import ReplyBet from "../replyBet/ReplyBet";
 import ViewFailedMessages from "../viewFailedMessages/ViewFailedMessages";
 
-export default function Modal({ setIsClicked, task, goal, user }) {
+export default function Modal({ setIsClicked, task, currGoal, user }) {
   const handleClick = (e) => {
     if (e.target.classList.contains("backdrop")) {
       setIsClicked(false);
@@ -21,15 +21,15 @@ export default function Modal({ setIsClicked, task, goal, user }) {
     >
       {task === "Create" ? (
         <div className="task-wrapper">
-          <RecordStatus goal={goal} atonement={true} />
+          <RecordStatus currGoal={currGoal} atonement={true} />
         </div>
       ) : task === "View" ? (
         <div className="task-wrapper reply">
-          <ViewFailedMessages goal={goal} />
+          <ViewFailedMessages goal={currGoal} />
         </div>
       ) : (
         <div className="task-wrapper reply">
-          <ReplyBet user={user} goal={goal} />
+          <ReplyBet user={user} goal={currGoal} />
         </div>
       )}
     </motion.div>

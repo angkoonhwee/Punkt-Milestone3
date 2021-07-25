@@ -39,7 +39,8 @@ export const fetchUserPosts = username => async dispatch => {
                     numDays: goal.data.numDays,
                     usersBetAgainst: goal.data.usersBetAgainst,
                     atonement: goal.data.atonement,
-                    postIds: goal.data.postIds
+                    postIds: goal.data.postIds,
+                    madeAtonement: goal.data.madeAtonement,
                 };
             })
         )
@@ -76,7 +77,8 @@ export const fetchMyPosts = () => async dispatch => {
                     numDays: goal.data.numDays,
                     usersBetAgainst: goal.data.usersBetAgainst,
                     atonement: goal.data.atonement,
-                    postIds: goal.data.postIds
+                    postIds: goal.data.postIds,
+                    madeAtonement: goal.data.madeAtonement,
                 };
             })
         )
@@ -117,7 +119,8 @@ export const fetchAllPosts = () => async dispatch => {
                     numDays: goal.data.numDays,
                     usersBetAgainst: goal.data.usersBetAgainst,
                     atonement: goal.data.atonement,
-                    postIds: goal.data.postIds
+                    postIds: goal.data.postIds,
+                    madeAtonement: goal.data.madeAtonement,
                 };
                 //console.log(post);
             })
@@ -158,7 +161,8 @@ export const fetchSpeculatingPosts = () => async dispatch => {
                     numDays: goal.data.numDays,
                     usersBetAgainst: goal.data.usersBetAgainst,
                     atonement: goal.data.atonement,
-                    postIds: goal.data.postIds
+                    postIds: goal.data.postIds,
+                    madeAtonement: goal.data.madeAtonement,
                 };
             })
         )
@@ -196,7 +200,8 @@ export const fetchGoalPosts = goalId => async dispatch => {
                     numDays: goal.data.numDays,
                     usersBetAgainst: goal.data.usersBetAgainst,
                     atonement: goal.data.atonement,
-                    postIds: goal.data.postIds
+                    postIds: goal.data.postIds,
+                    madeAtonement: goal.data.madeAtonement,
                 };
             })
         )
@@ -236,8 +241,10 @@ export const createPost = post => async dispatch => {
             numDays: goal.data.numDays,
             usersBetAgainst: goal.data.usersBetAgainst,
             atonement: goal.data.atonement,
-            postIds: goal.data.postIds
+            postIds: goal.data.postIds,
+            madeAtonement: goal.data.madeAtonement,
         };
+
         dispatch({
             type: CREATE_POST,
             payload: res.data

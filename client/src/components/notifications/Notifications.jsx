@@ -52,6 +52,11 @@ function Notifications({
   function onReject(requestId) {
     rejectRequest(requestId)
   }
+  // console.log("user.request: " + user.request);
+  // console.log(user.request !== null);
+  // console.log("requested: " + requested);
+  // console.log(!requested);
+  
 
   return (
     <div
@@ -61,12 +66,6 @@ function Notifications({
       <NotificationsIcon
         className="searchIcon navbar-icon"
         title="Notifications"
-      // style={{
-      //   color:
-      //     requests !== null && requests.length > 0
-      //       ? "#F34573"
-      //       : "#16697a"
-      // }}
       />
       <span className="navbar-icon-badge" style={{
         display: requests !== null && requests.length > 0
@@ -89,8 +88,9 @@ function Notifications({
               )
             })
           }
+          
           {user.request !== null
-            && !isEmpty(requested)
+            && requested
             && requested.status === "Rejected"
             ? <div className="data-item notif">
               <p className="notif-username">{requested.receiver.username + " "}</p>
@@ -98,7 +98,7 @@ function Notifications({
                 has rejected your Buddy Request!
               </p>
             </div>
-            : (user.request !== null && user.request.status === "Accepted" && !isEmpty(requested))
+            : (user.request !== null && requested && requested.status === "Accepted")
               ? <div className="data-item notif">
                 <p className="notif-username">{requested.receiver.username + " "}</p>
                 <p className="notif-username" style={{ color: "#53B8BB" }}>

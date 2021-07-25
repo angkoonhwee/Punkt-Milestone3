@@ -49,16 +49,20 @@ const posts = (state = initialState, action) => {
 
             }
         case CREATE_POST:
-            const newGoals = [...state.goals, payload];
+            const newGoals = state.goals ? [...state.goals, payload] : [payload];
+
             newGoals.sort(
                 (p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt)
             );
+
             newGoals.map(g => {
                 g.goal.postIds = payload.goal.postIds;
+                
                 if (g.goal.postIds.length === g.goal.numDays) {
                     g.goal.status = "Success"
                 }
             });
+
             return {
                 ...state,
                 goals: newGoals

@@ -97,10 +97,10 @@ function Post({
     };
   }, [comments]);
 
-  const currDays = goal?.madeAtonement
-    ? goal?.postIds?.length - 1
-    : goal?.postIds?.length;
-  const totalDays = goal?.numDays;
+  const currDays = goal.madeAtonement
+    ? goal.postIds?.length - 1
+    : goal.postIds?.length;
+  const totalDays = goal.numDays;
 
   function handleLit() {
     likePost(post._id, { userId: currUser._id });
@@ -127,17 +127,12 @@ function Post({
   return (
     <div
       className="post"
-    // layout
-    // initial={{ opacity: 0 }}
-    // animate={{ opacity: 1 }}
-    // transition={{ duration: 1.5 }}
     >
       <div className="post-wrapper">
         <div className="post-top">
           <div className="post-top-left">
             <Link to={`/profile/${user.username}`}>
               <img
-                // src={Users.filter((u) => u.id === post.userId)[0].profilePicture}
                 src={
                   user.profilePicture
                     ? user.profilePicture
@@ -149,7 +144,6 @@ function Post({
             </Link>
             <div className="profile-name-date">
               <p className="post-name">
-                {/* {Users.filter((u) => u.id === post.userId)[0].username} */}
                 {user.username}
               </p>
               <p className="post-date">{format(post.createdAt)}</p>

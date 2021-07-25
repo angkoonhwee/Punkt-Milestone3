@@ -80,7 +80,7 @@ function PostNoteBet({
         ? {
           userId: user._id,
           title: goal.title,
-          atonement: "Fulfil a request from the comment with most likes",
+          atonement: "Fulfil a request from the comment in the first post with most likes",
           numDays: goal.days,
         }
         : {
@@ -94,7 +94,7 @@ function PostNoteBet({
 
   return (
     <div className="post-note-bet">
-      <h3>My Betting Goal</h3>
+      <h3>Long Term <br/>Bet Goal</h3>
 
       {hasGoal ? (
         <div>
