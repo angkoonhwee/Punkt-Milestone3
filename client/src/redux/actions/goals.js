@@ -145,6 +145,7 @@ export const updateStatus = goalId => async dispatch => {
             userId: user._id,
             status: "Success",
         });
+        //console.log(res.data);
         dispatch({
             type: GOAL_STATUS,
             payload: res.data

@@ -1,8 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
-import { saveUser } from "../utils/localStorage";
-import throttle from "lodash/throttle";
 
 import rootReducer from "./reducers";
 

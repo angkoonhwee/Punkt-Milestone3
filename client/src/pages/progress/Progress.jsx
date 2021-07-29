@@ -8,7 +8,7 @@ import ScrollTop from "../../components/scrollTop/ScrollTop";
 import SetBet from "../../components/setBet/SetBet";
 import "./progress.css";
 import { useParams } from "react-router-dom";
-import { isEmpty } from "lodash";
+import { isEmpty, isUndefined } from "lodash";
 import Loading from "../loading/Loading";
 
 //redux
@@ -27,6 +27,7 @@ function Progress({
   fetchUserById,
   updateStatus,
   goal,
+  postIds,
   fetchGoal,
   fetchGoalById
 }) {
@@ -36,11 +37,19 @@ function Progress({
   const goalId = useParams().goalId;
 
   const [user, setUser] = useState({}); // owner of the goal
+  const [length, setLength] = useState(0);
+
+  useEffect(() => {
+    if (postIds) {
+      setLength(postIds.length);
+    }
+  }, [postIds]);
 
   useEffect(() => {
     if (goalId) {
       fetchGoalById(goalId);
     } else {
+      //console.log("fetching my goal!");
       fetchGoal(currUser._id);
     }
   }, [
@@ -67,13 +76,16 @@ function Progress({
     }
   }, [storeUser, user])
 
+  // console.log("Goal in Progress");
+  // console.log(goal.postIds);
+  // console.log("Length: " + length);
+
   useEffect(() => {
-    if (!isEmpty(goal) && goal.status === "Success") {
-      if (goal.postIds.length === goal.numDays) {
-        updateStatus(goal._id);
-      }
+    if (length === goal.numDays) {
+      //console.log("UPDATE STATUS");
+      updateStatus(goal._id);
     }
-  }, [updateStatus, goal.postIds])
+  }, [updateStatus, length])
 
   if (!isEmpty(goal) && !isEmpty(user)) {
     return (
@@ -109,7 +121,8 @@ const mapStateToProps = state => {
   return {
     currUser: state.auth.user,
     goal: state.goals.goals,
-    storeUser: state.user.user
+    storeUser: state.user.user,
+    postIds: state.goals.goals.postIds
   };
 };
 

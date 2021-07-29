@@ -329,7 +329,7 @@ function GoalsTable({ user, userGoals, fetchUserGoals }) {
         />
       )}
       {isViewMsg && currGoal && (
-        <Modal setIsClicked={setIsViewMsg} task={"View"} goal={currGoal} />
+        <Modal setIsClicked={setIsViewMsg} task={"View"} currGoal={currGoal} />
       )}
     </motion.div>
   );

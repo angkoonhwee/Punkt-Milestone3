@@ -61,12 +61,13 @@ const goals = (state = initialState, action) => {
         case UPDATE_GOAL_AFTER_CREATE:
             const updatedCreate = {...state};
             if (!isUndefined(updatedCreate.goals.postIds)) {
-                updatedCreate.goals.postIds.push(payload);
-                updatedCreate.goals.postIds = [...updatedCreate.goals.postIds];
+                updatedCreate.goals.postIds = [...updatedCreate.goals.postIds, payload];
                 if (updatedCreate.goals.postIds.length === updatedCreate.goals.numDays) {
                     updatedCreate.goals.status = "Success"
                 }
             }
+            // console.log("Freshly updated goals");
+            // console.log(updatedCreate.goals);
 
             return updatedCreate;
         default:

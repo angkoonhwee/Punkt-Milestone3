@@ -26,6 +26,17 @@
   cursor: pointer;
 }
 
+/* #punkt:hover {
+  background-color: rgb(232, 248, 252);
+  padding: 2px 7.5px;
+  border-radius: 5px;
+  line-height: 1.75;
+  position: absolute;
+  top: 60px;
+  cursor: pointer;
+  content: "Main";
+} */
+
 .punkt-img {
   width: 45px;
   /* padding: 1.5px 0; */
@@ -98,7 +109,7 @@
 .navbar-icon-badge {
   width: 11px;
   height: 11px;
-  background-color: #FFA62B;
+  background-color: #ffa62b;
   border-radius: 50%;
   position: absolute;
   top: 6px;
@@ -189,6 +200,29 @@
   color: rgb(161, 161, 161);
 }
 
+.navbar-hover-icon {
+  background-color: rgb(232, 248, 252);
+  padding: 2px 7.5px;
+  border-radius: 5px;
+  line-height: 1.75;
+  position: absolute;
+  top: 60px;
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0;
+  color: #16697a;
+}
+
+.main {
+  top: 55px;
+  left: 20%;
+}
+
+.logout {
+  top: 52px;
+}
+
 @media (max-width: 990px) {
   .nav-name {
     display: flex;
@@ -232,8 +266,13 @@
     width: 97%;
   }
 
-  .fas.fa-trophy,.fas.fa-user-friends {
+  .fas.fa-trophy,
+  .fas.fa-user-friends {
     margin-left: 11px;
+  }
+
+  .navbar-hover-icon {
+    display: none;
   }
 }
 

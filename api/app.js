@@ -120,7 +120,7 @@ io.on("connection", socket => {
 });
 
 // CHECK AND UPDATE FAILED GOAL STATUS AT 00:00 EVERY DAY
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("3 0 * * *", async () => {
   //update buddy
   try {
     console.log("START UPDATES");

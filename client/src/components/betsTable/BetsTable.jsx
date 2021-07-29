@@ -268,7 +268,7 @@ function BetsTable({ user, userBets, fetchUserBets }) {
         <Modal
           setIsClicked={setIsReplyingBet}
           task={"Reply"}
-          goal={currBet}
+          currGoal={currBet}
           user={user}
         />
       )}

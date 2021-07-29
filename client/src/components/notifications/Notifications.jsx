@@ -23,7 +23,9 @@ function Notifications({
   fetchReqNotif,
   fetchRequest,
   acceptRequest,
-  rejectRequest
+  rejectRequest,
+  hoverIcon,
+  setHoverIcon,
 }) {
   const [isClicked, setClicked] = useState(false);
 
@@ -57,77 +59,101 @@ function Notifications({
   // console.log("requested: " + requested);
   // console.log(!requested);
   
+  const checkNotifications = () => {
+    console.log()
+    if (requests && requests.length === 0 
+      && comments && comments.length === 0
+      && ((user.request && user.request === "Pending") 
+      || user.request === null
+      )) {
+        return ( 
+        <p className="no-user-text" style={{ zIndex: "999" }}>
+          {console.log("notificaitons")}
+          No Notifications
+        </p>)
+      }
+  }
 
   return (
-    <div
-      className="nav-link navbar-link-item"
-      onClick={() => setClicked(!isClicked)}
-    >
-      <NotificationsIcon
-        className="searchIcon navbar-icon"
-        title="Notifications"
-      />
-      <span className="navbar-icon-badge" style={{
-        display: requests !== null && requests.length > 0
-          ? "block"
-          : "none"
-      }} />
-      <p className="nav-name">Notifications</p>
-      {isClicked && (
-        <div className="notifications-wrapper">
-          {requests === null
-            ? <p>Loading...</p>
-            : requests.map(r => {
-              return (
-                <div className="data-item notif" key={r.requestId} >
-                  <p className="notif-username">{r.username}</p> wants to be your buddy!
-                  <br />
-                  <button className="buddy-request accept" onClick={() => onAccept(r.requestId)}>Accept</button>
-                  <button className="buddy-request reject" onClick={() => onReject(r.requestId)}>Reject</button>
-                </div>
-              )
-            })
-          }
-          
-          {user.request !== null
-            && requested
-            && requested.status === "Rejected"
-            ? <div className="data-item notif">
-              <p className="notif-username">{requested.receiver.username + " "}</p>
-              <p className="notif-username" style={{ color: "hsl(0, 52%, 61%)" }}>
-                has rejected your Buddy Request!
-              </p>
-            </div>
-            : (user.request !== null && requested && requested.status === "Accepted")
+    <div style={{ position: "relative"}} >
+      <div
+        className="nav-link navbar-link-item"
+        onClick={() => setClicked(!isClicked)}
+        onMouseEnter={() => setHoverIcon("Notifications")}
+        onMouseLeave={() => setHoverIcon("")}
+      >
+        <NotificationsIcon
+          className="searchIcon navbar-icon"
+        />
+        <span className="navbar-icon-badge" style={{
+          display: requests !== null && requests.length > 0
+            ? "block"
+            : "none"
+        }} />
+        <p className="nav-name">Notifications</p>
+        {isClicked && (
+          <div className="notifications-wrapper">
+            {requests === null
+              ? (
+                <p className="no-user-text" style={{ zIndex: "9999" }}>
+                  Loading...
+                </p>
+              ) : requests.map(r => {
+                return (
+                  <div className="data-item notif" key={r.requestId} >
+                    <p className="notif-username">{r.username}</p> wants to be your buddy!
+                    <br />
+                    <button className="buddy-request accept" onClick={() => onAccept(r.requestId)}>Accept</button>
+                    <button className="buddy-request reject" onClick={() => onReject(r.requestId)}>Reject</button>
+                  </div>
+                )
+              })
+            }
+            
+            {user.request !== null
+              && requested
+              && requested.status === "Rejected"
               ? <div className="data-item notif">
                 <p className="notif-username">{requested.receiver.username + " "}</p>
-                <p className="notif-username" style={{ color: "#53B8BB" }}>
-                  has accepted your Buddy Request!
+                <p className="notif-username" style={{ color: "hsl(0, 52%, 61%)" }}>
+                  has rejected your Buddy Request!
                 </p>
               </div>
-              : null
-          }
-          {comments === null
-            ? <p>Loading...</p>
-            : comments.length > 0 &&
-            comments.map((n) => {
-              return (
-                <Link
-                  to={`/progress/${n.goalId}`}
-                  style={{ textDecoration: "none" }}
-                  target="_blank"
-                  key={n._id}
-                >
-                  <div className="data-item notif">
-                    <p className="notif-username">{n.username}</p> commented on
-                    your post titled{" "}
-                    <p className="notif-username">「 {n.desc} 」</p>.
-                    <p className="post-date notif">{format(n.createdAt)}</p>
-                  </div>
-                </Link>
-              );
-            })}
-        </div>
+              : (user.request !== null && requested && requested.status === "Accepted")
+                ? <div className="data-item notif">
+                  <p className="notif-username">{requested.receiver.username + " "}</p>
+                  <p className="notif-username" style={{ color: "#53B8BB" }}>
+                    has accepted your Buddy Request!
+                  </p>
+                </div>
+                : null
+            }
+            {comments === null
+              ? <p>Loading...</p>
+              : comments.length > 0 &&
+              comments.map((n) => {
+                return (
+                  <Link
+                    to={`/progress/${n.goalId}`}
+                    style={{ textDecoration: "none" }}
+                    target="_blank"
+                    key={n._id}
+                  >
+                    <div className="data-item notif">
+                      <p className="notif-username">{n.username}</p> commented on
+                      your post titled{" "}
+                      <p className="notif-username">「 {n.desc} 」</p>.
+                      <p className="post-date notif">{format(n.createdAt)}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+              {checkNotifications()}
+          </div>
+        )}
+      </div>
+      {hoverIcon === "Notifications" && (
+        <div className="navbar-hover-icon notifications">{hoverIcon}</div>
       )}
     </div>
   );

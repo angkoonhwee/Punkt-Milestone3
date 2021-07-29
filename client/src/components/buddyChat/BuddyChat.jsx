@@ -47,7 +47,6 @@ function BuddyChat({ messages, fetchChat, chatId, userId, buddyId, messageSent }
       receiver: buddyId,
       text: message
     };
-    console.log("send message")
     socket.current.emit("Send Message", chatId, body);
     setMessage("");
   }

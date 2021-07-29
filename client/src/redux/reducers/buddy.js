@@ -60,8 +60,10 @@ const buddy = (state = initialState, action) => {
                 chat: payload
             }
         case MESSAGE_SENT:
-            const newChat = [...state.chat];
+            let newChat = [...state.chat];
+            newChat = newChat.filter(c => c._id !== payload._id);
             newChat.push(payload);
+            console.log(newChat);
             return {
                 ...state,
                 chat: newChat

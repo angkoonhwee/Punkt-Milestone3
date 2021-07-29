@@ -26,7 +26,7 @@ function NavbarHome() {
               <a
                 className="nav-link nav-home-name"
                 id="home-nav-btn"
-                href="https://github.com/Xiaoyunnn/Punkt-Orbital-2021"
+                href="https://drive.google.com/file/d/1CyTCvaEEmKo-PfZzisGhwUEP60Id17tT/view?usp=sharing"
               >
                 Help
                 {/* <HelpIcon className="searchIcon navbar-icon" /> */}
