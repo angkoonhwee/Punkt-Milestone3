@@ -120,7 +120,7 @@ io.on("connection", socket => {
 });
 
 // CHECK AND UPDATE FAILED GOAL STATUS AT 00:00 EVERY DAY
-cron.schedule("3 0 * * *", async () => {
+cron.schedule("48 1 * * *", async () => {
   //update buddy
   try {
     console.log("START UPDATES");
@@ -196,6 +196,12 @@ cron.schedule("3 0 * * *", async () => {
 
           // update goal status
           await goal.updateOne({ $set: { status: "Failed" } });
+
+          // update productivity points
+          const productivityPoints = (-1)*(numUsersAgainst * 10 + 10);
+          await user.updateOne({
+            $inc: { productivityPoints: productivityPoints },
+          });
 
           // update users bet against data --> win
           await Promise.all(
