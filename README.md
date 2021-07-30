@@ -26,7 +26,7 @@
     + [Maintenance](#maintenance)
   * [**Software Engineering Practices**](#software-engineering-practices)
     + [DRY Principle(Redux Store)](#dry-principle-redux-store-)
-    + [Separation of Concerns (SoC) (React Components)](#separation-of-concerns--soc---react-components-)
+    + [Separation of Concerns (SoC) (React Components)](#separation-of-concerns-soc-react-components-)
     + [Law of Demeter](#law-of-demeter)
     + [Version Control with Git](#version-control-with-git)
     + [Testing](#testing)
@@ -34,7 +34,7 @@
       - [System Testing](#system-testing)
       - [User Acceptance Testing](#user-acceptance-testing)
         * [<u>Merits</u>](#merits)
-        * [<u>Areas for Improvement / Bugs</u>](#areas-for-improvement---bugs)
+        * [<u>Areas for Improvement / Bugs</u>](#areas-for-improvement-bugs)
   * [**Development Timeline Summary**](#development-timeline-summary)
   * [**Project Log**](#project-log)
 
