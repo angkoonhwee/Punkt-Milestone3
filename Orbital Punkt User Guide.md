@@ -6,7 +6,7 @@
   * [Feature Guide](#feature-guide)
     + [Betting System](#betting-system)
       - [<u>Setting Your Own Goals</u>](#setting-your-own-goals)
-      - [<u>Betting on Others' Goals</u>](#betting-on-others--goals)
+      - [<u>Betting on Others' Goals</u>](#betting-on-others-goals)
       - [<u>Goal Outcomes</u>](#goal-outcomes)
     + [Buddy System](#buddy-system)
       - [<u>Buddy Request</u>](#buddy-request)
