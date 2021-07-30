@@ -250,15 +250,15 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - You can receive multiple requests from other users. 
 > - If you received a buddy request, there will be a yellow badge shown on the 🔔 icon on the navigation bar. 
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725151442095.png" alt="image-20210725151442095" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-buddy-req.png?raw=true" style="zoom: 33%;" />
 
 > Once the other user has accepted your buddy request / you have accepted a buddy request, you two will be paired as buddy for 30 days. 
 >
 > Afterwards, you can click **"Buddy"** icon on the navigation bar or **"Chat with Buddy"** button on the right bar of the Main/Explore/Speculate page to be directed to the Buddy page.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-navbar-buddy.png" alt="punkt-navbar-buddy" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-navbar-buddy.png?raw=true" alt="punkt-navbar-buddy" style="zoom: 33%;" />
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-chat-with-buddy.png" alt="image-20210725151636051" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-chat-with-buddy.png?raw=true" alt="image-20210725151636051" style="zoom: 33%;" />
 
 <div style="page-break-after: always;"></div>
 
@@ -269,7 +269,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - a progress bar showing the progress of the number of days you have been paired with your buddy, and
 > - the number of days left (out of a total of 30 days) as a buddy pair.
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-buddy-info.png" alt="image-20210725152454559" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-buddy-info.png?raw=true" alt="image-20210725152454559" style="zoom: 33%;" />
 
 #### <u>Daily Todo</u>
 
@@ -278,7 +278,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - If you do not complete your todo items by the end of the day, these todo items will be marked as late, and displayed as red.
 >
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-buddy-daily.png" alt="image-20210725151715773" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-buddy-daily.png?raw=true" style="zoom: 33%;" />
 
 #### <u>Set Todo</u>
 
@@ -287,7 +287,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - Input your todo item and click ➕ button to add that todo item to your todo list. 
 >
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-delete-todo.png" alt="punkt-delete-todo" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-delete-todo.png?raw=true" style="zoom: 33%;" />
 
 <div style="page-break-after: always;"></div>
 
@@ -302,7 +302,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - However, as of now, we are unsure if the bug is truly rectified or just the probability of it happening is very low.
 > - If you encountered this issue, you may refresh the page to render the messages correctly and use "Contact Us" form to notify us that the issue still exists. 
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725152100803.png" alt="image-20210725152100803" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-buddy-chat.png?raw=true" style="zoom: 33%;" />
 
 <div style="page-break-after: always;"></div>
 
@@ -312,7 +312,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 >
 > ** Users with same productivity points will be ranked according to the time they created their account.*
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-leaderboard.png" alt="punkt-leaderboard" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-leaderboard.png?raw=true" alt="punkt-leaderboard" style="zoom: 33%;" />
 
 
 
@@ -327,13 +327,13 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - For "Curent Modules" field, after you have keyed in your module code/name, you need to press space/comma/enter to create a tag before saving.
 > - For social media profile URL, copy paste the actual URL instead of just your username.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-settings-profile.png" alt="punkt-settings-profile" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-settings-profile.png?raw=true" style="zoom: 33%;" />
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-edit-profile.png" alt="image-20210725145707626" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-edit-profile.png?raw=true" alt="image-20210725145707626" style="zoom: 33%;" />
 
 > You can choose to see Goals, Bets and Buddy History by toggling the drop down button to the right of these titles.  
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-settings-table1.png" alt="punkt-settings-table1" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-settings-table1.png?raw=true" style="zoom: 33%;" />
 
 
 
@@ -343,21 +343,21 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - Upon clicking "View" button, a modal with messages sent by users who bet against this goal will be shown.
 > - You may click anywhere in the grey translucent background to close the modal.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-goal-table.png" alt="punkt-goal-table" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-goal-table.png?raw=true" alt="punkt-goal-table" style="zoom: 33%;" />
 
 
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725161923500.png" alt="image-20210725161923500" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-create-atonement.png?raw=true" style="zoom: 33%;" />
 
 
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-failed-msg.png" alt="image-20210725162453548" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-failed-msg.png?raw=true" alt="image-20210725162453548" style="zoom: 33%;" />
 
 
 
 > After you have created your atonement post, "Create" button will be changed to "View", which you can click to go to the progress page of this goal with the atonement post.
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-atonement-post.png" alt="image-20210725181921741" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-atonement-post.png?raw=true" alt="image-20210725181921741" style="zoom: 33%;" />
 
 
 
@@ -368,7 +368,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 <img src="/Users/xiaoyunwu/Documents/pic/punkt-reply-failed.png" alt="image-20210725162316477" style="zoom: 33%;" />
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725162406322.png" alt="image-20210725162406322" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-reply-failed.png?raw=true" style="zoom: 33%;" />
 
 <div style="page-break-after: always;"></div>
 
@@ -376,7 +376,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 > You can change your cover picture at your Profile page by clicking the cover picture to upload a new picture.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-profile-cover.png" alt="punkt-profile-cover" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-profile-cover.png?raw=true" alt="punkt-profile-cover" style="zoom: 33%;" />
 
 
 
@@ -387,7 +387,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - You can click on the username to go to their profile page.
 > - You may clear the search bar field by clicking on the ╳ button.
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-search.png" alt="image-20210725154445452" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-search.png?raw=true" alt="image-20210725154445452" style="zoom: 33%;" />
 
 
 
@@ -395,7 +395,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 > If you have forgotten your password, click "Forgot your password?" at the Login page.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-forgot-pw.png" alt="punkt-forgot-pw" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-forgot-pw.png?raw=true" alt="punkt-forgot-pw" style="zoom: 33%;" />
 
 > Enter your email to be given a link to reset your password in your inbox.
 >
@@ -403,19 +403,19 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 >
 > - Note: this email may be sent to spam / promotions inbox.
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725153329348.png" alt="image-20210725153329348" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-reset-email.png?raw=true" style="zoom: 33%;" />
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725153536828.png" alt="image-20210725153536828" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-reset-gmail.png?raw=true" style="zoom: 33%;" />
 
 > Click the link given in the email to be directed to the Reset Password Page.
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725153702302.png" alt="image-20210725153702302" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-reset-pw.png?raw=true" style="zoom: 33%;" />
 
 > If your password fulfils the requirements, you will receive an alert as well as an email showing that you have successfully reset your password. You may now login with the new password.
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725153812933.png" alt="image-20210725153812933" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-reset-success.png?raw=true" style="zoom: 33%;" />
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725160824297.png" alt="image-20210725160824297" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-reset-success-gmail.png?raw=true" style="zoom: 33%;" />
 
 
 
@@ -425,9 +425,9 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 >
 > - Fill in your name, email address (so that we can send reply to your email) as well as your enquiries.
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725150316879.png" alt="image-20210725150316879" style="zoom:50%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-footer.png?raw=true" style="zoom:50%;" />
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725150339999.png" alt="image-20210725150339999" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-contact.png?raw=true" style="zoom: 33%;" />
 
 
 
