@@ -20,7 +20,7 @@ https://drive.google.com/file/d/1l803ijBGdmbhO8nqqqm8hTfWFhuhAIpb/view?usp=shari
 
 ### Aim
 
-**We hope to motivate students to be more focused when they are studying through the use of our online application. **
+We hope to motivate students to be more focused when they are studying through the use of our online application. 
 
 ### User Stories
 
