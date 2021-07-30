@@ -93,7 +93,7 @@ https://github.com/angkoonhwee/Punkt-Milestone3
 
 ## **Deployments**
 
-==Note: **Please wait for 3s after every action** due to the relatively long request time for Heroku Server to send back the updated data.== 
+Note: **Please wait for 3s after every action** due to the relatively long request time for Heroku Server to send back the updated data.
 
 Frontend: https://punkt-orbital.netlify.app/
 
@@ -610,7 +610,7 @@ The following table provides a summary of the good points and shortcomings for o
 
 - Well-designed and aesthetic user interfaces.
 - Smooth transition and no lags. 
-  - ==side note: personally we feel that our app has been slowed down quite a lot due to Heroku, it is much smoother on localhost D: and due to Heroku lags, we removed some nice transition animations :’(== 
+  - side note: personally we feel that our app has been slowed down quite a lot due to Heroku, it is much smoother on localhost D: and due to Heroku lags, we removed some nice transition animations :’(
 - User guide is detailed and easy to follow
 - Inclusion of both short term and long term goals.
 - Novel features
@@ -620,7 +620,7 @@ The following table provides a summary of the good points and shortcomings for o
 
 ##### <u>Areas for Improvement / Bugs</u>
 
-==[Non-technical] The term “atonement” is not intuitively linked to forfeit which results in some users not understanding what the atonement field for goal creation is for.==
+[Non-technical] The term “atonement” is not intuitively linked to forfeit which results in some users not understanding what the atonement field for goal creation is for.
 
 - Response: 
 
@@ -628,7 +628,7 @@ The following table provides a summary of the good points and shortcomings for o
 
 
 
-==[Non-technical] Too many features which might confuse users who have just started using the app.==
+[Non-technical] Too many features which might confuse users who have just started using the app.
 
 - Response:
 
@@ -640,7 +640,7 @@ The following table provides a summary of the good points and shortcomings for o
 
 
 
-==[Non-technical] The many icons on the NavBar were confusing, no idea what the different symbols meant.==
+[Non-technical] The many icons on the NavBar were confusing, no idea what the different symbols meant.
 
 - Response:
 
@@ -648,7 +648,7 @@ The following table provides a summary of the good points and shortcomings for o
 
   
 
-==[Technical] Can include a feature to set a max number of days for a goal.==
+[Technical] Can include a feature to set a max number of days for a goal.
 
 - Response:
 
@@ -660,7 +660,7 @@ The following table provides a summary of the good points and shortcomings for o
 
 
 
-==[Technical] Users are able to sign up with a fake email account, making the application not very secure.==
+[Technical] Users are able to sign up with a fake email account, making the application not very secure.
 
 - Response:
 
@@ -670,13 +670,13 @@ The following table provides a summary of the good points and shortcomings for o
 
 
 
-==[Technical Bug] Click another user’s profile, then click the user’s own profile page. The cover and profile pictures displayed belong to the previous user.==
+[Technical Bug] Click another user’s profile, then click the user’s own profile page. The cover and profile pictures displayed belong to the previous user.
 
 - This was an oversight on our part and we have resolved it by updating the state “user” (the user on the profile page) when the react router’s params were not equal to currUser’s username (the logged in).
 
 
 
-==[Technical Bugs]== 
+[Technical Bugs]
 
 1. Form for creating a new goal is not shown after the goal is completed successfully.
 2. Number of days (and status of the goal) completed on the Bet Status component was not updated after a new post was created.
@@ -703,7 +703,7 @@ The following table provides a summary of the good points and shortcomings for o
 
 
 
-==[Technical Bug] Sending one message may result in multiple messages of the same content being displayed.== 
+[Technical Bug] Sending one message may result in multiple messages of the same content being displayed.
 
 - Response:
 
@@ -730,7 +730,7 @@ The following table provides a summary of the good points and shortcomings for o
 
 
 
-==[Technical] Unable to upload images.==
+[Technical] Unable to upload images.
 
 - Response:
 
@@ -742,7 +742,7 @@ The following table provides a summary of the good points and shortcomings for o
 
 
 
-==[Technical] Could add push notifications to remind users about their goals and todo items==
+[Technical] Could add push notifications to remind users about their goals and todo items
 
 - Response: 
 
@@ -750,7 +750,7 @@ The following table provides a summary of the good points and shortcomings for o
 
   
 
-==[Technical] Could add a feature to record time spent on each goal.==
+[Technical] Could add a feature to record time spent on each goal.
 
 - Response: 
 
@@ -758,7 +758,7 @@ The following table provides a summary of the good points and shortcomings for o
 
   
 
-==[Technical] Could allow users to set their goals as private== 
+[Technical] Could allow users to set their goals as private
 
 - Response: 
 
