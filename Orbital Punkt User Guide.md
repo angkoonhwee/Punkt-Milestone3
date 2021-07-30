@@ -58,7 +58,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 > 2. Click **"SIGN UP"** button on the cover picture or on the top right navigation bar as labelled in the screenshot below.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-1.png" alt="punkt-1" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-1.png?raw=true" alt="punkt-1" />
 
 > 3. Register an account using your email address. 
 >
@@ -67,11 +67,11 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 >    Password must be at least 6 characters with at least 1 UPPER case, 1 lower case and 1 numeric digit.
 >
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-2.png" alt="punkt-2" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-2.png?raw=true" alt="punkt-2" style="zoom: 33%;" />
 
 
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-duplicate-username.png" alt="punkt-duplicate-username" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-duplicate-username.png?raw=true" alt="punkt-duplicate-username" style="zoom: 33%;" />
 
 <div align = "center"> <em>Alert showing username has been registered.</em></div>
 
@@ -81,10 +81,9 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 >    - The left section of the page will display the posts created by you and those you are following. 
 >    - This section will be empty if there is no post created by you and those you are following.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-3.png" alt="punkt-3" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-3.png?raw=true" alt="punkt-3" style="zoom: 33%;" />
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-navbar-hover.png" alt="punkt-navbar-hover" style="zoom: 33%;" />
-
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-navbar-hover.png?raw=true" alt="punkt-navbar-hover" style="zoom: 33%;" />
 
 
 <div style="page-break-after: always;"></div>
