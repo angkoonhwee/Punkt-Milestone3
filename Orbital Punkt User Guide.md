@@ -1,6 +1,25 @@
 # User Guide for Punkt
 
-[TOC]
+- [User Guide for Punkt](#user-guide-for-punkt)
+  * [Introduction](#introduction)
+  * [Quick Start](#quick-start)
+  * [Feature Guide](#feature-guide)
+    + [Betting System](#betting-system)
+      - [<u>Setting Your Own Goals</u>](#-u-setting-your-own-goals--u-)
+      - [<u>Betting on Others' Goals</u>](#-u-betting-on-others--goals--u-)
+      - [<u>Goal Outcomes</u>](#-u-goal-outcomes--u-)
+    + [Buddy System](#buddy-system)
+      - [<u>Buddy Request</u>](#-u-buddy-request--u-)
+      - [<u>Daily Todo</u>](#-u-daily-todo--u-)
+      - [<u>Set Todo</u>](#-u-set-todo--u-)
+      - [<u>Live Chat</u>](#-u-live-chat--u-)
+    + [Leaderboard](#leaderboard)
+    + [Miscellaneous](#miscellaneous)
+      - [<u>User Settings</u>](#-u-user-settings--u-)
+      - [<u>Profile Page Cover Picture</u>](#-u-profile-page-cover-picture--u-)
+      - [<u>Search for Friends</u>](#-u-search-for-friends--u-)
+      - [<u>Forgot Password</u>](#-u-forgot-password--u-)
+      - [<u>Contact Us</u>](#-u-contact-us--u-)
 
 
 
@@ -39,7 +58,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 > 2. Click **"SIGN UP"** button on the cover picture or on the top right navigation bar as labelled in the screenshot below.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-1.png" alt="punkt-1" style="zoom: 33%;" />
+<img src="/Users/xiaoyunwu/Desktop/punkt-1.png" alt="punkt-1" />
 
 > 3. Register an account using your email address. 
 >
