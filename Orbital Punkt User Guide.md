@@ -366,9 +366,10 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - *e.g. If the goal atonement were to treat users with bubble tea, perhaps you can leave your Paylah/PayNow number here 😉.*  
 > - Only the goal creator can view these messages.
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-reply-failed.png" alt="image-20210725162316477" style="zoom: 33%;" />
-
 <img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-reply-failed.png?raw=true" style="zoom: 33%;" />
+
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-reply-view.png?raw=true" alt="image-20210725162316477" style="zoom: 33%;" />
+
 
 <div style="page-break-after: always;"></div>
 
