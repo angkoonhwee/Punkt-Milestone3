@@ -2,29 +2,29 @@
 
 - [**Milestone 3 README - Punkt**](#milestone-3-readme---punkt)
   * [**Proposed Level of Achievement**](#proposed-level-of-achievement)
-  * [**Poster**](#--poster--)
-  * [**Video**](#--video--)
-  * [**Project Introduction**](#--project-introduction--)
+  * [**Poster**](#poster)
+  * [**Video**](#video)
+  * [**Project Introduction**](#project-introduction)
     + [Aim](#aim)
     + [User Stories](#user-stories)
     + [How our app differs from existing apps](#how-our-app-differs-from-existing-apps)
-  * [**User Guide**](#--user-guide--)
-  * [**Code Base**](#--code-base--)
-  * [**Deployments**](#--deployments--)
-  * [**TechStack (MERN)**](#--techstack--mern---)
-  * [**Developer Guide**](#--developer-guide--)
+  * [**User Guide**](#user-guide)
+  * [**Code Base**](#code-base)
+  * [**Deployments**](#deployments)
+  * [**TechStack (MERN)**](#techstack--mern)
+  * [**Developer Guide**](#developer-guide)
     + [Requirement Gathering](#requirement-gathering)
     + [Planning](#planning)
-      - [<u>Features Design</u>](#-u-features-design--u-)
-      - [<u>Website Design</u>](#-u-website-design--u-)
-      - [<u>Database Model Design</u>](#-u-database-model-design--u-)
+      - [<u>Features Design</u>](#features-design)
+      - [<u>Website Design</u>](#website-design)
+      - [<u>Database Model Design</u>](#database-model-design)
     + [Implementation](#implementation)
-      - [<u>Buddy Chat:</u>](#-u-buddy-chat---u-)
+      - [<u>Buddy Chat:</u>](#buddy-chat)
       - [<u>Using of Redux for State Management</u>](#-u-using-of-redux-for-state-management--u-)
       - [<u>Cron Scheduling</u>](#-u-cron-scheduling--u-)
       - [<u>Uploading of Images</u>](#-u-uploading-of-images--u-)
     + [Maintenance](#maintenance)
-  * [**Software Engineering Practices**](#--software-engineering-practices--)
+  * [**Software Engineering Practices**](#software-engineering-practices)
     + [DRY Principle(Redux Store)](#dry-principle-redux-store-)
     + [Separation of Concerns (SoC) (React Components)](#separation-of-concerns--soc---react-components-)
     + [Law of Demeter](#law-of-demeter)
@@ -33,15 +33,15 @@
       - [Postman API Testing](#postman-api-testing)
       - [System Testing](#system-testing)
       - [User Acceptance Testing](#user-acceptance-testing)
-        * [<u>Merits</u>](#-u-merits--u-)
-        * [<u>Areas for Improvement / Bugs</u>](#-u-areas-for-improvement---bugs--u-)
-  * [**Development Timeline Summary**](#--development-timeline-summary--)
-  * [**Project Log**](#--project-log--)
+        * [<u>Merits</u>](#merits)
+        * [<u>Areas for Improvement / Bugs</u>](#areas-for-improvement---bugs)
+  * [**Development Timeline Summary**](#development-timeline-summary)
+  * [**Project Log**](#project-log)
 
 
 
 
-## **<a href="#proposed-level-of-achievement">Proposed Level of Achievement</a>**
+## **Proposed Level of Achievement**
 
 Project Gemini
 
