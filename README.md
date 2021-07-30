@@ -1,7 +1,7 @@
 # **Milestone 3 README - Punkt**
 
-- [**Milestone 3 README - Punkt**](#--milestone-3-readme---punkt--)
-  * [**Proposed Level of Achievement**](#--proposed-level-of-achievement--)
+- [**Milestone 3 README - Punkt**](#milestone-3-readme---punkt)
+  * [**Proposed Level of Achievement**](#proposed-level-of-achievement)
   * [**Poster**](#--poster--)
   * [**Video**](#--video--)
   * [**Project Introduction**](#--project-introduction--)
@@ -41,7 +41,7 @@
 
 
 
-## **Proposed Level of Achievement**
+## **<a href="#proposed-level-of-achievement">Proposed Level of Achievement</a>**
 
 Project Gemini
 
