@@ -99,7 +99,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - If you have a goal, you will see the progress of your goal. Click 🖊 button to redirect to the Progress page of your goal.
 > - If you leave "Atonement" section as empty, it will be set to default atonement "Fulfil the request from the comment in the first post with most likes" after you created the goal.
 
-  <img src="/Users/xiaoyunwu/Documents/pic/WechatIMG6.jpeg" alt="WechatIMG6" style="zoom: 50%;" />
+  <img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/WechatIMG6.jpeg?raw=true" alt="WechatIMG6" style="zoom: 33%;" />
 
 
 
@@ -107,7 +107,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 >
 > *Details of each of the status can be found at "Goal Outcomes" sub-section below.*
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725135822093.png" alt="image-20210725135822093" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-bet-status.png?raw=true" style="zoom: 33%;" />
 
 
 
@@ -118,7 +118,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - You can only create <u>ONE</u> post a day with a maximum of 6 images per post.
 > - Note: As we are using Google's Cloud services for the uploading of images, if you are currently in countries (e.g. China) with access restrictions to Google, you might face problems uploading images. We recommend you to access our application with a VPN service.
 
-<img src="/Users/xiaoyunwu/Documents/pic/image-20210725140133477.png" alt="image-20210725140133477" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-record.png?raw=true" alt="image-20210725140133477" style="zoom: 33%;" />
 
 
 
@@ -126,7 +126,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 >
 > - If you are unsatisfied with your previous post (e.g. selected the wrong image), you can click the Delete button on the top right of your post and you will be allowed to create a post again. 
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-disabled.png" alt="punkt-disabled" style="zoom:33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-disabled.png?raw=true" alt="punkt-disabled" style="zoom:33%;" />
 
 <div style="page-break-after: always;"></div>
 
@@ -134,13 +134,13 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 > If you have not followed any user, you can click "Explore" icon on the navigation bar to be directed to the page that displays posts created by all users.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-explore.png" alt="punkt-explore" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-explore.png?raw=true" alt="punkt-explore" style="zoom: 33%;" />
 
 
 
 > At the post component, click the section with light blue background that states the user's goal to be directed to the progress page of that goal.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-post-progress.png" alt="punkt-post-progress" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-post-progress.png?raw=true" alt="punkt-post-progress" style="zoom: 33%;" />
 
 
 
@@ -149,20 +149,20 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - Click "THIS IS IMPOSSIBLE!" to display a "CONFIRM" button to bet against this goal. 
 >
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725141710614.png" alt="image-20210725141710614" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-set-bet.png?raw=true" style="zoom: 33%;" />
 
 
 
 > Once you have clicked "CONFIRM" for any of the choice, the button will be disabled and shown as a grey button.
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725141749196.png" alt="image-20210725141749196" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-set-bet-disabled.png?raw=true" style="zoom: 33%;" />
 
 
 
 > You can now see the posts related to this goal that you have bet at the Speculate page, with the Bet Against button under the post lighted up with red background colour. 
 >
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-post-bet.png" alt="punkt-post-bet" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-post-bet.png?raw=true" alt="punkt-post-bet" style="zoom: 33%;" />
 
 
 
@@ -171,14 +171,14 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 > - Click 💬 button to show all the comments and an input field to post your comment. 
 > - Click 🧡 button to like a comment.
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-post-details.png" alt="image-20210725140841276" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-post-details.png?raw=true" alt="image-20210725140841276" style="zoom: 33%;" />
 
 
 
 > If you feel that the content of a post is inappropriate or the user is being dishonest in recording his/her progress (e.g. no proof or invalid proof), you can click ❗ button on the top right of the post to send our developer team a report. 
 >
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-report.png" alt="punkt-report" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-report.png?raw=true" alt="punkt-report" style="zoom: 33%;" />
 
 <div style="page-break-after: always;"></div>
 
@@ -202,9 +202,9 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 > If the goal has been completed successfully, or expired (failed goal), the section to record the user's progress will be disabled and the buttons to bet against the goals will be disabled for other users.
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-disabled-success.png" alt="image-20210725142351804" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-disabled-success.png?raw=true" alt="image-20210725142351804" style="zoom: 33%;" />
 
-<img src="/Users/xiaoyunwu/Library/Application Support/typora-user-images/image-20210725141749196.png" alt="image-20210725141749196" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-set-bet-disabled.png?raw=true" style="zoom: 33%;" />
 
 <div style="page-break-after: always;"></div>
 
@@ -212,7 +212,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 > Click your profile picture at the navigation bar to be directed to your profile page.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-navbar-profile.png" alt="punkt-navbar-profile" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-navbar-profile.png?raw=true" alt="punkt-navbar-profile" style="zoom: 33%;" />
 
 
 
@@ -220,7 +220,7 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 
 > Click the user profile picture at their post to be directed to their profile page.
 
-<img src="/Users/xiaoyunwu/Desktop/punkt-post-user-profile.png" alt="punkt-post-user-profile" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-post-user-profile.png?raw=true" alt="punkt-post-user-profile" style="zoom: 33%;" />
 
 
 
@@ -235,11 +235,11 @@ Punkt is here to give you a little external push to stop procrastinating by rais
 >
 > ** If you or the user for this profile page already have/has a buddy, you will not see the "Request Buddy" button.*
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-profile.png" alt="image-20210725142955868" style="zoom: 33%;" /> 
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-profile.png?raw=true" alt="image-20210725142955868" style="zoom: 33%;" /> 
 
 
 
-<img src="/Users/xiaoyunwu/Documents/pic/punkt-profile-with-buddy.png" alt="image-20210725143433651" style="zoom: 33%;" />
+<img src="https://github.com/angkoonhwee/Punkt-Milestone3/blob/main/user-guide-img/punkt-profile-with-buddy.png?raw=true" alt="image-20210725143433651" style="zoom: 33%;" />
 
 <div align = "center" > <em>E.g. this user has a buddy so you will not see the "Request Buddy" button</em></div>
 
