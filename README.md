@@ -39,11 +39,12 @@
   * [**Project Log**](#project-log)
 
 
-
+## **Google Doc Link**
+https://docs.google.com/document/d/1mWo_41FpLwexJBd74gpUyC0Jx1K6thDhaX6IArem3-U/edit?usp=sharing
 
 ## **Proposed Level of Achievement**
 
-Project Gemini
+Project Apollo 11
 
 ## **Poster**
 
